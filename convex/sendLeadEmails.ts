@@ -36,12 +36,36 @@ function getToEmail(): string {
 }
 
 function getFromEmailHeader(): string {
-  const fromEmail = process.env.RESEND_FROM_EMAIL;
-  if (!fromEmail) {
-    throw new Error(
-      "Missing RESEND_FROM_EMAIL. Set it to a verified sender email in Resend.",
-    );
+  const personalDomains = new Set([
+    "gmail.com",
+    "yahoo.com",
+    "outlook.com",
+    "hotmail.com",
+    "icloud.com",
+    "proton.me",
+    "protonmail.com",
+    "aol.com",
+    "live.com",
+    "msn.com",
+  ]);
+
+  const rawFromEmail = process.env.RESEND_FROM_EMAIL?.trim();
+  let fromEmail = rawFromEmail;
+
+  // Resend requires a verified sender domain in production.
+  // If a personal mailbox is configured (for example gmail), use Resend's onboarding sender.
+  if (fromEmail) {
+    const domain = fromEmail.split("@")[1]?.toLowerCase();
+    if (domain && personalDomains.has(domain)) {
+      console.warn(
+        `RESEND_FROM_EMAIL=${fromEmail} uses a personal email domain. Falling back to onboarding@resend.dev.`,
+      );
+      fromEmail = "onboarding@resend.dev";
+    }
+  } else {
+    fromEmail = "onboarding@resend.dev";
   }
+
   const fromName = process.env.RESEND_FROM_NAME ?? "Livoza";
   return `${fromName} <${fromEmail}>`;
 }
