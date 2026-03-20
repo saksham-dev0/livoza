@@ -52,9 +52,18 @@ function getFromEmailHeader(): string {
   const rawFromEmail = process.env.RESEND_FROM_EMAIL?.trim();
   let fromEmail = rawFromEmail;
 
+  const extractEmail = (value: string) => {
+    const angleMatch = value.match(/<([^>]+)>/);
+    if (angleMatch?.[1]) {
+      return angleMatch[1].trim();
+    }
+    return value.trim();
+  };
+
   // Resend requires a verified sender domain in production.
   // If a personal mailbox is configured (for example gmail), use Resend's onboarding sender.
   if (fromEmail) {
+    fromEmail = extractEmail(fromEmail);
     const domain = fromEmail.split("@")[1]?.toLowerCase();
     if (domain && personalDomains.has(domain)) {
       console.warn(
