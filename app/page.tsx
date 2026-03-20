@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 function LivozaLogo({ light = false }: { light?: boolean }) {
-  const textColor = light ? "text-white" : "text-[#202E29]";
+  const textColor = light ? "text-white" : "text-[#222222]";
   return (
     <a href="#" className="flex items-center gap-2">
       <img
@@ -60,10 +60,9 @@ export default function Home() {
 
   const navLinks = [
     { href: "#home", label: "Home" },
-    { href: "#about", label: "About" },
-    { href: "#property", label: "Property" },
-    { href: "#blogs", label: "Blogs" },
-    { href: "#community", label: "Community" },
+    { href: "#about", label: "About Us" },
+    { href: "#service", label: "Service" },
+    { href: "#footer", label: "Contact Us" },
   ];
 
   const facilities = [
@@ -104,7 +103,14 @@ export default function Home() {
       type: "Girls",
       name: "Triple Sharing (Non AC)",
       location: "100m from Christ University, Bangalore",
-      tags: ["Washing Machine", "Fridge", "TV", "Furnished"],
+      tags: [
+        "Washing Machine",
+        "Refrigerator",
+        "Microwave/Oven",
+        "Smart TV",
+        "Furnished Rooms",
+        "24/7 Girls-Only Security",
+      ],
       price: "₹16,500/mo",
       bookingAdvance: "₹20,000",
       annualTotal: "₹1,98,100",
@@ -116,7 +122,14 @@ export default function Home() {
       type: "Girls",
       name: "Double Sharing (Non AC)",
       location: "100m from Christ University, Bangalore",
-      tags: ["Washing Machine", "Fridge", "TV", "Furnished"],
+      tags: [
+        "Washing Machine",
+        "Refrigerator",
+        "Microwave/Oven",
+        "Smart TV",
+        "Furnished Rooms",
+        "24/7 Girls-Only Security",
+      ],
       price: "₹19,000/mo",
       bookingAdvance: "₹20,000",
       annualTotal: "₹2,26,600",
@@ -128,7 +141,14 @@ export default function Home() {
       type: "Girls",
       name: "Single Sharing (Non AC)",
       location: "100m from Christ University, Bangalore",
-      tags: ["Washing Machine", "Fridge", "TV", "Furnished"],
+      tags: [
+        "Washing Machine",
+        "Refrigerator",
+        "Microwave/Oven",
+        "Smart TV",
+        "Furnished Rooms",
+        "24/7 Girls-Only Security",
+      ],
       price: "₹35,000/mo",
       bookingAdvance: "₹30,000",
       annualTotal: "₹4,09,000",
@@ -162,12 +182,12 @@ export default function Home() {
     {
       icon: Sparkles,
       title: "Fully Furnished",
-      desc: "Every room comes with washing machine, fridge, oven, TV and more.",
+      desc: "Every room comes fully equipped for comfortable living.",
     },
     {
       icon: MapPin,
       title: "Prime Location",
-      desc: "Steps away from Christ University — just a 2-minute walk to campus.",
+      desc: "Steps away from Christ University, in the heart of Bangalore.",
     },
   ];
 
@@ -227,9 +247,9 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-[#F9F9F7] text-[#202E29] min-h-screen">
+    <div className="bg-[#021210] text-[#EAEAEA] min-h-screen">
       {/* Header */}
-      <header className="fixed top-0 w-full z-50 bg-[#F9F9F7] border-b border-[#C3B7A7]">
+      <header className="fixed top-0 w-full z-50 bg-transparent border-b border-white/10 backdrop-blur">
         <nav className="flex justify-between items-center max-w-7xl mx-auto px-6 lg:px-8 py-4">
           <LivozaLogo />
           <div className="hidden md:flex items-center gap-10">
@@ -239,8 +259,8 @@ export default function Home() {
                 href={link.href}
                 className={
                   link.label === "Home"
-                    ? "text-[#354C48] font-medium hover:text-[#202E29]"
-                    : "text-[#202E29] hover:text-[#354C48] transition-colors"
+                    ? "text-white/80 font-medium hover:text-[#FFC402]"
+                    : "text-white/80 hover:text-[#FFC402] transition-colors"
                 }
               >
                 {link.label}
@@ -250,20 +270,20 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <a
               href="tel:+919353477987"
-              className="hidden md:flex items-center gap-2 bg-[#202E29] text-white px-5 py-2.5 rounded-full font-medium hover:bg-[#354C48] transition-colors"
+              className="hidden md:flex items-center gap-2 bg-white/10 text-white px-5 py-2.5 rounded-full font-medium hover:bg-white/15 transition-colors"
             >
               <Phone className="w-4 h-4" />
               +91 9353477987
             </a>
             <button
               onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
-              className="hidden md:block bg-[#202E29] text-white px-6 py-2.5 rounded-full font-medium hover:bg-[#354C48] transition-colors"
+              className="hidden md:block bg-[#FFC402] text-[#021210] px-6 py-2.5 rounded-full font-medium hover:bg-[#D8A600] transition-colors"
             >
               Book Now
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-[#202E29] hover:bg-[#E1DCD3] rounded-lg transition-colors"
+              className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? (
@@ -283,7 +303,7 @@ export default function Home() {
           />
         )}
         <div
-          className={`md:hidden fixed top-[73px] right-0 z-50 w-full max-w-xs bg-[#F9F9F7] border-l border-[#C3B7A7] shadow-xl transition-transform duration-300 ${
+          className={`md:hidden fixed top-[73px] right-0 z-50 w-full max-w-xs bg-[#021210] border-l border-white/10 shadow-xl transition-transform duration-300 ${
             mobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
@@ -293,7 +313,7 @@ export default function Home() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-3 px-4 text-[#202E29] hover:bg-[#E1DCD3] rounded-lg font-medium transition-colors"
+                className="py-3 px-4 text-white/80 hover:bg-white/10 rounded-lg font-medium transition-colors"
               >
                 {link.label}
               </a>
@@ -301,7 +321,7 @@ export default function Home() {
             <a
               href="tel:+919353477987"
               onClick={() => setMobileMenuOpen(false)}
-              className="mt-4 flex items-center gap-2 py-3 px-4 text-[#354C48] hover:bg-[#E1DCD3] rounded-lg font-medium"
+              className="mt-4 flex items-center gap-2 py-3 px-4 text-[#FFC402] hover:bg-white/10 rounded-lg font-medium"
             >
               <Phone className="w-4 h-4" />
               +91 9353477987
@@ -313,27 +333,27 @@ export default function Home() {
       {/* Book Your Stay Modal */}
       {bookFormOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-[#F9F9F7] rounded-2xl max-w-md w-full p-8 relative shadow-xl">
+          <div className="bg-[#FFFFFF] rounded-2xl max-w-md w-full p-8 relative shadow-xl">
             <button
               onClick={() => setBookFormOpen(false)}
-              className="absolute top-4 right-4 text-[#968A79] hover:text-[#796D5D] text-2xl"
+              className="absolute top-4 right-4 text-[#7A9B7E] hover:text-[#7A9B7E] text-2xl"
             >
               ×
             </button>
-            <h2 className="text-2xl font-bold text-[#202E29] mb-1">
+            <h2 className="text-2xl font-bold text-[#222222] mb-1">
               Book Your Stay
             </h2>
-            <p className="text-[#796D5D] text-sm mb-6">
+            <p className="text-[#7A9B7E] text-sm mb-6">
               We&apos;ll call you back within 24 hours
             </p>
             {modalFormSubmitted ? (
               <div className="space-y-4">
-                <p className="text-[#202E29] font-medium">
+                <p className="text-[#222222] font-medium">
                   Thank you! We&apos;ll call you back within 24 hours.
                 </p>
                 <a
                   href="tel:+919353477987"
-                  className="inline-flex items-center gap-2 bg-[#202E29] text-white px-6 py-3 rounded-full font-medium hover:bg-[#354C48] transition-colors"
+                  className="inline-flex items-center gap-2 bg-[#1F3D2B] text-white px-6 py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
                 >
                   <Phone className="w-4 h-4" />
                   Or call us now: +91 9353477987
@@ -343,7 +363,7 @@ export default function Home() {
                     setModalFormSubmitted(false);
                     setBookFormOpen(false);
                   }}
-                  className="block w-full text-[#354C48] font-medium hover:underline"
+                  className="block w-full text-[#3E6B4F] font-medium hover:underline"
                 >
                   Close
                 </button>
@@ -351,10 +371,10 @@ export default function Home() {
             ) : (
             <form className="space-y-4" onSubmit={handleModalFormSubmit}>
               <div>
-                <label className="block text-sm font-medium text-[#796D5D] mb-1">
+                <label className="block text-sm font-medium text-[#7A9B7E] mb-1">
                   Room Type
                 </label>
-                <select className="w-full border border-[#C3B7A7] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#354C48] focus:border-transparent">
+                <select className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent">
                   <option>Select room type</option>
                   <option>Triple Sharing (Non AC)</option>
                   <option>Double Sharing (Non AC)</option>
@@ -362,40 +382,40 @@ export default function Home() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#796D5D] mb-1">
+                <label className="block text-sm font-medium text-[#7A9B7E] mb-1">
                   Full Name *
                 </label>
                 <input
                   type="text"
                   required
-                  className="w-full border border-[#C3B7A7] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#354C48] focus:border-transparent"
+                  className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                   placeholder="Your name"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#796D5D] mb-1">
+                <label className="block text-sm font-medium text-[#7A9B7E] mb-1">
                   Phone Number *
                 </label>
                 <input
                   type="tel"
                   required
-                  className="w-full border border-[#C3B7A7] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#354C48] focus:border-transparent"
+                  className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                   placeholder="+91 XXXXX XXXXX"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#796D5D] mb-1">
+                <label className="block text-sm font-medium text-[#7A9B7E] mb-1">
                   Email Address
                 </label>
                 <input
                   type="email"
-                  className="w-full border border-[#C3B7A7] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#354C48] focus:border-transparent"
+                  className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                   placeholder="your@email.com (optional)"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-[#202E29] text-white py-3 rounded-full font-medium hover:bg-[#354C48] transition-colors"
+                className="w-full bg-[#1F3D2B] text-white py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
               >
                 Request Callback
               </button>
@@ -409,7 +429,7 @@ export default function Home() {
         {/* Hero Section */}
         <section
           id="home"
-          className="relative min-h-screen flex items-center pt-20 overflow-hidden"
+          className="relative min-h-[calc(100vh-73px)] flex items-center overflow-hidden"
         >
           <div className="absolute inset-0 z-0">
             <img
@@ -417,82 +437,85 @@ export default function Home() {
               alt="Livoza Girls PG — Premium furnished rooms"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-[#202E29]/70" />
+            <div className="absolute inset-0 bg-[#021210]/70" />
           </div>
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
-            <p className="text-white/90 text-sm tracking-[0.2em] uppercase mb-4">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full text-center">
+            <p className="text-white/70 text-sm tracking-[0.2em] uppercase mb-4">
               Only For Girls · 100m from Christ University
             </p>
             <h1 className="font-[family-name:var(--font-playfair)] text-5xl md:text-6xl lg:text-7xl text-white leading-tight mb-6">
               Livoza Girls
               <br />
               <span
-                className="font-bold bg-[linear-gradient(90deg,#D4AF37_0%,#F6E27C_10%,#FFF4B3_28%,#FFF4B3_50%,#FFF4B3_72%,#F6E27C_90%,#D4AF37_100%)] bg-clip-text text-transparent drop-shadow-[0_6px_14px_rgba(0,0,0,0.30)] [text-shadow:0_0_12px_rgba(212,175,55,0.35)]"
+                className="font-bold text-[#FFC402] drop-shadow-[0_6px_14px_rgba(0,0,0,0.30)]"
               >
                 Premium Living
               </span>
             </h1>
-            <p className="text-white/90 text-lg md:text-xl max-w-2xl mb-10">
-              Just 100m from Christ University — a 2-minute walk. Fully equipped
-              rooms with washing machine, fridge, oven, TV and more.
+            <p className="text-white/80 text-base md:text-lg max-w-[560px] mx-auto mb-8 leading-relaxed">
+              Livoza Girls is situated just 100 metres from Christ University — a
+              2-minute walk to campus. Everything you need is at your doorstep.
             </p>
-            <button
-              onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
-              className="group inline-flex items-center gap-2 rounded-full p-[2px] bg-[linear-gradient(90deg,#AA9F91_0%,#F6E27C_35%,#FFF4B3_50%,#F6E27C_65%,#AA9F91_100%)]"
-            >
-              <span className="relative z-10 bg-[#202E29] text-white px-8 py-4 rounded-full font-medium transition-colors group-hover:bg-[#354C48] inline-flex items-center gap-2">
-                Book Your Stay
-              </span>
-            </button>
-            <p className="mt-8 text-white/80 text-sm flex items-center gap-2">
-              <MapPin className="w-4 h-4 flex-shrink-0" />
-              2 mins walk · 100m from Christ University
-            </p>
+            <div className="mt-2 flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                type="button"
+                className="inline-flex items-center justify-center gap-3 rounded-full border border-white/20 bg-white/5 px-8 py-3 text-white hover:bg-white/10 transition-colors"
+                aria-label="Watch our video"
+              >
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/10">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18V6L21 12L9 18Z" fill="#FFC402" />
+                  </svg>
+                </span>
+                Watch Our Video
+              </button>
+              <button
+                onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+                className="inline-flex items-center justify-center gap-3 rounded-full bg-[#3E6B4F] px-8 py-3 text-white hover:bg-[#1F3D2B] transition-colors"
+              >
+                <Phone className="w-4 h-4" />
+                Call Us Now: +91 9353477987
+              </button>
+            </div>
           </div>
         </section>
 
         {/* Search Form Bar */}
-        <section className="bg-[#F9F9F7] py-8 border-b border-[#C3B7A7] -mt-1 relative z-10">
-          <div className="max-w-5xl mx-auto px-6 lg:px-8">
-            {/* <div className="flex flex-col lg:flex-row gap-4 items-center justify-center">
-              <select className="w-full lg:w-40 border border-gray-300 rounded-lg px-4 py-2.5 text-sm">
-                <option>Room Type</option>
-                <option>Triple Sharing (Non AC)</option>
-                <option>Double Sharing (Non AC)</option>
-                <option>Single Sharing (Non AC)</option>
-              </select>
-              <select className="w-full lg:w-56 border border-gray-300 rounded-lg px-4 py-2.5 text-sm">
-                <option>Select Campus</option>
-                <option>Christ University Main Campus</option>
-              </select>
-              <select className="w-full lg:w-48 border border-gray-300 rounded-lg px-4 py-2.5 text-sm">
-                <option>Location</option>
-                <option>100m from Christ University</option>
-              </select>
-              <button className="w-full lg:w-auto bg-[#202E29] text-white px-8 py-2.5 rounded-full font-medium hover:bg-[#354C48] transition-colors">
-                Find Now
-              </button>
-            </div> */}
-            <p className="text-center text-[#796D5D] text-sm mt-4 flex items-center justify-center gap-2 flex-wrap">
-              <Heart className="w-4 h-4 flex-shrink-0" />
-              Girls-Only PG
-              <MapPin className="w-4 h-4 flex-shrink-0" />
-              100m from Christ University · Bangalore
-            </p>
-          </div>
+        <section className="hidden bg-[#D8A600] py-4 -mt-1 relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8" />
         </section>
 
         {/* Facilities Icon Bar */}
-        <section className="bg-[#F9F9F7] py-12 border-b border-[#C3B7A7]">
+        <section className="bg-[#FFFFFF] py-12 border-b border-[#EAEAEA]">
           <div className="max-w-6xl mx-auto px-6 lg:px-8">
+            <p className="text-center text-[#7A9B7E] text-sm mb-10 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+              <span className="inline-flex items-center justify-center gap-2">
+                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-[#7A9B7E] flex-shrink-0">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20 6L9 17L4 12"
+                      stroke="#7A9B7E"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                <span>Girls-Only PG</span>
+              </span>
+              <span className="text-[#D9D9D9] hidden sm:inline">·</span>
+              <span>100m from Christ University</span>
+              <span className="text-[#D9D9D9] hidden sm:inline">·</span>
+              <span>Bangalore</span>
+            </p>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
               {facilities.slice(0, 6).map((f) => (
                 <div
                   key={f.title}
                   className="flex flex-col items-center text-center"
                 >
-                  <f.icon className="w-8 h-8 text-[#354C48] mb-2" />
-                  <span className="text-sm font-medium text-[#202E29]">
+                  <f.icon className="w-8 h-8 text-[#3E6B4F] mb-2" />
+                  <span className="text-sm font-medium text-[#222222]">
                     {f.title}
                   </span>
                 </div>
@@ -501,64 +524,68 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Our Facilities - Dark Section */}
-        <section className="bg-[#202E29] py-24">
+        {/* Service We Provide */}
+        <section id="service" className="bg-[#021210] py-24">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <p className="text-[#C3B7A7] text-sm font-medium tracking-[0.2em] uppercase mb-2">
-              Our Facilities
+            <p className="text-white/60 text-sm tracking-[0.2em] uppercase mb-2 text-center">
+              OUR FACILITIES
             </p>
-            <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-white mb-4">
-              Every Room Fully{" "}
-              <span className="text-[#C3B7A7]">Equipped</span>
+            <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-[#F7F7F7] mb-4 text-center">
+              Every Room Fully Equipped
             </h2>
-            <p className="text-white/80 text-lg max-w-2xl mb-16">
-              Every room comes fully equipped for comfortable living. Washing
-              Machine · Refrigerator · Microwave/Oven · Smart TV · Furnished Rooms
-              · 24/7 Girls-Only Security.
+            <p className="text-white/60 text-lg max-w-2xl mx-auto mb-16 text-center">
+              Every room comes fully equipped for comfortable living. Washing Machine
+              <br />
+              - Refrigerator · Microwave/Oven · Smart TV · Furnished Rooms · 24/7 Girls-Only Security.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {facilities.map((f) => (
+              {facilities.slice(0, 6).map((f) => (
                 <div
                   key={f.title}
-                  className="bg-white/5 rounded-xl p-6 border border-white/10 hover:border-[#C3B7A7]/30 transition-colors"
+                  className="bg-gradient-to-br from-[#195A3A] to-[#103925] rounded-2xl p-6 border border-white/5 hover:border-white/10 transition-colors relative overflow-hidden"
                 >
-                  <f.icon className="w-10 h-10 text-[#C3B7A7] mb-4" />
-                  <h3 className="text-white font-semibold text-lg mb-2">
-                    {f.title}
-                  </h3>
-                  <p className="text-white/70 text-sm">{f.desc}</p>
+                  <div
+                    className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0)_55%)]"
+                    aria-hidden
+                  />
+                  <div className="relative z-10 flex flex-col items-center text-center">
+                    <f.icon className="w-10 h-10 text-[#FFC402] mb-4" />
+                    <h3 className="text-[#F7F7F7] font-semibold text-lg mb-2">
+                      {f.title}
+                    </h3>
+                    <p className="text-white/70 text-sm">{f.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* About Us */}
-        <section id="about" className="py-24 bg-[#F9F9F7]">
+        {/* Stats (About section repurposed) */}
+        <section id="about" className="py-24 bg-[#021210]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="hidden grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <p className="text-[#354C48] text-sm font-medium tracking-[0.2em] uppercase mb-2">
+                <p className="text-[#3E6B4F] text-sm font-medium tracking-[0.2em] uppercase mb-2">
                   About Us
                 </p>
-                <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#202E29] mb-6">
+                <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#222222] mb-6">
                   Steps away from Christ University, in the heart of Bangalore.
                 </h2>
-                <p className="text-[#796D5D] text-lg mb-8">
-                  Livoza Girls is situated just 100 metres from Christ
-                  University — a 2-minute walk to campus. Everything you need is
-                  at your doorstep. Fully furnished rooms with washing machine,
-                  fridge, oven, TV and 24/7 girls-only security.
+                <p className="text-[#7A9B7E] text-lg mb-8">
+                  Livoza Girls is situated just 100 metres from Christ University
+                  — a 2-minute walk to campus. Everything you need is at your
+                  doorstep.
                 </p>
                 <ul className="space-y-4 mb-8">
                   {[
-                    "Advance Payment — 2 months' rent, adjustable in April & May",
-                    "Maintenance — ₹10,000 one-time annual charge",
-                    "Booking Advance — ₹20,000–₹30,000 to secure your room",
-                    "Annual Discount — 5% off when you pay for the full year",
+                    "01. Advance Payment — 2 months' rent, fully adjustable in April & May",
+                    "02. Maintenance — ₹10,000 one-time annual charge covers upkeep and repairs",
+                    "03. Booking Advance — Secure your room with ₹20,000–₹30,000 upfront",
+                    "04. Annual Discount — 5% off when you pay for the full year upfront",
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full bg-[#354C48] flex items-center justify-center flex-shrink-0">
+                      <span className="w-6 h-6 rounded-full bg-[#3E6B4F] flex items-center justify-center flex-shrink-0">
                         <svg
                           className="w-3 h-3 text-white"
                           fill="currentColor"
@@ -571,13 +598,278 @@ export default function Home() {
                           />
                         </svg>
                       </span>
-                      <span className="text-[#796D5D]">{item}</span>
+                      <span className="text-[#7A9B7E]">{item}</span>
                     </li>
                   ))}
                 </ul>
                 <button
                   onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
-                  className="inline-flex items-center gap-2 bg-[#202E29] text-white px-6 py-3 rounded-full font-medium hover:bg-[#354C48] transition-colors"
+                  className="inline-flex items-center gap-2 bg-[#1F3D2B] text-white px-6 py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
+                >
+                  Learn More
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <img
+                  src="/img-74fee9ff-d738-4933-b56e-5f2281417268.png"
+                  alt="Livoza Girls PG — Premium furnished room"
+                  className="rounded-2xl w-full aspect-[3/4] object-cover"
+                />
+                <img
+                  src="/img-74fee9ff-d738-4933-b56e-5f2281417268.png"
+                  alt="Livoza Girls PG — Room interior"
+                  className="rounded-2xl w-full aspect-[3/4] object-cover mt-8"
+                />
+                <img
+                  src="/img-74fee9ff-d738-4933-b56e-5f2281417268.png"
+                  alt="Livoza Girls PG — Furnished accommodation"
+                  className="rounded-2xl w-full aspect-[3/4] object-cover -mt-4"
+                />
+                <img
+                  src="/img-74fee9ff-d738-4933-b56e-5f2281417268.png"
+                  alt="Livoza Girls PG — Triple sharing room"
+                  className="rounded-2xl w-full aspect-[3/4] object-cover mt-4"
+                />
+              </div>
+            </div>
+            <div className="mb-12 hidden">
+              <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-[#EAEAEA] mb-4">
+                We Achieved Best
+                <br />
+                From Gardening
+              </h2>
+            </div>
+            {/* Stats */}
+            <div className="h-px bg-white/10 mb-10" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+              {[
+                { num: "100m", label: "From Christ University" },
+                { num: "2 min", label: "Walk to Campus" },
+                { num: "3+", label: "Room Types" },
+                { num: "24/7", label: "Girls-Only Security" },
+              ].map((s) => (
+                <div key={s.label} className="text-center">
+                  <p className="font-[family-name:var(--font-playfair)] text-4xl font-bold text-[#FFC402] mb-1">
+                    {s.num}
+                  </p>
+                  <p className="text-white/70">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Our Properties */}
+        <section id="property" className="py-24 bg-[#F5F1E8]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <p className="text-[#3E6B4F] text-sm font-medium tracking-[0.2em] uppercase mb-2">
+              Room Types
+            </p>
+            <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#222222] mb-4">
+              Choose Your Accommodation
+            </h2>
+            <p className="text-[#7A9B7E] text-lg mb-16 max-w-2xl">
+              Every room comes fully equipped for comfortable living. Steps away
+              from Christ University, in the heart of Bangalore — just 100 metres
+              from campus (a 2-minute walk).
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {properties.map((p) => (
+                <div
+                  key={p.name}
+                  className="bg-[#FFFFFF] rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
+                >
+                  <div className="relative aspect-[4/3]">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-4 left-4 flex gap-2">
+                      {p.new && (
+                        <span className="bg-[#A3B18A] text-white text-xs px-2 py-1 rounded">
+                          New
+                        </span>
+                      )}
+                      <span className="bg-[#F5F1E8]/90 text-[#222222] text-xs px-2 py-1 rounded">
+                        {p.type}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-[#7A9B7E] text-sm mb-2">{p.location}</p>
+                    <h3 className="text-xl font-bold text-[#222222] mb-3">
+                      {p.name}
+                    </h3>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {p.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="text-xs text-[#000000] bg-[#C8D5C0] px-2 py-1 rounded"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="font-semibold text-[#3E6B4F] mb-1">
+                      Rent: {p.price} · Booking: {p.bookingAdvance} · Annual: {p.annualTotal}
+                    </p>
+                    <p className="text-[#7A9B7E] text-sm mb-4">{p.desc}</p>
+                    <button
+                      onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+                      className="inline-block bg-[#1F3D2B] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#3E6B4F] transition-colors"
+                    >
+                      Check Availability
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-12">
+              <button
+                onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+                className="inline-flex items-center gap-2 text-[#3E6B4F] font-medium hover:underline"
+              >
+                View All Properties
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Choose Us */}
+        <section className="hidden py-24 bg-[#FFFFFF]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <p className="text-[#3E6B4F] text-sm font-medium tracking-[0.2em] uppercase mb-2">
+              Why Choose Us
+            </p>
+            <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#222222] mb-4">
+              Why Choose Livoza Girls?
+            </h2>
+            <p className="text-[#7A9B7E] text-lg mb-16 max-w-2xl">
+              Transparent pricing, fully furnished rooms, and a prime location
+              — everything you need for a comfortable stay near Christ University.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {whyChoose.map((w) => {
+                const Icon = w.icon;
+                return (
+                <div
+                  key={w.title}
+                    className="p-6 rounded-xl border border-[#EAEAEA] hover:border-[#3E6B4F]/30 hover:shadow-lg transition-all"
+                >
+                    <Icon className="w-8 h-8 text-[#3E6B4F] mb-4" />
+                    <h3 className="text-xl font-bold text-[#222222] mb-2">
+                    {w.title}
+                  </h3>
+                    <p className="text-[#7A9B7E]">{w.desc}</p>
+                </div>
+              );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="py-24 bg-[#021210]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-[#EAEAEA]">
+                What They Say About Us?
+              </h2>
+              <p className="text-white/60 text-base md:text-lg mt-4 max-w-2xl mx-auto">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit
+                tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+              </p>
+            </div>
+
+            <div className="bg-[#195A3A]/85 rounded-2xl p-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {testimonials.slice(0, 4).map((t, i) => (
+                  <div
+                    key={`${t.initial}-${i}`}
+                    className="relative bg-[#103925]/55 rounded-2xl p-6 min-h-[220px]"
+                  >
+                    <div className="flex gap-1 text-[#FFC402] text-xs mb-4">
+                      {Array.from({ length: 5 }).map((_, idx) => (
+                        <span key={idx}>★</span>
+                      ))}
+                    </div>
+
+                    <p className="text-white/70 text-sm leading-relaxed">
+                      &quot;{t.quote}&quot;
+                    </p>
+
+                    <span className="absolute bottom-6 right-6 text-[#FFC402] text-3xl leading-none">
+                      ”
+                    </span>
+
+                    <div className="mt-6 flex items-center gap-3">
+                      <span className="w-11 h-11 rounded-full bg-[#FFC402] text-[#021210] flex items-center justify-center font-bold">
+                        {t.initial}
+                      </span>
+                      <div>
+                        <p className="text-[#F7F7F7] font-bold text-sm">
+                          {t.name}
+                        </p>
+                        <p className="text-white/60 text-xs">{t.college}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* About Us (Inserted after Testimonials) */}
+        <section className="py-24 bg-[#F5F1E8]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <p className="text-[#3E6B4F] text-sm font-medium tracking-[0.2em] uppercase mb-2">
+                  ABOUT US
+                </p>
+                <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#222222] mb-6">
+                  Steps away from Christ University,
+                  <br />
+                  in the heart of Bangalore.
+                </h2>
+                <p className="text-[#7A9B7E] text-lg mb-8">
+                  Livoza Girls is situated just 100 metres from Christ University
+                  — a 2-minute walk to campus. Everything you need is at your
+                  doorstep. Fully furnished rooms with washing machine, fridge,
+                  oven, TV and 24/7 girls-only security.
+                </p>
+                <ul className="space-y-4 mb-8">
+                  {[
+                    "Advance Payment — 2 months' rent, adjustable in April & May",
+                    "Maintenance — ₹10,000 one-time annual charge",
+                    "Booking Advance — ₹20,000–₹30,000 to secure your room",
+                    "Annual Discount — 5% off when you pay for the full year upfront",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3">
+                      <span className="w-6 h-6 rounded-full bg-[#3E6B4F] flex items-center justify-center flex-shrink-0">
+                        <svg
+                          className="w-3 h-3 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M20 6L9 17L4 12" />
+                        </svg>
+                      </span>
+                      <span className="text-[#7A9B7E]">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+                  className="inline-flex items-center gap-2 bg-[#1F3D2B] text-white px-6 py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
                 >
                   Learn More
                   <ChevronRight className="w-4 h-4" />
@@ -606,211 +898,52 @@ export default function Home() {
                 />
               </div>
             </div>
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 pt-16 border-t border-[#C3B7A7]">
-              {[
-                { num: "100m", label: "From Christ University" },
-                { num: "2 min", label: "Walk to Campus" },
-                { num: "3", label: "Room Types" },
-                { num: "24/7", label: "Girls-Only Security" },
-              ].map((s) => (
-                <div key={s.label} className="text-center">
-                  <p className="font-[family-name:var(--font-playfair)] text-4xl font-bold text-[#354C48] mb-1">
-                    {s.num}
-                  </p>
-                  <p className="text-[#796D5D]">{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Our Properties */}
-        <section id="property" className="py-24 bg-[#E1DCD3]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <p className="text-[#354C48] text-sm font-medium tracking-[0.2em] uppercase mb-2">
-              Room Options
-            </p>
-            <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#202E29] mb-4">
-              Comfortable Accommodation
-            </h2>
-            <p className="text-[#796D5D] text-lg mb-16 max-w-2xl">
-              Fully furnished rooms with washing machine, fridge, oven, TV — 100m
-              from Christ University, Bangalore.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {properties.map((p) => (
-                <div
-                  key={p.name}
-                  className="bg-[#F9F9F7] rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
-                >
-                  <div className="relative aspect-[4/3]">
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute top-4 left-4 flex gap-2">
-                      {p.new && (
-                        <span className="bg-[#354C48] text-white text-xs px-2 py-1 rounded">
-                          New
-                        </span>
-                      )}
-                      <span className="bg-[#F9F9F7]/90 text-[#202E29] text-xs px-2 py-1 rounded">
-                        {p.type}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <p className="text-[#796D5D] text-sm mb-2">{p.location}</p>
-                    <h3 className="text-xl font-bold text-[#202E29] mb-3">
-                      {p.name}
-                    </h3>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {p.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="text-xs text-[#796D5D] bg-[#E1DCD3] px-2 py-1 rounded"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="font-semibold text-[#354C48] mb-1">
-                      Rent: {p.price} · Booking: {p.bookingAdvance} · Annual: {p.annualTotal}
-                    </p>
-                    <p className="text-[#796D5D] text-sm mb-4">{p.desc}</p>
-                    <button
-                      onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
-                      className="inline-block bg-[#202E29] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#354C48] transition-colors"
-                    >
-                      Check Availability
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-12">
-              <button
-                onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
-                className="inline-flex items-center gap-2 text-[#354C48] font-medium hover:underline"
-              >
-                View All Properties
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Why Choose Us */}
-        <section className="py-24 bg-[#F9F9F7]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <p className="text-[#354C48] text-sm font-medium tracking-[0.2em] uppercase mb-2">
-              Why Choose Us
-            </p>
-            <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#202E29] mb-4">
-              Why Choose Livoza Girls?
-            </h2>
-            <p className="text-[#796D5D] text-lg mb-16 max-w-2xl">
-              Transparent pricing, fully furnished rooms, and a prime location
-              — everything you need for a comfortable stay near Christ University.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {whyChoose.map((w) => {
-                const Icon = w.icon;
-                return (
-                <div
-                  key={w.title}
-                  className="p-6 rounded-xl border border-[#C3B7A7] hover:border-[#354C48]/30 hover:shadow-lg transition-all"
-                >
-                  <Icon className="w-8 h-8 text-[#354C48] mb-4" />
-                  <h3 className="text-xl font-bold text-[#202E29] mb-2">
-                    {w.title}
-                  </h3>
-                  <p className="text-[#796D5D]">{w.desc}</p>
-                </div>
-              );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials */}
-        <section className="py-24 bg-[#E1DCD3]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <p className="text-[#354C48] text-sm font-medium tracking-[0.2em] uppercase mb-2">
-              Testimonials
-            </p>
-            <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#202E29] mb-4">
-              What Our Residents Say
-            </h2>
-            <p className="text-[#796D5D] text-lg mb-16">
-              Let&apos;s hear it from our residents.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {testimonials.map((t, i) => (
-                <div
-                  key={i}
-                  className="bg-[#F9F9F7] p-8 rounded-2xl shadow-sm"
-                >
-                  <p className="text-[#796D5D] mb-6 italic">&quot;{t.quote}&quot;</p>
-                  <div className="flex items-center gap-4">
-                    <span className="w-12 h-12 rounded-full bg-[#354C48] text-white flex items-center justify-center font-bold">
-                      {t.initial}
-                    </span>
-                    <div>
-                      <p className="font-bold text-[#202E29]">{t.name}</p>
-                      <p className="text-sm text-[#796D5D]">{t.college}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
         {/* Blog */}
-        {/* <section id="blogs" className="py-24 bg-white">
+        {/* <section id="blogs" className="py-24 bg-[#021210]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="flex justify-between items-end mb-12">
               <div>
-                <p className="text-[#354C48] text-sm font-medium tracking-[0.2em] uppercase mb-2">
-                  Blog
+                <p className="text-[#FFC402] text-sm font-medium tracking-[0.2em] uppercase mb-2">
+                  Our latest blog
                 </p>
-                <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#202E29]">
+                <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#F7F7F7]">
                   Latest from Our Blog
                 </h2>
               </div>
               <a
                 href="#"
-                className="text-[#354C48] font-medium hover:underline hidden md:block"
+                className="text-[#FFC402] font-medium hover:underline hidden md:block"
               >
                 View All Posts
               </a>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {blogPosts.map((b) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[...blogPosts, blogPosts[0]].slice(0, 3).map((b, idx) => (
                 <a
-                  key={b.title}
+                  key={`${b.title}-${idx}`}
                   href="#"
-                  className="group block bg-[#E1DCD3] rounded-2xl overflow-hidden hover:shadow-lg transition-shadow"
+                  className="group block bg-[#195A3A]/20 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow border border-white/5"
                 >
-                  <div className="aspect-video bg-[#C3B7A7]">
+                  <div className="relative aspect-video bg-[#103925]">
                     <img
-                      src="/img2.jpeg"
+                      src={idx === 0 ? "/img2.jpeg" : idx === 1 ? "/img3.jpeg" : "/img1.jpeg"}
                       alt={b.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-300"
                     />
+                    <div className="absolute inset-0 bg-[#021210]/30" />
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-[#202E29] mb-2 group-hover:text-[#354C48] transition-colors">
+                  <div className="p-6 relative">
+                    <h3 className="text-xl font-bold text-[#F7F7F7] mb-2 group-hover:text-[#FFC402] transition-colors">
                       {b.title}
                     </h3>
-                    <p className="text-[#796D5D] text-sm mb-2">
+                    <p className="text-white/60 text-sm mb-2">
                       {b.date} · {b.readTime}
                     </p>
-                    <p className="text-[#796D5D]">{b.excerpt}</p>
-                    <span className="inline-block mt-4 text-[#354C48] font-medium">
+                    <p className="text-white/70">{b.excerpt}</p>
+                    <span className="inline-block mt-4 text-[#FFC402] font-medium">
                       Read More →
                     </span>
                   </div>
@@ -819,7 +952,7 @@ export default function Home() {
             </div>
             <a
               href="#"
-              className="text-[#354C48] font-medium hover:underline mt-8 md:hidden"
+              className="text-[#FFC402] font-medium hover:underline mt-8 md:hidden"
             >
               View All Posts
             </a>
@@ -827,7 +960,7 @@ export default function Home() {
         </section> */}
 
         {/* Community CTA */}
-        <section id="community" className="py-16 bg-[#202E29]">
+        <section id="community" className="py-16 bg-[#103925]">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
             <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-4xl text-white mb-4">
               Be a Part of the Livoza Community
@@ -839,7 +972,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="tel:+919353477987"
-                className="inline-block bg-[#F9F9F7] text-[#202E29] px-8 py-3 rounded-full font-medium hover:bg-[#E1DCD3] transition-colors"
+                className="inline-block bg-[#FFFFFF] text-[#222222] px-8 py-3 rounded-full font-medium hover:bg-[#F5F1E8] transition-colors"
               >
                 Call +91 9353477987
               </a>
@@ -854,74 +987,74 @@ export default function Home() {
         </section>
 
         {/* Contact */}
-        <section className="py-24 bg-[#E1DCD3]">
+        <section id="contact" className="py-24 bg-[#F5F1E8]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
               <div>
-                <p className="text-[#354C48] text-sm font-medium tracking-[0.2em] uppercase mb-2">
-                  Contact Livoza
+                <p className="text-[#3E6B4F] text-sm font-medium tracking-[0.2em] uppercase mb-2">
+                  CONTACT LIVOZA
                 </p>
-                <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#202E29] mb-4">
+                <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#222222] mb-4">
                   Request A Callback
                 </h2>
-                <p className="text-[#796D5D] mb-8">
+                <p className="text-[#7A9B7E] mb-8">
                   Interested in Livoza Girls PG? Fill in the form and our team
                   will call you back within 24 hours to help you find your
                   perfect room.
                 </p>
                 <div className="space-y-6">
                   <div>
-                    <p className="font-semibold text-[#202E29] mb-1">
+                    <p className="font-semibold text-[#222222] mb-1">
                       Location
                     </p>
-                    <p className="text-[#796D5D]">
+                    <p className="text-[#7A9B7E]">
                       100 metres from Christ University · 2-minute walk · Bangalore
                     </p>
                   </div>
                   <div>
-                    <p className="font-semibold text-[#202E29] mb-1">Phone</p>
+                    <p className="font-semibold text-[#222222] mb-1">Phone</p>
                     <div className="flex flex-col gap-1">
                       <a
                         href="tel:+919353477987"
-                        className="text-[#354C48] hover:underline"
+                        className="text-[#3E6B4F] hover:underline"
                       >
                         +91 9353477987
                       </a>
                       <a
                         href="tel:+918360669796"
-                        className="text-[#354C48] hover:underline"
+                        className="text-[#3E6B4F] hover:underline"
                       >
                         +91 8360669796
                       </a>
                     </div>
                   </div>
                   <div>
-                    <p className="font-semibold text-[#202E29] mb-1">Email</p>
+                    <p className="font-semibold text-[#222222] mb-1">Email</p>
                     <a
                       href="mailto:info@livoza.com"
-                      className="text-[#354C48] hover:underline"
+                      className="text-[#3E6B4F] hover:underline"
                     >
                       info@livoza.com
                     </a>
                   </div>
                 </div>
               </div>
-              <div className="bg-[#F9F9F7] p-8 rounded-2xl shadow-sm">
+              <div className="bg-[#FFFFFF] p-8 rounded-2xl shadow-sm">
                 {contactFormSubmitted ? (
                   <div className="space-y-4">
-                    <p className="text-[#202E29] font-medium">
+                    <p className="text-[#222222] font-medium">
                       Thank you! We&apos;ll call you back within 24 hours.
                     </p>
                     <a
                       href="tel:+919353477987"
-                      className="inline-flex items-center gap-2 bg-[#202E29] text-white px-6 py-3 rounded-full font-medium hover:bg-[#354C48] transition-colors"
+                      className="inline-flex items-center gap-2 bg-[#1F3D2B] text-white px-6 py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
                     >
                       <Phone className="w-4 h-4" />
                       Or call us now: +91 9353477987
                     </a>
                     <button
                       onClick={() => setContactFormSubmitted(false)}
-                      className="block w-full text-[#354C48] font-medium hover:underline"
+                      className="block w-full text-[#3E6B4F] font-medium hover:underline"
                     >
                       Submit another request
                     </button>
@@ -929,50 +1062,50 @@ export default function Home() {
                 ) : (
                 <form className="space-y-4" onSubmit={handleContactFormSubmit}>
                   <div>
-                    <label className="block text-sm font-medium text-[#796D5D] mb-1">
+                    <label className="block text-sm font-medium text-[#7A9B7E] mb-1">
                       Full Name *
                     </label>
                     <input
                       type="text"
                       required
-                      className="w-full border border-[#C3B7A7] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#354C48] focus:border-transparent"
+                      className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                       placeholder="Your full name"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-[#796D5D] mb-1">
+                    <label className="block text-sm font-medium text-[#7A9B7E] mb-1">
                       Phone Number *
                     </label>
                     <input
                       type="tel"
                       required
-                      className="w-full border border-[#C3B7A7] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#354C48] focus:border-transparent"
+                      className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                       placeholder="+91 XXXXX XXXXX"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-[#796D5D] mb-1">
+                    <label className="block text-sm font-medium text-[#7A9B7E] mb-1">
                       Email Address
                     </label>
                     <input
                       type="email"
-                      className="w-full border border-[#C3B7A7] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#354C48] focus:border-transparent"
+                      className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                       placeholder="your@email.com"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-[#796D5D] mb-1">
+                    <label className="block text-sm font-medium text-[#7A9B7E] mb-1">
                       Message
                     </label>
                     <textarea
                       rows={4}
-                      className="w-full border border-[#C3B7A7] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#354C48] focus:border-transparent"
+                      className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                       placeholder="Tell us about your requirements..."
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-[#202E29] text-white py-3 rounded-full font-medium hover:bg-[#354C48] transition-colors"
+                    className="w-full bg-[#1F3D2B] text-white py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
                   >
                     Request Callback
                   </button>
@@ -984,7 +1117,7 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="bg-[#202E29] py-16">
+        <footer id="footer" className="bg-[#103925] py-16">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               <div className="md:col-span-2">
@@ -1044,33 +1177,28 @@ export default function Home() {
                 </ul>
               </div>
             </div>
-            <div className="mt-16 pt-8 border-t border-white/10">
-              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                <p className="text-white/60 text-sm text-center md:text-left">
-                  © Livoza Girls 2025 | All Rights Reserved
-                </p>
-                <p className="text-white/40 text-sm">
-                  100m from Christ University · Bangalore
-                </p>
-              </div>
+            <div className="mt-16 bg-[#FFC402] px-6 py-4 text-center rounded-xl">
+              <p className="text-[#021210] text-sm">
+                Copyright © 2026 Livoza | Powered by Dragon Ventures
+              </p>
             </div>
           </div>
         </footer>
       </main>
 
       {/* Mobile Floating CTA Buttons */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-[#F9F9F7] border-t border-[#C3B7A7] shadow-2xl px-4 py-4">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-[#FFFFFF] border-t border-[#EAEAEA] shadow-2xl px-4 py-4">
         <div className="flex gap-3 max-w-7xl mx-auto">
           <a
             href="tel:+919353477987"
-            className="flex-1 flex items-center justify-center gap-2 bg-[#202E29] text-white py-3.5 px-4 rounded-full font-medium hover:bg-[#354C48] transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 bg-[#1F3D2B] text-white py-3.5 px-4 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
           >
             <Phone className="w-5 h-5 flex-shrink-0" />
             Call Now
           </a>
           <button
             onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#354C48] text-white py-3.5 px-4 rounded-full font-medium hover:bg-[#202E29] transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 bg-[#3E6B4F] text-white py-3.5 px-4 rounded-full font-medium hover:bg-[#1F3D2B] transition-colors"
           >
             <Calendar className="w-5 h-5 flex-shrink-0" />
             Book Now
