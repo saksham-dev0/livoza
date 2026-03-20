@@ -10,6 +10,11 @@
 !.yarn/releases
 !.yarn/versions
 
+# Convex
+/AGENTS.md
+/CLAUDE.md
+/.agents/
+
 # testing
 /coverage
 

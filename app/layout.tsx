@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { ConvexClientProvider } from "./ConvexClientProvider";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -30,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${playfair.variable} font-sans antialiased`}
       >
-        {children}
+        <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>
     </html>
   );

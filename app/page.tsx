@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { useMutation } from "convex/react";
+import { api } from "../convex/_generated/api";
 import {
   Phone,
   Shield,
@@ -48,14 +50,89 @@ export default function Home() {
   const [modalFormSubmitted, setModalFormSubmitted] = useState(false);
   const [contactFormSubmitted, setContactFormSubmitted] = useState(false);
 
-  const handleModalFormSubmit = (e: React.FormEvent) => {
+  const [isBookSubmitting, setIsBookSubmitting] = useState(false);
+  const [bookFormError, setBookFormError] = useState<string | null>(null);
+
+  const [isContactSubmitting, setIsContactSubmitting] = useState(false);
+  const [contactFormError, setContactFormError] = useState<string | null>(null);
+
+  const createBookNowSubmission = useMutation(
+    api.forms.createBookNowSubmission,
+  );
+  const createContactSubmission = useMutation(
+    api.forms.createContactSubmission,
+  );
+
+  const handleModalFormSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
-    setModalFormSubmitted(true);
+    if (isBookSubmitting) return;
+
+    setIsBookSubmitting(true);
+    setBookFormError(null);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const roomType = String(formData.get("roomType") ?? "").trim();
+      const fullName = String(formData.get("fullName") ?? "").trim();
+      const phoneNumber = String(formData.get("phoneNumber") ?? "").trim();
+      const emailAddressRaw = formData.get("emailAddress");
+      const emailAddress =
+        typeof emailAddressRaw === "string" ? emailAddressRaw.trim() : "";
+
+      await createBookNowSubmission({
+        roomType,
+        fullName,
+        phoneNumber,
+        emailAddress: emailAddress ? emailAddress : undefined,
+      });
+
+      setModalFormSubmitted(true);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to submit request.";
+      setBookFormError(message);
+    } finally {
+      setIsBookSubmitting(false);
+    }
   };
 
-  const handleContactFormSubmit = (e: React.FormEvent) => {
+  const handleContactFormSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
-    setContactFormSubmitted(true);
+    if (isContactSubmitting) return;
+
+    setIsContactSubmitting(true);
+    setContactFormError(null);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const fullName = String(formData.get("fullName") ?? "").trim();
+      const phoneNumber = String(formData.get("phoneNumber") ?? "").trim();
+      const emailAddressRaw = formData.get("emailAddress");
+      const emailAddress =
+        typeof emailAddressRaw === "string" ? emailAddressRaw.trim() : "";
+      const messageRaw = formData.get("message");
+      const message =
+        typeof messageRaw === "string" ? messageRaw.trim() : "";
+
+      await createContactSubmission({
+        fullName,
+        phoneNumber,
+        emailAddress: emailAddress ? emailAddress : undefined,
+        message: message ? message : undefined,
+      });
+
+      setContactFormSubmitted(true);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to submit request.";
+      setContactFormError(message);
+    } finally {
+      setIsContactSubmitting(false);
+    }
   };
 
   const navLinks = [
@@ -276,7 +353,7 @@ export default function Home() {
               +91 9353477987
             </a>
             <button
-              onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+              onClick={() => { setModalFormSubmitted(false); setBookFormError(null); setBookFormOpen(true); }}
               className="hidden md:block bg-[#e3bf5f] text-[#021210] px-6 py-2.5 rounded-full font-medium hover:bg-[#e3bf5f] transition-colors"
             >
               Book Now
@@ -361,6 +438,7 @@ export default function Home() {
                 <button
                   onClick={() => {
                     setModalFormSubmitted(false);
+                    setBookFormError(null);
                     setBookFormOpen(false);
                   }}
                   className="block w-full text-[#3E6B4F] font-medium hover:underline"
@@ -374,11 +452,21 @@ export default function Home() {
                 <label className="block text-sm font-medium text-[#7A9B7E] mb-1">
                   Room Type
                 </label>
-                <select className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent">
-                  <option>Select room type</option>
-                  <option>Triple Sharing (Non AC)</option>
-                  <option>Double Sharing (Non AC)</option>
-                  <option>Single Sharing (Non AC)</option>
+                <select
+                  name="roomType"
+                  required
+                  className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
+                >
+                  <option value="">Select room type</option>
+                  <option value="Triple Sharing (Non AC)">
+                    Triple Sharing (Non AC)
+                  </option>
+                  <option value="Double Sharing (Non AC)">
+                    Double Sharing (Non AC)
+                  </option>
+                  <option value="Single Sharing (Non AC)">
+                    Single Sharing (Non AC)
+                  </option>
                 </select>
               </div>
               <div>
@@ -387,6 +475,7 @@ export default function Home() {
                 </label>
                 <input
                   type="text"
+                  name="fullName"
                   required
                   className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                   placeholder="Your name"
@@ -398,6 +487,7 @@ export default function Home() {
                 </label>
                 <input
                   type="tel"
+                  name="phoneNumber"
                   required
                   className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                   placeholder="+91 XXXXX XXXXX"
@@ -409,16 +499,21 @@ export default function Home() {
                 </label>
                 <input
                   type="email"
+                  name="emailAddress"
                   className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                   placeholder="your@email.com (optional)"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-[#1F3D2B] text-white py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
+                disabled={isBookSubmitting}
+                className="w-full bg-[#1F3D2B] text-white py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors disabled:opacity-70"
               >
-                Request Callback
+                {isBookSubmitting ? "Submitting..." : "Request Callback"}
               </button>
+              {bookFormError ? (
+                <p className="text-sm text-red-600">{bookFormError}</p>
+              ) : null}
             </form>
             )}
           </div>
@@ -470,7 +565,7 @@ export default function Home() {
                 Watch Our Video
               </button>
               <button
-                onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+                onClick={() => { setModalFormSubmitted(false); setBookFormError(null); setBookFormOpen(true); }}
                 className="inline-flex items-center justify-center gap-3 rounded-full bg-[#3E6B4F] px-8 py-3 text-white hover:bg-[#1F3D2B] transition-colors"
               >
                 <Phone className="w-4 h-4" />
@@ -603,7 +698,7 @@ export default function Home() {
                   ))}
                 </ul>
                 <button
-                  onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+                  onClick={() => { setModalFormSubmitted(false); setBookFormError(null); setBookFormOpen(true); }}
                   className="inline-flex items-center gap-2 bg-[#1F3D2B] text-white px-6 py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
                 >
                   Learn More
@@ -717,7 +812,7 @@ export default function Home() {
                     </p>
                     <p className="text-[#7A9B7E] text-sm mb-4">{p.desc}</p>
                     <button
-                      onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+                      onClick={() => { setModalFormSubmitted(false); setBookFormError(null); setBookFormOpen(true); }}
                       className="inline-block bg-[#1F3D2B] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#3E6B4F] transition-colors"
                     >
                       Check Availability
@@ -728,7 +823,7 @@ export default function Home() {
             </div>
             <div className="text-center mt-12">
               <button
-                onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+                onClick={() => { setModalFormSubmitted(false); setBookFormError(null); setBookFormOpen(true); }}
                 className="inline-flex items-center gap-2 text-[#3E6B4F] font-medium hover:underline"
               >
                 View All Properties
@@ -868,7 +963,7 @@ export default function Home() {
                   ))}
                 </ul>
                 <button
-                  onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+                  onClick={() => { setModalFormSubmitted(false); setBookFormError(null); setBookFormOpen(true); }}
                   className="inline-flex items-center gap-2 bg-[#1F3D2B] text-white px-6 py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
                 >
                   Learn More
@@ -1053,7 +1148,7 @@ export default function Home() {
                       Or call us now: +91 9353477987
                     </a>
                     <button
-                      onClick={() => setContactFormSubmitted(false)}
+                      onClick={() => { setContactFormSubmitted(false); setContactFormError(null); }}
                       className="block w-full text-[#3E6B4F] font-medium hover:underline"
                     >
                       Submit another request
@@ -1067,6 +1162,7 @@ export default function Home() {
                     </label>
                     <input
                       type="text"
+                      name="fullName"
                       required
                       className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                       placeholder="Your full name"
@@ -1078,6 +1174,7 @@ export default function Home() {
                     </label>
                     <input
                       type="tel"
+                      name="phoneNumber"
                       required
                       className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                       placeholder="+91 XXXXX XXXXX"
@@ -1089,6 +1186,7 @@ export default function Home() {
                     </label>
                     <input
                       type="email"
+                      name="emailAddress"
                       className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                       placeholder="your@email.com"
                     />
@@ -1098,6 +1196,7 @@ export default function Home() {
                       Message
                     </label>
                     <textarea
+                      name="message"
                       rows={4}
                       className="w-full border border-[#EAEAEA] rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-[#3E6B4F] focus:border-transparent"
                       placeholder="Tell us about your requirements..."
@@ -1105,10 +1204,14 @@ export default function Home() {
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-[#1F3D2B] text-white py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors"
+                    disabled={isContactSubmitting}
+                    className="w-full bg-[#1F3D2B] text-white py-3 rounded-full font-medium hover:bg-[#3E6B4F] transition-colors disabled:opacity-70"
                   >
-                    Request Callback
+                    {isContactSubmitting ? "Submitting..." : "Request Callback"}
                   </button>
+                  {contactFormError ? (
+                    <p className="text-sm text-red-600">{contactFormError}</p>
+                  ) : null}
                 </form>
                 )}
               </div>
@@ -1197,7 +1300,7 @@ export default function Home() {
             Call Now
           </a>
           <button
-            onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
+            onClick={() => { setModalFormSubmitted(false); setBookFormError(null); setBookFormOpen(true); }}
             className="flex-1 flex items-center justify-center gap-2 bg-[#3E6B4F] text-white py-3.5 px-4 rounded-full font-medium hover:bg-[#1F3D2B] transition-colors"
           >
             <Calendar className="w-5 h-5 flex-shrink-0" />
