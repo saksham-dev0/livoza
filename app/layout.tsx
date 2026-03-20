@@ -16,9 +16,14 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Puzzles Living | Premium Student PG & Hostel in Bangalore",
+  title: "Livoza Living | Premium Student PG & Hostel in Bangalore",
   description:
     "Premium PG accommodations near Christ University with homely meals, high-speed WiFi, and a vibrant student community — built for students who deserve more.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

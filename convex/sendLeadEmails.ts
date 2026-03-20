@@ -1,26 +1,16 @@
-import { Resend } from "@convex-dev/resend";
-import { components } from "./_generated/api";
-import type { MutationCtx } from "./_generated/server";
-
-type BookNowLead = {
+export type BookNowLead = {
   roomType: string;
   fullName: string;
   phoneNumber: string;
   emailAddress?: string;
 };
 
-type ContactLead = {
+export type ContactLead = {
   fullName: string;
   phoneNumber: string;
   emailAddress?: string;
   message?: string;
 };
-
-const resend: Resend = new Resend(components.resend, {
-  // We want real delivery to your mailbox.
-  // Ensure RESEND_API_KEY + RESEND_FROM_EMAIL are configured in your Convex deployment.
-  testMode: false,
-});
 
 function escapeHtml(text: string) {
   return text
@@ -31,61 +21,17 @@ function escapeHtml(text: string) {
     .replaceAll("'", "&#039;");
 }
 
-function getToEmail(): string {
-  return process.env.RESEND_TO_EMAIL ?? "reztrosoftteam@gmail.com";
+export function getToEmail(): string {
+  return process.env.SMTP_TO_EMAIL ?? "reztrosoftteam@gmail.com";
 }
 
-function getFromEmailHeader(): string {
-  const personalDomains = new Set([
-    "gmail.com",
-    "yahoo.com",
-    "outlook.com",
-    "hotmail.com",
-    "icloud.com",
-    "proton.me",
-    "protonmail.com",
-    "aol.com",
-    "live.com",
-    "msn.com",
-  ]);
-
-  const rawFromEmail = process.env.RESEND_FROM_EMAIL?.trim();
-  let fromEmail = rawFromEmail;
-
-  const extractEmail = (value: string) => {
-    const angleMatch = value.match(/<([^>]+)>/);
-    if (angleMatch?.[1]) {
-      return angleMatch[1].trim();
-    }
-    return value.trim();
-  };
-
-  // Resend requires a verified sender domain in production.
-  // If a personal mailbox is configured (for example gmail), use Resend's onboarding sender.
-  if (fromEmail) {
-    fromEmail = extractEmail(fromEmail);
-    const domain = fromEmail.split("@")[1]?.toLowerCase();
-    if (domain && personalDomains.has(domain)) {
-      console.warn(
-        `RESEND_FROM_EMAIL=${fromEmail} uses a personal email domain. Falling back to onboarding@resend.dev.`,
-      );
-      fromEmail = "onboarding@resend.dev";
-    }
-  } else {
-    fromEmail = "onboarding@resend.dev";
-  }
-
-  const fromName = process.env.RESEND_FROM_NAME ?? "Livoza";
+export function getFromEmailHeader(): string {
+  const fromEmail = process.env.SMTP_FROM_EMAIL?.trim() ?? "reztrosoftteam@gmail.com";
+  const fromName = process.env.SMTP_FROM_NAME ?? "Livoza";
   return `${fromName} <${fromEmail}>`;
 }
 
-export async function queueBookNowEmail(
-  ctx: MutationCtx,
-  lead: BookNowLead,
-) {
-  const to = getToEmail();
-  const from = getFromEmailHeader();
-
+export function buildBookNowEmail(lead: BookNowLead): { subject: string; html: string } {
   const subject = `Livoza - New Book Now Request`;
   const html = `
     <div style="font-family: Arial, Helvetica, sans-serif; line-height: 1.4;">
@@ -110,22 +56,10 @@ export async function queueBookNowEmail(
       </table>
     </div>
   `;
-
-  await resend.sendEmail(ctx, {
-    from,
-    to,
-    subject,
-    html,
-  });
+  return { subject, html };
 }
 
-export async function queueContactEmail(
-  ctx: MutationCtx,
-  lead: ContactLead,
-) {
-  const to = getToEmail();
-  const from = getFromEmailHeader();
-
+export function buildContactEmail(lead: ContactLead): { subject: string; html: string } {
   const subject = `Livoza - New Contact Callback Request`;
   const html = `
     <div style="font-family: Arial, Helvetica, sans-serif; line-height: 1.4;">
@@ -150,12 +84,6 @@ export async function queueContactEmail(
       </table>
     </div>
   `;
-
-  await resend.sendEmail(ctx, {
-    from,
-    to,
-    subject,
-    html,
-  });
+  return { subject, html };
 }
 

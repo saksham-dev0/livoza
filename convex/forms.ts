@@ -1,6 +1,6 @@
 import { v } from "convex/values";
+import { internal } from "./_generated/api";
 import { mutation } from "./_generated/server";
-import { queueBookNowEmail, queueContactEmail } from "./sendLeadEmails";
 
 function normalizeOptionalString(input: string | null | undefined) {
   const s = input?.trim();
@@ -45,16 +45,16 @@ export const createBookNowSubmission = mutation({
       submittedByAuthTokenIdentifier,
     });
 
-    // Best-effort email queueing; the form should still be stored even if email sending fails.
+    // Best-effort email scheduling; submission should still be stored even if email scheduling fails.
     try {
-      await queueBookNowEmail(ctx, {
+      await ctx.scheduler.runAfter(0, internal.sendLeadEmailsNode.sendBookNowEmail, {
         roomType,
         fullName,
         phoneNumber,
         emailAddress,
       });
     } catch (err) {
-      console.error("Failed to queue BOOK NOW email", err);
+      console.error("Failed to schedule BOOK NOW email", err);
     }
 
     return id;
@@ -95,14 +95,14 @@ export const createContactSubmission = mutation({
     });
 
     try {
-      await queueContactEmail(ctx, {
+      await ctx.scheduler.runAfter(0, internal.sendLeadEmailsNode.sendContactEmail, {
         fullName,
         phoneNumber,
         emailAddress,
         message,
       });
     } catch (err) {
-      console.error("Failed to queue CONTACT email", err);
+      console.error("Failed to schedule CONTACT email", err);
     }
 
     return id;

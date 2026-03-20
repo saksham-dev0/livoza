@@ -28,9 +28,9 @@ function LivozaLogo({ light = false }: { light?: boolean }) {
   return (
     <a href="#" className="flex items-center gap-2">
       <img
-        src="/logo.png"
+        src="/Livoza_logo-png.png"
         alt="Livoza"
-        className="h-10 w-auto flex-shrink-0"
+        className="h-14 lg:h-20 w-auto flex-shrink-0"
       />
       {/* <div className={`flex flex-col ${textColor}`}>
         <span className="font-bold text-lg tracking-tight leading-tight">
@@ -534,6 +534,11 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-[#021210]/70" />
           </div>
+          {/* Fade hero into black — matches solid black section below */}
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[min(22vh,420px)] bg-gradient-to-b from-transparent via-black/55 to-black"
+            aria-hidden
+          />
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full text-center">
             <p className="text-white/70 text-sm tracking-[0.2em] uppercase mb-4">
               Only For Girls · 100m from Christ University
@@ -580,41 +585,43 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6 lg:px-8" />
         </section>
 
-        {/* Facilities Icon Bar */}
-        <section className="bg-[#FFFFFF] py-12 border-b border-[#EAEAEA]">
-          <div className="max-w-6xl mx-auto px-6 lg:px-8">
-            <p className="text-center text-[#7A9B7E] text-sm mb-10 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
-              <span className="inline-flex items-center justify-center gap-2">
-                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-[#7A9B7E] flex-shrink-0">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M20 6L9 17L4 12"
-                      stroke="#7A9B7E"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span>Girls-Only PG</span>
-              </span>
-              <span className="text-[#D9D9D9] hidden sm:inline">·</span>
-              <span>100m from Christ University</span>
-              <span className="text-[#D9D9D9] hidden sm:inline">·</span>
-              <span>Bangalore</span>
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-              {facilities.slice(0, 6).map((f) => (
-                <div
-                  key={f.title}
-                  className="flex flex-col items-center text-center"
-                >
-                  <f.icon className="w-8 h-8 text-[#3E6B4F] mb-2" />
-                  <span className="text-sm font-medium text-[#222222]">
-                    {f.title}
+        {/* Facilities — black band + rounded forest-green panel (reference layout) */}
+        <section className="relative z-10 bg-black pb-16 md:pb-20 border-b border-white/10">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-10">
+            <div className="rounded-t-[2.25rem] sm:rounded-t-[2.75rem] md:rounded-t-[3.25rem] bg-gradient-to-b from-[#1a4d35] to-[#0d281c] px-5 py-10 sm:px-8 sm:py-12 md:px-10 md:py-14 border border-white/10 shadow-[0_-20px_60px_rgba(0,0,0,0.45)]">
+              <p className="text-center text-white/75 text-sm mb-10 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+                <span className="inline-flex items-center justify-center gap-2">
+                  <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-[#7A9B7E] flex-shrink-0">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M20 6L9 17L4 12"
+                        stroke="#7A9B7E"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </span>
-                </div>
-              ))}
+                  <span>Girls-Only PG</span>
+                </span>
+                <span className="text-white/35 hidden sm:inline">·</span>
+                <span>100m from Christ University</span>
+                <span className="text-white/35 hidden sm:inline">·</span>
+                <span>Bangalore</span>
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+                {facilities.slice(0, 6).map((f) => (
+                  <div
+                    key={f.title}
+                    className="flex flex-col items-center text-center"
+                  >
+                    <f.icon className="w-8 h-8 text-[#e3bf5f] mb-2" />
+                    <span className="text-sm font-medium text-white/90">
+                      {f.title}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
