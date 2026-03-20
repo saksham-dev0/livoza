@@ -259,8 +259,8 @@ export default function Home() {
                 href={link.href}
                 className={
                   link.label === "Home"
-                    ? "text-white/80 font-medium hover:text-[#FFC402]"
-                    : "text-white/80 hover:text-[#FFC402] transition-colors"
+                    ? "text-white/80 font-medium hover:text-[#e3bf5f]"
+                    : "text-white/80 hover:text-[#e3bf5f] transition-colors"
                 }
               >
                 {link.label}
@@ -277,7 +277,7 @@ export default function Home() {
             </a>
             <button
               onClick={() => { setModalFormSubmitted(false); setBookFormOpen(true); }}
-              className="hidden md:block bg-[#FFC402] text-[#021210] px-6 py-2.5 rounded-full font-medium hover:bg-[#D8A600] transition-colors"
+              className="hidden md:block bg-[#e3bf5f] text-[#021210] px-6 py-2.5 rounded-full font-medium hover:bg-[#e3bf5f] transition-colors"
             >
               Book Now
             </button>
@@ -321,7 +321,7 @@ export default function Home() {
             <a
               href="tel:+919353477987"
               onClick={() => setMobileMenuOpen(false)}
-              className="mt-4 flex items-center gap-2 py-3 px-4 text-[#FFC402] hover:bg-white/10 rounded-lg font-medium"
+              className="mt-4 flex items-center gap-2 py-3 px-4 text-[#e3bf5f] hover:bg-white/10 rounded-lg font-medium"
             >
               <Phone className="w-4 h-4" />
               +91 9353477987
@@ -447,7 +447,7 @@ export default function Home() {
               Livoza Girls
               <br />
               <span
-                className="font-bold text-[#FFC402] drop-shadow-[0_6px_14px_rgba(0,0,0,0.30)]"
+                className="font-bold text-[#e3bf5f] drop-shadow-[0_6px_14px_rgba(0,0,0,0.30)]"
               >
                 Premium Living
               </span>
@@ -464,7 +464,7 @@ export default function Home() {
               >
                 <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/10">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 18V6L21 12L9 18Z" fill="#FFC402" />
+                    <path d="M9 18V6L21 12L9 18Z" fill="#e3bf5f" />
                   </svg>
                 </span>
                 Watch Our Video
@@ -481,7 +481,7 @@ export default function Home() {
         </section>
 
         {/* Search Form Bar */}
-        <section className="hidden bg-[#D8A600] py-4 -mt-1 relative z-10">
+        <section className="hidden bg-[#e3bf5f] py-4 -mt-1 relative z-10">
           <div className="max-w-7xl mx-auto px-6 lg:px-8" />
         </section>
 
@@ -549,7 +549,7 @@ export default function Home() {
                     aria-hidden
                   />
                   <div className="relative z-10 flex flex-col items-center text-center">
-                    <f.icon className="w-10 h-10 text-[#FFC402] mb-4" />
+                    <f.icon className="w-10 h-10 text-[#e3bf5f] mb-4" />
                     <h3 className="text-[#F7F7F7] font-semibold text-lg mb-2">
                       {f.title}
                     </h3>
@@ -650,7 +650,7 @@ export default function Home() {
                 { num: "24/7", label: "Girls-Only Security" },
               ].map((s) => (
                 <div key={s.label} className="text-center">
-                  <p className="font-[family-name:var(--font-playfair)] text-4xl font-bold text-[#FFC402] mb-1">
+                  <p className="font-[family-name:var(--font-playfair)] text-4xl font-bold text-[#e3bf5f] mb-1">
                     {s.num}
                   </p>
                   <p className="text-white/70">{s.label}</p>
@@ -791,7 +791,7 @@ export default function Home() {
                     key={`${t.initial}-${i}`}
                     className="relative bg-[#103925]/55 rounded-2xl p-6 min-h-[220px]"
                   >
-                    <div className="flex gap-1 text-[#FFC402] text-xs mb-4">
+                    <div className="flex gap-1 text-[#e3bf5f] text-xs mb-4">
                       {Array.from({ length: 5 }).map((_, idx) => (
                         <span key={idx}>★</span>
                       ))}
@@ -801,12 +801,12 @@ export default function Home() {
                       &quot;{t.quote}&quot;
                     </p>
 
-                    <span className="absolute bottom-6 right-6 text-[#FFC402] text-3xl leading-none">
+                    <span className="absolute bottom-6 right-6 text-[#e3bf5f] text-3xl leading-none">
                       ”
                     </span>
 
                     <div className="mt-6 flex items-center gap-3">
-                      <span className="w-11 h-11 rounded-full bg-[#FFC402] text-[#021210] flex items-center justify-center font-bold">
+                      <span className="w-11 h-11 rounded-full bg-[#e3bf5f] text-[#021210] flex items-center justify-center font-bold">
                         {t.initial}
                       </span>
                       <div>
@@ -906,7 +906,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="flex justify-between items-end mb-12">
               <div>
-                <p className="text-[#FFC402] text-sm font-medium tracking-[0.2em] uppercase mb-2">
+                <p className="text-[#e3bf5f] text-sm font-medium tracking-[0.2em] uppercase mb-2">
                   Our latest blog
                 </p>
                 <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#F7F7F7]">
@@ -915,7 +915,7 @@ export default function Home() {
               </div>
               <a
                 href="#"
-                className="text-[#FFC402] font-medium hover:underline hidden md:block"
+                className="text-[#e3bf5f] font-medium hover:underline hidden md:block"
               >
                 View All Posts
               </a>
@@ -936,14 +936,14 @@ export default function Home() {
                     <div className="absolute inset-0 bg-[#021210]/30" />
                   </div>
                   <div className="p-6 relative">
-                    <h3 className="text-xl font-bold text-[#F7F7F7] mb-2 group-hover:text-[#FFC402] transition-colors">
+                    <h3 className="text-xl font-bold text-[#F7F7F7] mb-2 group-hover:text-[#e3bf5f] transition-colors">
                       {b.title}
                     </h3>
                     <p className="text-white/60 text-sm mb-2">
                       {b.date} · {b.readTime}
                     </p>
                     <p className="text-white/70">{b.excerpt}</p>
-                    <span className="inline-block mt-4 text-[#FFC402] font-medium">
+                    <span className="inline-block mt-4 text-[#e3bf5f] font-medium">
                       Read More →
                     </span>
                   </div>
@@ -952,7 +952,7 @@ export default function Home() {
             </div>
             <a
               href="#"
-              className="text-[#FFC402] font-medium hover:underline mt-8 md:hidden"
+              className="text-[#e3bf5f] font-medium hover:underline mt-8 md:hidden"
             >
               View All Posts
             </a>
@@ -1177,7 +1177,7 @@ export default function Home() {
                 </ul>
               </div>
             </div>
-            <div className="mt-16 bg-[#FFC402] px-6 py-4 text-center rounded-xl">
+            <div className="mt-16 bg-[#e3bf5f] px-6 py-4 text-center rounded-xl">
               <p className="text-[#021210] text-sm">
                 Copyright © 2026 Livoza | Powered by Dragon Ventures
               </p>
