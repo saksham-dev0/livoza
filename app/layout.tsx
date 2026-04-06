@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   description:
     "Premium PG accommodations near Christ University with homely meals, high-speed WiFi, and a vibrant student community — built for students who deserve more.",
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
+    icon: "/logo.jpeg",
+    shortcut: "/logo.jpeg",
+    apple: "/logo.jpeg",
   },
 };
 
