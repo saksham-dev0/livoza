@@ -221,7 +221,7 @@ export default function Home() {
         "Furnished Rooms",
         "24/7 Girls-Only Security",
       ],
-      price: "₹35,000/mo",
+      price: "₹25,000/mo",
       bookingAdvance: "₹30,000",
       annualTotal: "₹4,09,000",
       desc: "Complete privacy with a fully furnished private room.",
@@ -502,7 +502,7 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
+              {/* <button
                 type="button"
                 className="inline-flex items-center justify-center gap-3 rounded-full border border-white/20 bg-white/[0.07] backdrop-blur-sm px-7 py-3 text-white text-sm font-medium hover:bg-white/[0.12] transition-all duration-200"
                 aria-label="Watch our video"
@@ -513,7 +513,7 @@ export default function Home() {
                   </svg>
                 </span>
                 Watch Our Video
-              </button>
+              </button> */}
               <button
                 onClick={openBookForm}
                 className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#3E6B4F] px-7 py-3 text-white text-sm font-semibold hover:bg-[#2d5039] transition-all duration-200 shadow-[0_4px_20px_rgba(62,107,79,0.5)]"
