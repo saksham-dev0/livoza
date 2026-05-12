@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import {
@@ -38,6 +39,7 @@ function LivozaLogo({ light = false }: { light?: boolean }) {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [bookFormOpen, setBookFormOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [modalFormSubmitted, setModalFormSubmitted] = useState(false);
@@ -81,7 +83,7 @@ export default function Home() {
         emailAddress: emailAddress ? emailAddress : undefined,
       });
 
-      setModalFormSubmitted(true);
+      router.push("/thank-you");
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to submit request.";
@@ -118,7 +120,7 @@ export default function Home() {
         message: message ? message : undefined,
       });
 
-      setContactFormSubmitted(true);
+      router.push("/thank-you");
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to submit request.";
