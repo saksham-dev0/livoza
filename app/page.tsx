@@ -26,14 +26,12 @@ import {
 
 function LivozaLogo({ light = false }: { light?: boolean }) {
   return (
-    <a href="#" className="flex items-center gap-2">
-      <div className="rounded-2xl border-2 border-[#e3bf5f] shadow-[0_0_14px_rgba(227,191,95,0.45)] overflow-hidden bg-white">
-        <img
-          src="/Livoza_logo-png.png"
-          alt="Livoza"
-          className="h-10 lg:h-14 w-auto flex-shrink-0 block"
-        />
-      </div>
+    <a href="#" className="flex items-center">
+      <img
+        src="/livoza-white.png"
+        alt="Livoza"
+        className="h-14 lg:h-20 w-auto flex-shrink-0 block"
+      />
     </a>
   );
 }
@@ -183,8 +181,12 @@ export default function Home() {
         "Furnished Rooms",
         "24/7 Girls-Only Security",
       ],
-      price: "₹16,500/mo",
+      advancePayment: "₹33,000",
+      maintenance: "₹10,000",
+      agreementDuration: "12 months",
       bookingAdvance: "₹20,000",
+      totalInitial: "₹59,500",
+      moveInAmount: "₹39,500",
       annualTotal: "₹1,98,100",
       desc: "Most affordable option, ideal for students on a budget.",
       image: "/triplebed.jpeg",
@@ -203,8 +205,12 @@ export default function Home() {
         "Furnished Rooms",
         "24/7 Girls-Only Security",
       ],
-      price: "₹19,000/mo",
+      advancePayment: "₹38,000",
+      maintenance: "₹10,000",
+      agreementDuration: "12 months",
       bookingAdvance: "₹20,000",
+      totalInitial: "₹67,000",
+      moveInAmount: "₹47,000",
       annualTotal: "₹2,26,600",
       desc: "A comfortable balance of privacy and affordability.",
       image: "/doublebed.jpeg",
@@ -223,8 +229,12 @@ export default function Home() {
         "Furnished Rooms",
         "24/7 Girls-Only Security",
       ],
-      price: "₹25,000/mo",
+      advancePayment: "₹70,000",
+      maintenance: "₹10,000",
+      agreementDuration: "12 months",
       bookingAdvance: "₹30,000",
+      totalInitial: "₹1,15,000",
+      moveInAmount: "₹85,000",
       annualTotal: "₹4,09,000",
       desc: "Complete privacy with a fully furnished private room.",
       image: "/img1.jpeg",
@@ -274,9 +284,9 @@ export default function Home() {
     <div className="bg-[#021210] text-[#EAEAEA] min-h-screen">
       {/* ── Header ── */}
       <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-[#021210]/80 border-b border-white/[0.07]">
-        <nav className="flex justify-between items-center max-w-7xl mx-auto px-6 lg:px-8 py-3">
+        <nav className="flex justify-between items-center md:grid md:grid-cols-3 max-w-7xl mx-auto px-4 lg:px-8 py-3">
           <LivozaLogo />
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center justify-center gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -287,7 +297,7 @@ export default function Home() {
               </a>
             ))}
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-end gap-3">
             <a
               href="tel:+919353477987"
               className="hidden md:flex items-center gap-2 text-white/70 text-sm px-4 py-2 rounded-full border border-white/15 hover:border-white/30 hover:text-white transition-all duration-200"
@@ -483,14 +493,23 @@ export default function Home() {
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full text-center pt-20">
             {/* Eyebrow badge */}
-            <div className="inline-flex items-center gap-2 bg-white/[0.08] border border-white/[0.12] backdrop-blur-sm rounded-full px-4 py-1.5 mb-8">
+            <div className="inline-flex items-center gap-2 bg-white/[0.08] border border-white/[0.12] backdrop-blur-sm rounded-full px-4 py-1.5 mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#e3bf5f] animate-pulse" />
               <span className="text-white/80 text-xs tracking-[0.2em] uppercase font-medium">
                 Girls-Only · 100m from Christ University
               </span>
             </div>
 
-            <h1 className="font-[family-name:var(--font-playfair)] text-5xl md:text-6xl lg:text-7xl xl:text-[80px] text-white leading-[1.08] mb-6 tracking-tight">
+            {/* 1 Month Free offer pill */}
+            <div className="flex justify-center mb-6">
+              <div className="inline-flex items-center gap-2 bg-[#3E6B4F]/30 border border-[#3E6B4F]/60 backdrop-blur-sm rounded-full px-5 py-2">
+                <span className="text-base">🎉</span>
+                <span className="text-white font-bold text-sm tracking-wide">1 Month Stay FREE</span>
+                <span className="text-white/50 text-xs">· Pay for 11 months, Stay for 12 months</span>
+              </div>
+            </div>
+
+            <h1 className="font-[family-name:var(--font-playfair)] text-5xl md:text-6xl lg:text-7xl xl:text-[80px] text-white leading-[1.08] mb-3 tracking-tight">
               Livoza Girls
               <br />
               <span className="text-[#e3bf5f] [text-shadow:0_0_40px_rgba(227,191,95,0.4),0_4px_16px_rgba(0,0,0,0.3)]">
@@ -498,8 +517,14 @@ export default function Home() {
               </span>
             </h1>
 
+            {/* Slogan */}
+            <p className="text-white/40 text-sm md:text-base italic font-[family-name:var(--font-playfair)] mb-6 tracking-wide">
+              A Stay That Matters.
+            </p>
+
             <p className="text-white/70 text-base md:text-lg max-w-[540px] mx-auto mb-10 leading-relaxed">
-              Situated just 100 metres from Christ University — a 2-minute walk to campus.
+              Situated just 100 metres from Christ University <br/>
+              2-minute walk to campus.
               Everything you need, right at your doorstep.
             </p>
 
@@ -527,7 +552,7 @@ export default function Home() {
 
             {/* Trust indicators */}
             <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-white/50 text-xs">
-              {["Girls-Only PG", "Fully Furnished", "24/7 Security", "2 Min Walk to Campus"].map((item, i) => (
+              {["Girls-Only PG", "Fully Furnished", "All Rooms with Balcony", "24/7 Security", "2 Min Walk to Campus"].map((item, i) => (
                 <span key={item} className="flex items-center gap-1.5">
                   {i > 0 && <span className="w-1 h-1 rounded-full bg-white/30" />}
                   {item}
@@ -671,9 +696,12 @@ export default function Home() {
                       className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                    <div className="absolute top-4 left-4 flex gap-2">
+                    <div className="absolute top-4 left-4 flex flex-col gap-1.5">
                       <span className="bg-[#e3bf5f] text-[#021210] text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
                         {p.badge}
+                      </span>
+                      <span className="bg-[#3E6B4F] text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
+                        🎉 1 Month Free
                       </span>
                     </div>
                     <div className="absolute bottom-4 left-4">
@@ -690,14 +718,39 @@ export default function Home() {
                       {p.location}
                     </p>
 
-                    <div className="bg-[#0f2e1e] border border-white/[0.06] rounded-2xl p-4 mb-4">
-                      <div className="flex items-baseline gap-1 mb-0.5">
-                        <span className="text-2xl font-bold text-[#e3bf5f] font-[family-name:var(--font-playfair)]">{p.price}</span>
+                    <div className="bg-[#0f2e1e] border border-white/[0.06] rounded-2xl p-4 mb-4 space-y-1.5">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-white/45">Advance Payment</span>
+                        <span className="text-white/70 font-medium">{p.advancePayment} <span className="text-white/30 font-normal">(adj. Apr & May)</span></span>
                       </div>
-                      <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-white/40">
-                        <span>Booking: {p.bookingAdvance}</span>
-                        <span>·</span>
-                        <span>Annual: {p.annualTotal}</span>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-white/45">Maintenance (One Time)</span>
+                        <span className="text-white/70 font-medium">{p.maintenance}</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-white/45">Agreement Duration</span>
+                        <span className="text-white/70 font-medium">{p.agreementDuration}</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-white/45">Booking Advance</span>
+                        <span className="text-white/70 font-medium">{p.bookingAdvance}</span>
+                      </div>
+                      <div className="h-px bg-white/[0.07] my-1" />
+                      <div className="flex justify-between text-xs font-semibold">
+                        <span className="text-white/60">Total</span>
+                        <span className="text-white/85">{p.totalInitial}</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-white/40">Move-in Amount</span>
+                        <span className="text-white/55">{p.moveInAmount} <span className="text-white/25 font-normal text-[10px]">(after shifting)</span></span>
+                      </div>
+                      <div className="h-px bg-white/[0.07] my-1" />
+                      <div className="flex justify-between text-xs font-bold">
+                        <span className="text-[#e3bf5f]/80">Annual Total</span>
+                        <span className="text-[#e3bf5f]">{p.annualTotal}</span>
+                      </div>
+                      <div className="bg-[#3E6B4F]/20 border border-[#3E6B4F]/30 rounded-xl px-3 py-2 text-[11px] text-[#7A9B7E] text-center font-medium">
+                        🎉 Pay for 11 months, stay for 12 — 1 month free!
                       </div>
                     </div>
 
