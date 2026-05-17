@@ -9,6 +9,7 @@
  */
 
 import type * as forms from "../forms.js";
+import type * as referrals from "../referrals.js";
 import type * as sendLeadEmails from "../sendLeadEmails.js";
 import type * as sendLeadEmailsNode from "../sendLeadEmailsNode.js";
 
@@ -20,6 +21,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   forms: typeof forms;
+  referrals: typeof referrals;
   sendLeadEmails: typeof sendLeadEmails;
   sendLeadEmailsNode: typeof sendLeadEmailsNode;
 }>;

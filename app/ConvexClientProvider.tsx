@@ -1,7 +1,24 @@
 "use client";
 
-import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { ReactNode, useMemo } from "react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { ConvexReactClient } from "convex/react";
+import { useAuth } from "@clerk/nextjs";
+import { ReactNode, useEffect, useMemo } from "react";
+import { useMutation } from "convex/react";
+import { api } from "../convex/_generated/api";
+
+function UserSync() {
+  const { isSignedIn } = useAuth();
+  const upsertReferralUser = useMutation(api.referrals.upsertReferralUser);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      upsertReferralUser().catch(() => {});
+    }
+  }, [isSignedIn, upsertReferralUser]);
+
+  return null;
+}
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
   const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
@@ -19,5 +36,10 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
     );
   }
 
-  return <ConvexProvider client={convex}>{children}</ConvexProvider>;
+  return (
+    <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+      <UserSync />
+      {children}
+    </ConvexProviderWithClerk>
+  );
 }
