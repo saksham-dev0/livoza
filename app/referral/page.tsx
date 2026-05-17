@@ -1,6 +1,6 @@
 "use client";
 
-import { SignIn, useUser } from "@clerk/nextjs";
+import { useUser, RedirectToSignIn } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useRouter } from "next/navigation";
@@ -18,82 +18,12 @@ export default function ReferralPage() {
   }
 
   if (!isSignedIn) {
-    return (
-      <div className="min-h-screen bg-[#021210] flex flex-col items-center justify-center px-4">
-        {/* Background gradient */}
-        <div className="fixed inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#3E6B4F]/10 rounded-full blur-[120px]" />
-        </div>
-
-        <div className="relative z-10 mb-10 text-center">
-          <div className="inline-flex items-center gap-2 bg-[#3E6B4F]/20 border border-[#3E6B4F]/40 rounded-full px-4 py-1.5 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#e3bf5f] animate-pulse" />
-            <span className="text-[#e3bf5f] text-xs font-medium tracking-widest uppercase">Referral Program</span>
-          </div>
-          <h1
-            className="text-3xl md:text-4xl font-bold text-[#EAEAEA] mb-3"
-            style={{ fontFamily: "var(--font-playfair)" }}
-          >
-            Refer &amp; Earn
-          </h1>
-          <p className="text-white/50 text-sm max-w-xs mx-auto">
-            Sign in to access your referral dashboard and start earning rewards
-          </p>
-        </div>
-
-        <div className="relative z-10 w-full max-w-sm">
-          <div
-            className="rounded-2xl p-1"
-            style={{
-              background: "linear-gradient(135deg, rgba(62,107,79,0.3) 0%, rgba(227,191,95,0.1) 100%)",
-            }}
-          >
-            <div className="rounded-xl overflow-hidden bg-[#021210]">
-              <SignIn
-                routing="hash"
-                fallbackRedirectUrl="/referral"
-                signUpFallbackRedirectUrl="/referral/referee"
-                signUpForceRedirectUrl="/referral/referee"
-                appearance={{
-                  elements: {
-                    rootBox: "w-full",
-                    card: "bg-[#0a1f14] border border-white/[0.07] shadow-none rounded-xl",
-                    headerTitle: "text-[#EAEAEA]",
-                    headerSubtitle: "text-white/50",
-                    socialButtonsBlockButton: "bg-[#061a12] border border-white/[0.1] text-white hover:bg-[#0d2a1a] transition-colors",
-                    socialButtonsBlockButtonText: "text-[#EAEAEA]",
-                    dividerLine: "bg-white/[0.08]",
-                    dividerText: "text-white/30",
-                    formFieldLabel: "text-white/50",
-                    formFieldInput: "bg-[#061a12] border border-white/[0.1] text-white placeholder:text-white/20 focus:border-[#3E6B4F] focus:ring-[#3E6B4F]/30 rounded-xl",
-                    formButtonPrimary: "bg-[#e3bf5f] text-[#021210] hover:bg-[#f0cf77] rounded-full font-semibold shadow-[0_4px_14px_rgba(227,191,95,0.3)]",
-                    footerActionLink: "text-[#e3bf5f] hover:text-[#f0cf77]",
-                    identityPreviewText: "text-[#EAEAEA]",
-                    identityPreviewEditButton: "text-[#e3bf5f]",
-                    formResendCodeLink: "text-[#e3bf5f]",
-                    otpCodeFieldInput: "bg-[#061a12] border border-white/[0.1] text-white",
-                    alertText: "text-red-400",
-                  },
-                  variables: {
-                    colorBackground: "#0a1f14",
-                    colorText: "#EAEAEA",
-                    colorTextSecondary: "rgba(255,255,255,0.5)",
-                    colorPrimary: "#3E6B4F",
-                    colorInputBackground: "#061a12",
-                    colorInputText: "#EAEAEA",
-                    borderRadius: "0.75rem",
-                  },
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <RedirectToSignIn />;
   }
 
   return <ReferralDashboard />;
 }
+
 
 function ReferralDashboard() {
   const { user } = useUser();
@@ -180,27 +110,6 @@ function ReferralDashboard() {
             <div className="bg-[#061a12] rounded-2xl p-5 border border-white/[0.06] text-center">
               <p className="text-3xl font-bold text-[#e3bf5f] mb-1">₹0</p>
               <p className="text-white/40 text-xs uppercase tracking-wider">Rewards Earned</p>
-            </div>
-          </div>
-
-          {/* Referral link */}
-          <div className="mb-6">
-            <p className="text-white/40 text-xs uppercase tracking-wider mb-3">Your Referral Link</p>
-            <div className="flex gap-2">
-              <div className="flex-1 bg-[#061a12] border border-white/[0.08] rounded-xl px-4 py-3 text-white/40 text-sm truncate">
-                {referralLink || "Loading..."}
-              </div>
-              <button
-                onClick={handleCopy}
-                className="px-4 py-3 rounded-xl text-sm font-medium transition-all shrink-0"
-                style={{
-                  background: copied ? "rgba(62,107,79,0.3)" : "rgba(227,191,95,0.15)",
-                  border: copied ? "1px solid rgba(62,107,79,0.5)" : "1px solid rgba(227,191,95,0.3)",
-                  color: copied ? "#7A9B7E" : "#e3bf5f",
-                }}
-              >
-                {copied ? "Copied!" : "Copy"}
-              </button>
             </div>
           </div>
 
