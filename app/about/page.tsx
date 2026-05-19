@@ -179,11 +179,13 @@ export default function AboutPage() {
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer",
                 fontFamily: "inherit",
               }}>Read our story <Arrow/></button>
-              <button style={{
-                padding: "12px 10px", borderRadius: 99, background: "#fff",
-                color: T.ink, border: "1px solid #0000001a", fontWeight: 500, fontSize: isMobile ? 13 : 14,
-                cursor: "pointer", fontFamily: "inherit",
-              }}>Refer & Earn</button>
+              <a href="/referral">
+                <button style={{
+                  padding: "12px 10px", borderRadius: 99, background: "#fff",
+                  color: T.ink, border: "1px solid #0000001a", fontWeight: 500, fontSize: isMobile ? 13 : 14,
+                  cursor: "pointer", fontFamily: "inherit",
+                }}>Refer & Earn</button>
+              </a>
             </div>
           </aside>
         </div>

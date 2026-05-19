@@ -28,6 +28,7 @@ export function SharedNav({ onBook }: { onBook?: () => void }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const links = [
+    { href: "/", label: "Home" },
     { href: "/properties", label: "Properties" },
     { href: "/#facilities", label: "Facilities" },
     { href: "/about", label: "About" },
