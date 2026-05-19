@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { SharedNav } from "../components/SharedNav";
 import { FloatingCTA } from "../components/FloatingCTA";
+import Link from "next/link";
 
 // ── Design tokens ──
 const T = {
@@ -395,8 +396,7 @@ export default function AboutPage() {
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "2fr 1fr 1fr 1fr 1fr", gap: isMobile ? 28 : 40 }}>
           <div style={{ gridColumn: isMobile ? "1 / -1" : "auto" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ width: 28, height: 28, borderRadius: 8, background: T.ink, display: "grid", placeItems: "center", color: "#fff", ...serif, fontStyle: "italic", fontSize: 18 }}>l</span>
-              <span style={{ fontWeight: 600, fontSize: 17, letterSpacing: "-0.01em" }}>Livoza</span>
+              <Logo />
             </div>
             <p style={{ margin: "14px 0 0", color: T.muted, fontSize: 13.5, lineHeight: 1.55, maxWidth: 280 }}>Premium yet affordable housing. <br/> Built in Bengaluru.</p>
             <div style={{ ...mono, fontSize: 11, color: T.muted, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 20 }}>© Livoza 2025 — all rights reserved</div>
@@ -423,5 +423,13 @@ export default function AboutPage() {
       </footer>
 
     </div>
+  );
+}
+
+export function Logo() {
+  return (
+    <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+      <img src="/Livoza-Logo-new.png" alt="Livoza" style={{ height: 38, width: "auto", display: "block" }} />
+    </Link>
   );
 }

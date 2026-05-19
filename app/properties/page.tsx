@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react";
 import { SharedNav } from "../components/SharedNav";
 import { FloatingCTA } from "../components/FloatingCTA";
+import Link from "next/link";
 
 const T = {
   ink: "#154f4c",
@@ -1141,12 +1142,7 @@ export default function PropertiesPage() {
           <div className="foot-grid-inner">
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{
-                  width: 28, height: 28, borderRadius: 8, background: T.ink,
-                  display: "grid", placeItems: "center", color: "#fff",
-                  fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: 18,
-                }}>l</span>
-                <span style={{ fontWeight: 600, fontSize: 17, letterSpacing: "-0.01em" }}>Livoza</span>
+                <Logo />
               </div>
               <p style={{ margin: "16px 0 0", color: T.muted, fontSize: 13.5, lineHeight: 1.55, maxWidth: 280 }}>
                 Student living, done properly. Built in Bengaluru by people who got tired of settling for less.
@@ -1182,5 +1178,13 @@ export default function PropertiesPage() {
 
       </div>
     </>
+  );
+}
+
+export function Logo() {
+  return (
+    <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+      <img src="/Livoza-Logo-new.png" alt="Livoza" style={{ height: 38, width: "auto", display: "block" }} />
+    </Link>
   );
 }
