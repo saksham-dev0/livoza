@@ -49,24 +49,12 @@ export default function ReferralLanding() {
           gap: 16,
         }}
       >
-        <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
-          <span
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: 8,
-              background: "#154f4c",
-              display: "grid",
-              placeItems: "center",
-              color: "#fff",
-              fontFamily: "'Instrument Serif', serif",
-              fontStyle: "italic",
-              fontSize: 18,
-            }}
-          >
-            l
-          </span>
-          <span style={{ fontWeight: 600, fontSize: 17, letterSpacing: "-0.01em" }}>Livoza</span>
+        <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+          <img
+            src="/Livoza-Logo-new.png"
+            alt="Livoza"
+            style={{ height: 38, width: "auto", display: "block" }}
+          />
         </a>
 
         <nav style={{ display: isMobile ? "none" : "flex", gap: 28, fontSize: 14.5, color: "#1d3936" }}>
@@ -806,6 +794,32 @@ export default function ReferralLanding() {
           </div>
         </div>
       </section>
+      {isMobile && (
+        <button
+          onClick={goToSignUp}
+          style={{
+            position: "fixed",
+            left: 20,
+            right: 20,
+            bottom: "calc(16px + env(safe-area-inset-bottom))",
+            zIndex: 50,
+            height: 54,
+            borderRadius: 99,
+            border: "1px solid #ffffff33",
+            background: "#154f4c",
+            color: "#fff",
+            boxShadow: "0 18px 40px -18px #0e3a37cc",
+            fontFamily: "inherit",
+            fontSize: 15,
+            fontWeight: 700,
+            letterSpacing: "0.01em",
+            cursor: "pointer",
+          }}
+          aria-label="Refer someone"
+        >
+          Refer someone
+        </button>
+      )}
     </div>
   );
 }

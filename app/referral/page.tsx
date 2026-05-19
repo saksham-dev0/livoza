@@ -87,9 +87,8 @@ function ReferralDashboard() {
     <div style={shell}>
       {/* Nav */}
       <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: isMobile ? "16px 18px" : "22px 40px", gap: isMobile ? 10 : 24 }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
-          <span style={{ width: 28, height: 28, borderRadius: 8, background: "#154f4c", display: "grid", placeItems: "center", color: "#fff", fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: 18 }}>l</span>
-          <span style={{ fontWeight: 600, fontSize: 17, letterSpacing: "-0.01em" }}>Livoza</span>
+        <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+          <img src="/Livoza-Logo-new.png" alt="Livoza" style={{ height: 38, width: "auto", display: "block" }} />
         </Link>
         <nav style={{ display: isMobile ? "none" : "flex", gap: 28, fontSize: 14.5, color: "#1d3936" }}>
           <Link href="/referral" style={{ opacity: 1, fontWeight: 600, textDecoration: "none", color: "#154f4c", display: "flex", alignItems: "center", gap: 6 }}>
@@ -108,7 +107,7 @@ function ReferralDashboard() {
       </header>
 
       {/* Page */}
-      <section style={{ padding: isMobile ? "10px 18px 52px" : "8px 40px 80px" }}>
+      <section style={{ padding: isMobile ? "10px 18px 118px" : "8px 40px 80px" }}>
         {/* Page head */}
         <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: isMobile ? "stretch" : "flex-end", gap: isMobile ? 20 : 24, margin: isMobile ? "12px 0 20px" : "14px 0 22px" }}>
           <div style={{ minWidth: 0 }}>
@@ -385,6 +384,32 @@ function ReferralDashboard() {
           </div>
         </div>
       </section>
+      {isMobile && (
+        <button
+          onClick={() => router.push("/referral/referee")}
+          style={{
+            position: "fixed",
+            left: 20,
+            right: 20,
+            bottom: "calc(16px + env(safe-area-inset-bottom))",
+            zIndex: 50,
+            height: 54,
+            borderRadius: 99,
+            border: "1px solid #ffffff33",
+            background: "#154f4c",
+            color: "#fff",
+            boxShadow: "0 18px 40px -18px #0e3a37cc",
+            fontFamily: "inherit",
+            fontSize: 15,
+            fontWeight: 700,
+            letterSpacing: "0.01em",
+            cursor: "pointer",
+          }}
+          aria-label="Refer someone"
+        >
+          Refer someone
+        </button>
+      )}
     </div>
   );
 }

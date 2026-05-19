@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { Phone, MapPin, ChevronRight, Calendar, Menu, X, CheckCircle2 } from "lucide-react";
+import { Phone, MapPin, ChevronRight, Calendar, CheckCircle2 } from "lucide-react";
+import { SharedNav, Logo } from "./components/SharedNav";
 
 // ── Design tokens (brand teal palette) ──
 const T = {
@@ -54,109 +55,6 @@ const Bookmark = () => (
   </svg>
 );
 
-// ── Logo ──
-function Logo() {
-  return (
-    <a href="#" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-      <img src="/Livoza-Logo-new.png" alt="Livoza" style={{ height: 38, width: "auto", display: "block" }} />
-    </a>
-  );
-}
-
-// ── Nav ──
-function Nav({ onBook, mobileOpen, setMobileOpen }: {
-  onBook: () => void;
-  mobileOpen: boolean;
-  setMobileOpen: (v: boolean) => void;
-}) {
-  const links = [
-    { href: "#rooms", label: "Rooms" },
-    { href: "#facilities", label: "Facilities" },
-    { href: "#about", label: "About" },
-    { href: "#contact", label: "Contact" },
-  ];
-  return (
-    <header style={{
-      position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-      background: `${T.paper}e6`, backdropFilter: "blur(12px)",
-      borderBottom: `1px solid ${T.line2}`,
-    }}>
-      <div style={{
-        maxWidth: 1280, margin: "0 auto", padding: "0 32px",
-        display: "flex", alignItems: "center", justifyContent: "space-between", height: 68,
-      }}>
-        <Logo />
-
-        {/* Desktop nav */}
-        <nav style={{ display: "flex", gap: 28, fontSize: 14 }}>
-          {links.map(l => (
-            <a key={l.href} href={l.href} style={{
-              color: T.ink2, fontWeight: 500, textDecoration: "none",
-              opacity: 0.8,
-            }}>{l.label}</a>
-          ))}
-        </nav>
-
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <div className="desktop-nav-btns" style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <a href="tel:+919353477987" style={{
-              display: "flex", alignItems: "center", gap: 6,
-              padding: "9px 16px", borderRadius: 99,
-              border: `1px solid ${T.line2}`, background: T.card,
-              fontSize: 13, fontWeight: 500, color: T.ink, textDecoration: "none",
-            }}>
-              <Phone style={{ width: 13, height: 13 }} />
-              +91 9353477987
-            </a>
-            <button onClick={onBook} style={{
-              padding: "9px 18px", borderRadius: 99, background: T.ink,
-              color: "#fff", border: "none", fontSize: 13, fontWeight: 500, cursor: "pointer",
-            }}>Book Now</button>
-          </div>
-
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            style={{
-              display: "none", padding: 8, background: "none", border: "none",
-              cursor: "pointer", color: T.ink,
-            }}
-            className="mobile-menu-btn"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X style={{ width: 20, height: 20 }} /> : <Menu style={{ width: 20, height: 20 }} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div style={{
-          background: T.paper, borderTop: `1px solid ${T.line2}`,
-          padding: "16px 24px 24px",
-        }}>
-          {links.map(l => (
-            <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)} style={{
-              display: "block", padding: "12px 0", color: T.ink2, fontWeight: 500,
-              borderBottom: `1px solid ${T.line}`, textDecoration: "none", fontSize: 15,
-            }}>{l.label}</a>
-          ))}
-          <a href="tel:+919353477987" style={{
-            display: "flex", alignItems: "center", gap: 8, marginTop: 16,
-            color: T.ink, fontWeight: 600, fontSize: 15, textDecoration: "none",
-          }}>
-            <Phone style={{ width: 16, height: 16 }} />+91 9353477987
-          </a>
-          <button onClick={() => { onBook(); setMobileOpen(false); }} style={{
-            marginTop: 12, width: "100%", padding: "12px", borderRadius: 99,
-            background: T.ink, color: "#fff", border: "none", fontWeight: 600,
-            fontSize: 15, cursor: "pointer",
-          }}>Book Now</button>
-        </div>
-      )}
-    </header>
-  );
-}
 
 // ── Hero inline booking form ──
 function HeroBookForm() {
@@ -1154,7 +1052,6 @@ function BookModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 export default function Home() {
   const router = useRouter();
   const [bookOpen, setBookOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   const [contactError, setContactError] = useState<string | null>(null);
@@ -1217,7 +1114,7 @@ export default function Home() {
       `}</style>
 
       <div style={{ background: T.paper, minHeight: "100vh", color: T.ink, fontFamily: "var(--font-poppins), ui-sans-serif, system-ui, sans-serif" }}>
-        <Nav onBook={() => setBookOpen(true)} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+        <SharedNav onBook={() => setBookOpen(true)} />
         <Hero onBook={() => setBookOpen(true)} />
         <Trustbar />
         <Facilities />
@@ -1245,7 +1142,7 @@ export default function Home() {
             <a href="tel:+919353477987" style={{
               flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
               background: T.mint, color: T.ink, padding: "13px", borderRadius: 99,
-              fontWeight: 600, fontSize: 14, textDecoration: "none",
+              border: `1px solid ${T.ink}`, fontWeight: 600, fontSize: 14, textDecoration: "none",
             }}>
               <Phone style={{ width: 16, height: 16 }} /> Call Now
             </a>
