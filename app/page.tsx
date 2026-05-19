@@ -4,1173 +4,1263 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
-import {
-  Phone,
-  Shield,
-  Shirt,
-  ChevronRight,
-  Refrigerator,
-  Tv,
-  Sofa,
-  CookingPot,
-  Menu,
-  X,
-  Calendar,
-  MapPin,
-  Heart,
-  Wrench,
-  CreditCard,
-  Tag,
-  Sparkles,
-} from "lucide-react";
+import { Phone, MapPin, ChevronRight, Calendar, Menu, X, CheckCircle2 } from "lucide-react";
 
-function LivozaLogo({ light = false }: { light?: boolean }) {
+// ── Design tokens (brand teal palette) ──
+const T = {
+  paper:  "#f1ece2",
+  paper2: "#e7e1d2",
+  mint:   "#dee8e6",
+  mint2:  "#c8d6d3",
+  sage:   "#5d8b87",
+  ink:    "#154f4c",
+  ink2:   "#1d3936",
+  muted:  "#6a7a78",
+  line:   "#154f4c10",
+  line2:  "#154f4c1f",
+  card:   "#ffffff",
+};
+
+// ── Inline-style helpers ──
+const serif: React.CSSProperties = {
+  fontFamily: "var(--font-instrument), 'Times New Roman', serif",
+  fontWeight: 400,
+  letterSpacing: "-0.01em",
+};
+const mono: React.CSSProperties = {
+  fontFamily: "'Geist Mono', ui-monospace, monospace",
+  letterSpacing: "0.1em",
+};
+
+// ── Small Icons ──
+const Arrow = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <path d="M5 12h14M13 6l6 6-6 6"/>
+  </svg>
+);
+const Check = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+    <path d="m5 12 5 5 9-11"/>
+  </svg>
+);
+const Star = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill={T.ink}>
+    <path d="m12 3 2.6 6 6.4.5-4.9 4.2 1.5 6.3L12 16.8 6.4 20l1.5-6.3L3 9.5 9.4 9z"/>
+  </svg>
+);
+const Bookmark = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <path d="M6 4h12v17l-6-4-6 4z"/>
+  </svg>
+);
+
+// ── Logo ──
+function Logo() {
   return (
-    <a href="#" className="flex items-center">
-      <img
-        src="/livoza-white.png"
-        alt="Livoza"
-        className="h-14 lg:h-20 w-auto flex-shrink-0 block"
-      />
+    <a href="#" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+      <img src="/Livoza-Logo-new.png" alt="Livoza" style={{ height: 38, width: "auto", display: "block" }} />
     </a>
   );
 }
 
-export default function Home() {
+// ── Nav ──
+function Nav({ onBook, mobileOpen, setMobileOpen }: {
+  onBook: () => void;
+  mobileOpen: boolean;
+  setMobileOpen: (v: boolean) => void;
+}) {
+  const links = [
+    { href: "#rooms", label: "Rooms" },
+    { href: "#facilities", label: "Facilities" },
+    { href: "#about", label: "About" },
+    { href: "#contact", label: "Contact" },
+  ];
+  return (
+    <header style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
+      background: `${T.paper}e6`, backdropFilter: "blur(12px)",
+      borderBottom: `1px solid ${T.line2}`,
+    }}>
+      <div style={{
+        maxWidth: 1280, margin: "0 auto", padding: "0 32px",
+        display: "flex", alignItems: "center", justifyContent: "space-between", height: 68,
+      }}>
+        <Logo />
+
+        {/* Desktop nav */}
+        <nav style={{ display: "flex", gap: 28, fontSize: 14 }}>
+          {links.map(l => (
+            <a key={l.href} href={l.href} style={{
+              color: T.ink2, fontWeight: 500, textDecoration: "none",
+              opacity: 0.8,
+            }}>{l.label}</a>
+          ))}
+        </nav>
+
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <div className="desktop-nav-btns" style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            <a href="tel:+919353477987" style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "9px 16px", borderRadius: 99,
+              border: `1px solid ${T.line2}`, background: T.card,
+              fontSize: 13, fontWeight: 500, color: T.ink, textDecoration: "none",
+            }}>
+              <Phone style={{ width: 13, height: 13 }} />
+              +91 9353477987
+            </a>
+            <button onClick={onBook} style={{
+              padding: "9px 18px", borderRadius: 99, background: T.ink,
+              color: "#fff", border: "none", fontSize: 13, fontWeight: 500, cursor: "pointer",
+            }}>Book Now</button>
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            style={{
+              display: "none", padding: 8, background: "none", border: "none",
+              cursor: "pointer", color: T.ink,
+            }}
+            className="mobile-menu-btn"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X style={{ width: 20, height: 20 }} /> : <Menu style={{ width: 20, height: 20 }} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div style={{
+          background: T.paper, borderTop: `1px solid ${T.line2}`,
+          padding: "16px 24px 24px",
+        }}>
+          {links.map(l => (
+            <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)} style={{
+              display: "block", padding: "12px 0", color: T.ink2, fontWeight: 500,
+              borderBottom: `1px solid ${T.line}`, textDecoration: "none", fontSize: 15,
+            }}>{l.label}</a>
+          ))}
+          <a href="tel:+919353477987" style={{
+            display: "flex", alignItems: "center", gap: 8, marginTop: 16,
+            color: T.ink, fontWeight: 600, fontSize: 15, textDecoration: "none",
+          }}>
+            <Phone style={{ width: 16, height: 16 }} />+91 9353477987
+          </a>
+          <button onClick={() => { onBook(); setMobileOpen(false); }} style={{
+            marginTop: 12, width: "100%", padding: "12px", borderRadius: 99,
+            background: T.ink, color: "#fff", border: "none", fontWeight: 600,
+            fontSize: 15, cursor: "pointer",
+          }}>Book Now</button>
+        </div>
+      )}
+    </header>
+  );
+}
+
+// ── Hero inline booking form ──
+function HeroBookForm() {
   const router = useRouter();
-  const [bookFormOpen, setBookFormOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [modalFormSubmitted, setModalFormSubmitted] = useState(false);
-  const [contactFormSubmitted, setContactFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const createBookNowSubmission = useMutation(api.forms.createBookNowSubmission);
 
-  const [isBookSubmitting, setIsBookSubmitting] = useState(false);
-  const [bookFormError, setBookFormError] = useState<string | null>(null);
-
-  const [isContactSubmitting, setIsContactSubmitting] = useState(false);
-  const [contactFormError, setContactFormError] = useState<string | null>(null);
-
-  const createBookNowSubmission = useMutation(
-    api.forms.createBookNowSubmission,
-  );
-  const createContactSubmission = useMutation(
-    api.forms.createContactSubmission,
-  );
-
-  const handleModalFormSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isBookSubmitting) return;
-
-    setIsBookSubmitting(true);
-    setBookFormError(null);
-
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError(null);
     try {
-      const formData = new FormData(e.currentTarget);
-      const roomType = String(formData.get("roomType") ?? "").trim();
-      const fullName = String(formData.get("fullName") ?? "").trim();
-      const phoneNumber = String(formData.get("phoneNumber") ?? "").trim();
-      const emailAddressRaw = formData.get("emailAddress");
-      const emailAddress =
-        typeof emailAddressRaw === "string" ? emailAddressRaw.trim() : "";
-
+      const fd = new FormData(e.currentTarget);
       await createBookNowSubmission({
-        roomType,
-        fullName,
-        phoneNumber,
-        emailAddress: emailAddress ? emailAddress : undefined,
+        roomType: String(fd.get("roomType") ?? "").trim(),
+        fullName: String(fd.get("fullName") ?? "").trim(),
+        phoneNumber: String(fd.get("phoneNumber") ?? "").trim(),
+        emailAddress: String(fd.get("emailAddress") ?? "").trim() || undefined,
       });
-
       router.push("/thank-you");
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Failed to submit request.";
-      setBookFormError(message);
+      setError(err instanceof Error ? err.message : "Failed to submit.");
     } finally {
-      setIsBookSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
-  const handleContactFormSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ) => {
-    e.preventDefault();
-    if (isContactSubmitting) return;
+  return (
+    <>
+      <div style={{ marginBottom: 4 }}>
+        <h2 style={{ ...serif, margin: 0, fontSize: 26, color: T.ink }}>Book Your Stay</h2>
+        <p style={{ margin: "4px 0 0", fontSize: 13, color: T.muted }}>We&apos;ll call you back within 24 hours</p>
+      </div>
+      <form style={{ display: "flex", flexDirection: "column", gap: 12 }} onSubmit={handleSubmit}>
+        <div>
+          <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 5 }}>Room Type</label>
+          <select name="roomType" required style={{
+            width: "100%", padding: "11px 36px 11px 14px", borderRadius: 12,
+            border: `1px solid ${T.line2}`, background: T.paper,
+            fontSize: 14, color: T.ink, fontFamily: "inherit", outline: "none",
+            appearance: "none", backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236a7a78' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "no-repeat", backgroundPosition: "calc(100% - 14px) center",
+          }}>
+            <option value="">Select room type</option>
+            <option value="Triple Sharing (Non AC)">Triple Sharing (Non AC)</option>
+            <option value="Double Sharing (Non AC)">Double Sharing (Non AC)</option>
+            <option value="Single Sharing (Non AC)">Single Sharing (Non AC)</option>
+          </select>
+        </div>
+        {[
+          { label: "Full Name *", name: "fullName", type: "text", required: true, placeholder: "Your name" },
+          { label: "Phone Number *", name: "phoneNumber", type: "tel", required: true, placeholder: "+91 XXXXX XXXXX" },
+          { label: "Email Address", name: "emailAddress", type: "email", required: false, placeholder: "your@email.com (optional)" },
+        ].map(f => (
+          <div key={f.name}>
+            <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 5 }}>
+              {f.label}
+            </label>
+            <input
+              type={f.type} name={f.name} required={f.required} placeholder={f.placeholder}
+              style={{
+                width: "100%", padding: "11px 14px", borderRadius: 12,
+                border: `1px solid ${T.line2}`, background: T.paper,
+                fontSize: 14, color: T.ink, fontFamily: "inherit", outline: "none", boxSizing: "border-box",
+              }}
+            />
+          </div>
+        ))}
+        <button type="submit" disabled={isSubmitting} style={{
+          padding: "14px", borderRadius: 99, background: T.ink,
+          color: "#fff", border: "none", fontWeight: 500, fontSize: 14.5,
+          cursor: "pointer", marginTop: 4, opacity: isSubmitting ? 0.6 : 1,
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+        }}>
+          {isSubmitting ? "Submitting…" : <><span>Request Callback</span><Arrow /></>}
+        </button>
+        {error && <p style={{ fontSize: 13, color: "#c0392b", margin: 0 }}>{error}</p>}
+      </form>
+      <a href="tel:+919353477987" style={{
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+        padding: "12px", borderRadius: 99, background: T.paper,
+        border: `1px solid ${T.line2}`, color: T.ink, textDecoration: "none",
+        fontWeight: 500, fontSize: 13.5,
+      }}>
+        <Phone style={{ width: 14, height: 14 }} /> Call +91 9353477987
+      </a>
+    </>
+  );
+}
 
-    setIsContactSubmitting(true);
-    setContactFormError(null);
+// ── Hero ──
+function Hero({ onBook }: { onBook: () => void }) {
 
-    try {
-      const formData = new FormData(e.currentTarget);
-      const fullName = String(formData.get("fullName") ?? "").trim();
-      const phoneNumber = String(formData.get("phoneNumber") ?? "").trim();
-      const emailAddressRaw = formData.get("emailAddress");
-      const emailAddress =
-        typeof emailAddressRaw === "string" ? emailAddressRaw.trim() : "";
-      const messageRaw = formData.get("message");
-      const message =
-        typeof messageRaw === "string" ? messageRaw.trim() : "";
+  return (
+    <section style={{ padding: "100px 32px 0", maxWidth: 1280, margin: "0 auto" }}>
+      {/* Eyebrow — full width */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
+        <span style={{
+          display: "inline-flex", alignItems: "center", gap: 6,
+          padding: "6px 12px", background: `${T.card}cc`, border: `1px solid ${T.line2}`,
+          borderRadius: 99, fontSize: 13, color: T.muted,
+        }}>
+          <span style={{ width: 6, height: 6, borderRadius: 99, background: "#2eb86c" }} />
+          Girls-Only · 100m from Christ University, Bangalore
+        </span>
+        <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase" }}>
+          est. 2026 — premium student living
+        </div>
+      </div>
 
-      await createContactSubmission({
-        fullName,
-        phoneNumber,
-        emailAddress: emailAddress ? emailAddress : undefined,
-        message: message ? message : undefined,
-      });
+      {/* Single 2-column grid: left = headline + image, right = floating card + featured card */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 1.55fr) minmax(320px, 1fr)",
+        gridTemplateRows: "auto 1fr",
+        gap: 18,
+      }} className="hero-grid">
 
-      router.push("/thank-you");
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Failed to submit request.";
-      setContactFormError(message);
-    } finally {
-      setIsContactSubmitting(false);
-    }
-  };
+        {/* LEFT TOP — Headline */}
+        <div style={{ gridColumn: 1, gridRow: 1, alignSelf: "end", paddingBottom: 18 }}>
+          <h1 style={{
+            ...serif,
+            fontSize: "clamp(56px, 7.5vw, 112px)",
+            lineHeight: 0.93, letterSpacing: "-0.025em",
+            color: T.ink, margin: 0,
+          }}>
+            Premium Living.<br />
+            <span style={{ fontStyle: "italic", color: T.sage }}>A stay that matters.</span>
+          </h1>
+        </div>
 
-  const navLinks = [
-    { href: "#home", label: "Home" },
-    { href: "#about", label: "About Us" },
-    { href: "#service", label: "Service" },
-    { href: "#footer", label: "Contact Us" },
-  ];
+        {/* RIGHT TOP — Floating offer card */}
+        <div style={{ gridColumn: 2, gridRow: 1, display: "flex", alignItems: "flex-end" }}>
+          <div className="float-card" style={{
+            background: T.ink, color: "#fff",
+            borderRadius: 24, padding: "24px 26px",
+            boxShadow: `0 24px 64px -12px ${T.ink}60, 0 8px 24px -8px ${T.ink}30`,
+            width: "100%",
+          }}>
+            <div style={{ fontSize: 26, marginBottom: 10 }}>🎉</div>
+            <div style={{ ...serif, fontSize: 34, fontStyle: "italic", lineHeight: 1.05, marginBottom: 10, color: T.mint }}>
+              1 Month<br />Stay FREE
+            </div>
+            <div style={{ fontSize: 13, opacity: 0.75, lineHeight: 1.6, marginBottom: 18 }}>
+              Pay for 11 months and get your 12th month absolutely free. No hidden fees.
+            </div>
+          </div>
+        </div>
 
+        {/* LEFT BOTTOM — Hero image */}
+        <div style={{ gridColumn: 1, gridRow: 2, position: "relative", borderRadius: 24, overflow: "hidden", minHeight: 460 }}>
+          <img
+            src="/img1.jpeg"
+            alt="Livoza Girls PG — Premium furnished room near Christ University"
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
+          <div style={{ position: "absolute", top: 18, left: 18, display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <span style={{
+              padding: "7px 12px", borderRadius: 99,
+              background: "#ffffffd9", backdropFilter: "blur(8px)",
+              fontSize: 12.5, fontWeight: 500, color: T.ink,
+              display: "inline-flex", alignItems: "center", gap: 6,
+            }}>
+              <MapPin style={{ width: 13, height: 13 }} /> 2 min walk to campus
+            </span>
+            <span style={{
+              padding: "7px 12px", borderRadius: 99,
+              background: "#ffffffd9", backdropFilter: "blur(8px)",
+              fontSize: 12.5, fontWeight: 500, color: T.ink,
+            }}>Girls-Only</span>
+          </div>
+          <div style={{ position: "absolute", bottom: 18, left: 18, display: "flex", gap: 6 }}>
+            {[0,1,2,3].map(i => (
+              <span key={i} style={{
+                width: i === 0 ? 24 : 6, height: 6, borderRadius: 99,
+                background: i === 0 ? T.mint : `${T.mint}80`,
+              }} />
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT BOTTOM — Inline booking form */}
+        <aside style={{
+          gridColumn: 2, gridRow: 2,
+          background: T.card, borderRadius: 24, padding: "24px 22px",
+          display: "flex", flexDirection: "column", gap: 14,
+          border: `1px solid ${T.line2}`,
+        }}>
+          <HeroBookForm />
+        </aside>
+      </div>
+    </section>
+  );
+}
+
+// ── Trustbar ──
+function Trustbar() {
+  const items = ["Girls-Only PG", "100m from Christ University", "Fully Furnished Rooms", "24/7 Security", "1 Month Free"];
+  return (
+    <div style={{
+      maxWidth: 1280, margin: "28px auto 0", padding: "0 32px",
+    }}>
+      <div style={{
+        borderTop: `1px solid ${T.line2}`, borderBottom: `1px solid ${T.line2}`,
+        padding: "14px 0",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        gap: 20, color: T.muted, fontSize: 13.5, flexWrap: "wrap",
+      }}>
+        <span style={{ ...mono, fontSize: 11, textTransform: "uppercase", color: T.sage }}>
+          ✦ premium girls pg · bangalore
+        </span>
+        <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
+          {items.map(x => (
+            <span key={x} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <span style={{ color: T.sage }}><Check /></span> {x}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Facilities ──
+function Facilities() {
   const facilities = [
+    { icon: "🫧", title: "Washing Machine", desc: "In-room for your convenience" },
+    { icon: "🥶", title: "Refrigerator", desc: "Personal fridge in every room" },
+    { icon: "🍳", title: "Microwave / Oven", desc: "Kitchen appliances for easy cooking" },
+    { icon: "📺", title: "Smart TV", desc: "Entertainment in every room" },
+    { icon: "🛋️", title: "Furnished Rooms", desc: "Bed, wardrobe, desk & more" },
+    { icon: "🛡️", title: "24/7 Security", desc: "Girls-only security always on" },
+    { icon: "🌿", title: "Balcony", desc: "Every room has a balcony" },
+    { icon: "⚡", title: "Power Backup", desc: "Uninterrupted electricity" },
+    { icon: "📶", title: "High-Speed WiFi", desc: "Fast internet throughout" },
+  ];
+
+  return (
+    <section id="facilities" style={{ padding: "80px 32px 0", maxWidth: 1280, margin: "0 auto" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28, gap: 24, flexWrap: "wrap" }}>
+        <div>
+          <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase", marginBottom: 8 }}>
+            ⁂ facilities
+          </div>
+          <h2 style={{ ...serif, margin: 0, fontSize: "clamp(44px, 7vw, 80px)", lineHeight: 1, letterSpacing: "-0.02em", color: T.ink }}>
+            Every room,{" "}
+            <span style={{ fontStyle: "italic", color: T.sage }}>fully equipped.</span>
+          </h2>
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 16 }} className="facilities-grid">
+        {facilities.map(f => (
+          <div key={f.title} style={{
+            background: T.card, borderRadius: 20, padding: "20px 22px",
+            border: `1px solid ${T.line2}`,
+            display: "flex", gap: 16, alignItems: "flex-start",
+          }}>
+            <span style={{
+              width: 44, height: 44, borderRadius: 14, background: T.mint,
+              display: "grid", placeItems: "center", fontSize: 22, flexShrink: 0,
+            }}>{f.icon}</span>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 15, color: T.ink, letterSpacing: "-0.01em" }}>{f.title}</div>
+              <div style={{ color: T.muted, fontSize: 13, marginTop: 3, lineHeight: 1.5 }}>{f.desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── How it works ──
+function HowItWorks() {
+  const steps = [
     {
-      icon: Shirt,
-      title: "Washing Machine",
-      desc: "In-room washing machine for your convenience",
+      n: "01", title: "Pick your room type",
+      body: "Choose between triple, double, or single sharing. All rooms are fully furnished and steps from Christ University.",
+      img: "/triplebed.jpeg",
     },
     {
-      icon: Refrigerator,
-      title: "Refrigerator",
-      desc: "Personal fridge in every room",
+      n: "02", title: "Book your slot",
+      body: "Fill the form or call us. Pay the booking advance to secure your room — refundable if plans change.",
+      img: "/doublebed.jpeg",
     },
     {
-      icon: CookingPot,
-      title: "Microwave / Oven",
-      desc: "Kitchen appliances for easy cooking",
-    },
-    {
-      icon: Tv,
-      title: "Smart TV",
-      desc: "Entertainment in every room",
-    },
-    {
-      icon: Sofa,
-      title: "Furnished Rooms",
-      desc: "Fully furnished with bed, wardrobe, desk & more",
-    },
-    {
-      icon: Shield,
-      title: "24/7 Girls-Only Security",
-      desc: "Dedicated security for your peace of mind",
+      n: "03", title: "Move in & settle",
+      body: "Sign the agreement and move in. Everything's ready — bed, appliances, security. Focus on your studies.",
+      img: "/img1.jpeg",
     },
   ];
 
-  const properties = [
+  return (
+    <section style={{ padding: "80px 32px 0", maxWidth: 1280, margin: "0 auto" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28, gap: 24, flexWrap: "wrap" }}>
+        <div>
+          <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase", marginBottom: 8 }}>⁂ how it works</div>
+          <h2 style={{ ...serif, margin: 0, fontSize: "clamp(44px, 7vw, 80px)", lineHeight: 1, letterSpacing: "-0.02em", color: T.ink }}>
+            Three steps,{" "}
+            <span style={{ fontStyle: "italic", color: T.sage }}>keys in hand.</span>
+          </h2>
+        </div>
+        <p style={{ maxWidth: 300, color: T.muted, fontSize: 14, lineHeight: 1.6, margin: 0 }}>
+          Built for students coming to Christ University. We handle the parts your parents keep worrying about.
+        </p>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }} className="steps-grid">
+        {steps.map(s => (
+          <div key={s.n} style={{
+            background: T.card, borderRadius: 22, overflow: "hidden",
+            border: `1px solid ${T.line2}`,
+            display: "flex", flexDirection: "column", gap: 0,
+          }}>
+            <div style={{ height: 180 }}>
+              <img src={s.img} alt={s.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            </div>
+            <div style={{ padding: "18px 20px 22px" }}>
+              <div style={{ ...mono, fontSize: 11, color: T.sage, marginBottom: 6 }}>{s.n}</div>
+              <h3 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 600, letterSpacing: "-0.02em", color: T.ink }}>{s.title}</h3>
+              <p style={{ margin: 0, color: T.muted, fontSize: 13.5, lineHeight: 1.6 }}>{s.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── Room card ──
+function RoomCard({ room, onBook }: {
+  room: {
+    name: string; badge: string; image: string; advancePayment: string;
+    maintenance: string; bookingAdvance: string; totalInitial: string;
+    moveInAmount: string; annualTotal: string; desc: string;
+  };
+  onBook: () => void;
+}) {
+  return (
+    <article style={{
+      background: T.card, borderRadius: 22, overflow: "hidden",
+      border: `1px solid ${T.line2}`,
+      display: "flex", flexDirection: "column",
+    }}>
+      <div style={{ position: "relative", height: 220 }}>
+        <img src={room.image} alt={room.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%)" }} />
+        <div style={{ position: "absolute", top: 12, left: 12, display: "flex", gap: 6 }}>
+          <span style={{
+            background: T.ink, color: "#fff", padding: "5px 10px",
+            borderRadius: 99, fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase",
+          }}>{room.badge}</span>
+          <span style={{
+            background: "#ffffffd9", color: T.ink, padding: "5px 10px",
+            borderRadius: 99, fontSize: 11, fontWeight: 600,
+          }}>🎉 1 Month Free</span>
+        </div>
+        <button style={{
+          position: "absolute", top: 12, right: 12, width: 34, height: 34, borderRadius: 99,
+          background: "#ffffffd9", border: "none", display: "grid", placeItems: "center", cursor: "pointer",
+          color: T.ink,
+        }}><Bookmark /></button>
+        <div style={{
+          position: "absolute", bottom: 12, right: 12,
+          padding: "5px 10px", borderRadius: 99, background: "#1d393699",
+          color: "#fff", fontSize: 11.5, fontWeight: 500,
+        }}>Girls Only</div>
+      </div>
+
+      <div style={{ padding: "18px 18px 20px", display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+          <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, letterSpacing: "-0.01em", color: T.ink }}>{room.name}</h3>
+          <div style={{ ...serif, fontSize: 24, letterSpacing: "-0.02em", lineHeight: 1, color: T.ink }}>
+            ₹ *<span style={{ fontSize: 11, color: T.muted, fontFamily: "inherit" }}></span>
+          </div>
+        </div>
+
+        <div style={{ color: T.muted, fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
+          <MapPin style={{ width: 13, height: 13 }} /> Christ University · 100m
+        </div>
+
+        {/* Pricing table */}
+        {/* <div style={{
+          background: T.paper, borderRadius: 14, padding: "12px 14px",
+          display: "flex", flexDirection: "column", gap: 6,
+        }}>
+          {[
+            ["Advance Payment", room.advancePayment, false],
+            ["Maintenance (one-time)", room.maintenance, false],
+            ["Booking Advance", room.bookingAdvance, false],
+            ["Total Initial", room.totalInitial, false],
+          ].map(([k, v, bold]) => (
+            <div key={String(k)} style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5 }}>
+              <span style={{ color: T.muted }}>{k}</span>
+              <span style={{ fontWeight: bold ? 700 : 600, color: T.ink2 }}>{v}</span>
+            </div>
+          ))}
+          <div style={{ height: 1, background: T.line2, margin: "4px 0" }} />
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, fontWeight: 700 }}>
+            <span style={{ color: T.sage }}>Annual Total</span>
+            <span style={{ color: T.ink }}>{room.annualTotal}</span>
+          </div>
+        </div> */}
+
+        <p style={{ color: T.muted, fontSize: 13, margin: 0, lineHeight: 1.5 }}>{room.desc}</p>
+
+        <button onClick={onBook} style={{
+          marginTop: "auto", padding: "13px", borderRadius: 99, background: T.ink,
+          color: "#fff", border: "none", fontWeight: 500, fontSize: 13.5, cursor: "pointer",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+        }}>
+          Check Availability <Arrow />
+        </button>
+      </div>
+    </article>
+  );
+}
+
+// ── Rooms section ──
+function Rooms({ onBook }: { onBook: () => void }) {
+  const rooms = [
     {
-      type: "Girls",
       name: "Triple Sharing (Non AC)",
-      location: "100m from Christ University, Bangalore",
-      tags: [
-        "Washing Machine",
-        "Refrigerator",
-        "Microwave/Oven",
-        "Smart TV",
-        "Furnished Rooms",
-        "24/7 Girls-Only Security",
-      ],
+      badge: "Best Value",
+      image: "/triplebed.jpeg",
       advancePayment: "₹33,000",
       maintenance: "₹10,000",
-      agreementDuration: "12 months",
       bookingAdvance: "₹20,000",
       totalInitial: "₹59,500",
       moveInAmount: "₹39,500",
       annualTotal: "₹1,98,100",
       desc: "Most affordable option, ideal for students on a budget.",
-      image: "/triplebed.jpeg",
-      new: true,
-      badge: "Best Value",
     },
     {
-      type: "Girls",
       name: "Double Sharing (Non AC)",
-      location: "100m from Christ University, Bangalore",
-      tags: [
-        "Washing Machine",
-        "Refrigerator",
-        "Microwave/Oven",
-        "Smart TV",
-        "Furnished Rooms",
-        "24/7 Girls-Only Security",
-      ],
+      badge: "Most Popular",
+      image: "/doublebed.jpeg",
       advancePayment: "₹38,000",
       maintenance: "₹10,000",
-      agreementDuration: "12 months",
       bookingAdvance: "₹20,000",
       totalInitial: "₹67,000",
       moveInAmount: "₹47,000",
       annualTotal: "₹2,26,600",
       desc: "A comfortable balance of privacy and affordability.",
-      image: "/doublebed.jpeg",
-      new: true,
-      badge: "Most Popular",
     },
     {
-      type: "Girls",
       name: "Single Sharing (Non AC)",
-      location: "100m from Christ University, Bangalore",
-      tags: [
-        "Washing Machine",
-        "Refrigerator",
-        "Microwave/Oven",
-        "Smart TV",
-        "Furnished Rooms",
-        "24/7 Girls-Only Security",
-      ],
+      badge: "Premium",
+      image: "/img1.jpeg",
       advancePayment: "₹70,000",
       maintenance: "₹10,000",
-      agreementDuration: "12 months",
       bookingAdvance: "₹30,000",
       totalInitial: "₹1,15,000",
       moveInAmount: "₹85,000",
       annualTotal: "₹4,09,000",
       desc: "Complete privacy with a fully furnished private room.",
-      image: "/img1.jpeg",
-      new: true,
-      badge: "Premium",
     },
   ];
 
-  const testimonials = [
-    {
-      quote:
-        "Livoza has become such an important part of my college life. The comfortable rooms and friendly atmosphere made it feel like home.",
-      initial: "M",
-      name: "Student",
-      college: "Christ University",
-    },
-    {
-      quote:
-        "Found the perfect PG near campus. The facilities are great and the 2-minute walk to Christ University is a huge plus.",
-      initial: "K",
-      name: "Student",
-      college: "Christ University",
-    },
-    {
-      quote:
-        "Secure, clean, and fully equipped. The washing machine and fridge in the room make daily life so much easier.",
-      initial: "V",
-      name: "Student",
-      college: "Christ University",
-    },
-    {
-      quote:
-        "Livoza was a lifesaver! Best accommodation I could have found near Christ. Affordable and has everything I need.",
-      initial: "S",
-      name: "Student",
-      college: "Christ University",
-    },
-  ];
+  return (
+    <section id="rooms" style={{ padding: "80px 32px 0", maxWidth: 1280, margin: "0 auto" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28, gap: 24, flexWrap: "wrap" }}>
+        <div>
+          <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase", marginBottom: 8 }}>
+            ⁂ room types
+          </div>
+          <h2 style={{ ...serif, margin: 0, fontSize: "clamp(44px, 7vw, 80px)", lineHeight: 1, letterSpacing: "-0.02em", color: T.ink }}>
+            Choose your room,{" "}
+            <span style={{ fontStyle: "italic", color: T.sage }}>your space.</span>
+          </h2>
+        </div>
+        <button onClick={onBook} style={{
+          display: "inline-flex", alignItems: "center", gap: 8,
+          fontSize: 14, fontWeight: 500, background: "none", border: "none",
+          cursor: "pointer", color: T.ink,
+        }}>
+          Book a room <Arrow />
+        </button>
+      </div>
 
-  const openBookForm = () => {
-    setModalFormSubmitted(false);
-    setBookFormError(null);
-    setBookFormOpen(true);
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 18 }} className="rooms-grid">
+        {rooms.map(r => <RoomCard key={r.name} room={r} onBook={onBook} />)}
+      </div>
+    </section>
+  );
+}
+
+// // ── Facilities ──
+// function Facilities() {
+//   const facilities = [
+//     { icon: "🫧", title: "Washing Machine", desc: "In-room for your convenience" },
+//     { icon: "🥶", title: "Refrigerator", desc: "Personal fridge in every room" },
+//     { icon: "🍳", title: "Microwave / Oven", desc: "Kitchen appliances for easy cooking" },
+//     { icon: "📺", title: "Smart TV", desc: "Entertainment in every room" },
+//     { icon: "🛋️", title: "Furnished Rooms", desc: "Bed, wardrobe, desk & more" },
+//     { icon: "🛡️", title: "24/7 Security", desc: "Girls-only security always on" },
+//     { icon: "🌿", title: "Balcony", desc: "Every room has a balcony" },
+//     { icon: "⚡", title: "Power Backup", desc: "Uninterrupted electricity" },
+//     { icon: "📶", title: "High-Speed WiFi", desc: "Fast internet throughout" },
+//   ];
+
+//   return (
+//     <section id="facilities" style={{ padding: "80px 32px 0", maxWidth: 1280, margin: "0 auto" }}>
+//       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28, gap: 24, flexWrap: "wrap" }}>
+//         <div>
+//           <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase", marginBottom: 8 }}>
+//             ⁂ facilities
+//           </div>
+//           <h2 style={{ ...serif, margin: 0, fontSize: "clamp(44px, 7vw, 80px)", lineHeight: 1, letterSpacing: "-0.02em", color: T.ink }}>
+//             Every room,{" "}
+//             <span style={{ fontStyle: "italic", color: T.sage }}>fully equipped.</span>
+//           </h2>
+//         </div>
+//       </div>
+
+//       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 16 }} className="facilities-grid">
+//         {facilities.map(f => (
+//           <div key={f.title} style={{
+//             background: T.card, borderRadius: 20, padding: "20px 22px",
+//             border: `1px solid ${T.line2}`,
+//             display: "flex", gap: 16, alignItems: "flex-start",
+//           }}>
+//             <span style={{
+//               width: 44, height: 44, borderRadius: 14, background: T.mint,
+//               display: "grid", placeItems: "center", fontSize: 22, flexShrink: 0,
+//             }}>{f.icon}</span>
+//             <div>
+//               <div style={{ fontWeight: 600, fontSize: 15, color: T.ink, letterSpacing: "-0.01em" }}>{f.title}</div>
+//               <div style={{ color: T.muted, fontSize: 13, marginTop: 3, lineHeight: 1.5 }}>{f.desc}</div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </section>
+//   );
+// }
+
+// // ── How it works ──
+// function HowItWorks() {
+//   const steps = [
+//     {
+//       n: "01", title: "Pick your room type",
+//       body: "Choose between triple, double, or single sharing. All rooms are fully furnished and steps from Christ University.",
+//       img: "/triplebed.jpeg",
+//     },
+//     {
+//       n: "02", title: "Book your slot",
+//       body: "Fill the form or call us. Pay the booking advance to secure your room — refundable if plans change.",
+//       img: "/doublebed.jpeg",
+//     },
+//     {
+//       n: "03", title: "Move in & settle",
+//       body: "Sign the agreement and move in. Everything's ready — bed, appliances, security. Focus on your studies.",
+//       img: "/img1.jpeg",
+//     },
+//   ];
+
+//   return (
+//     <section style={{ padding: "80px 32px 0", maxWidth: 1280, margin: "0 auto" }}>
+//       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28, gap: 24, flexWrap: "wrap" }}>
+//         <div>
+//           <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase", marginBottom: 8 }}>⁂ how it works</div>
+//           <h2 style={{ ...serif, margin: 0, fontSize: "clamp(44px, 7vw, 80px)", lineHeight: 1, letterSpacing: "-0.02em", color: T.ink }}>
+//             Three steps,{" "}
+//             <span style={{ fontStyle: "italic", color: T.sage }}>keys in hand.</span>
+//           </h2>
+//         </div>
+//         <p style={{ maxWidth: 300, color: T.muted, fontSize: 14, lineHeight: 1.6, margin: 0 }}>
+//           Built for students coming to Christ University. We handle the parts your parents keep worrying about.
+//         </p>
+//       </div>
+
+//       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }} className="steps-grid">
+//         {steps.map(s => (
+//           <div key={s.n} style={{
+//             background: T.card, borderRadius: 22, overflow: "hidden",
+//             border: `1px solid ${T.line2}`,
+//             display: "flex", flexDirection: "column", gap: 0,
+//           }}>
+//             <div style={{ height: 180 }}>
+//               <img src={s.img} alt={s.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+//             </div>
+//             <div style={{ padding: "18px 20px 22px" }}>
+//               <div style={{ ...mono, fontSize: 11, color: T.sage, marginBottom: 6 }}>{s.n}</div>
+//               <h3 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 600, letterSpacing: "-0.02em", color: T.ink }}>{s.title}</h3>
+//               <p style={{ margin: 0, color: T.muted, fontSize: 13.5, lineHeight: 1.6 }}>{s.body}</p>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </section>
+//   );
+// }
+
+// ── Stats ──
+function Stats() {
+  return (
+    <section id="about" style={{ padding: "80px 32px 0", maxWidth: 1280, margin: "0 auto" }}>
+      <div style={{
+        background: T.ink, borderRadius: 28, padding: "48px 56px",
+        display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+        gap: 0, position: "relative", overflow: "hidden",
+      }} className="stats-grid">
+        {[
+          { num: "100m", label: "From Christ University" },
+          { num: "2 min", label: "Walk to Campus" },
+          { num: "3+", label: "Room Types Available" },
+          { num: "24/7", label: "Girls-Only Security" },
+        ].map((s, i) => (
+          <div key={s.label} style={{
+            textAlign: "center", padding: "0 24px",
+            borderRight: i < 3 ? `1px solid #ffffff1a` : "none",
+          }}>
+            <div style={{ ...serif, fontSize: "clamp(40px, 5vw, 64px)", lineHeight: 1, color: T.mint, marginBottom: 8, fontStyle: "italic" }}>
+              {s.num}
+            </div>
+            <div style={{ fontSize: 13, color: "#ffffff80", letterSpacing: "0.04em" }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── Testimonials ──
+function Testimonials() {
+  return (
+    <section style={{ padding: "80px 32px 0", maxWidth: 1280, margin: "0 auto" }}>
+      <div style={{
+        background: T.ink, color: "#fff", borderRadius: 28,
+        padding: "56px 56px 48px",
+        display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 48,
+        position: "relative", overflow: "hidden",
+      }} className="testimonial-grid">
+        <div>
+          <div style={{ ...mono, fontSize: 11, opacity: 0.55, letterSpacing: ".12em", textTransform: "uppercase" }}>
+            resident · christ university, bangalore
+          </div>
+          <p style={{
+            ...serif,
+            fontSize: "clamp(32px, 4vw, 52px)", lineHeight: 1.08, letterSpacing: "-0.02em",
+            margin: "18px 0 0", fontStyle: "italic", color: "#fff",
+          }}>
+            "Found a fully furnished room 100 metres from campus. Everything appliances, security, community all sorted before my first lecture."
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 32 }}>
+            <div style={{
+              width: 42, height: 42, borderRadius: 99,
+              background: `linear-gradient(135deg, ${T.mint}, ${T.sage})`,
+            }} />
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 15 }}>Meera S.</div>
+              <div style={{ fontSize: 12, opacity: 0.6 }}>Moved in 2025 · Christ University student</div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{
+          background: "#ffffff0d", borderRadius: 20, padding: 28,
+          display: "flex", flexDirection: "column", gap: 20,
+          border: "1px solid #ffffff1a",
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ ...mono, fontSize: 11, opacity: 0.6, letterSpacing: ".1em", textTransform: "uppercase" }}>
+              Livoza at a glance
+            </div>
+            <span style={{ fontSize: 11, padding: "3px 8px", background: "#ffffff14", borderRadius: 99 }}>2026–27</span>
+          </div>
+          {[
+            ["₹0", "broker or hidden fees — ever"],
+            ["12 months", "lease with 1 month free"],
+            ["100m", "from Christ University campus"],
+            ["24/7", "girls-only security & support"],
+          ].map(([k, v]) => (
+            <div key={String(k)} style={{
+              display: "flex", justifyContent: "space-between", alignItems: "baseline",
+              borderBottom: "1px solid #ffffff14", paddingBottom: 14,
+            }}>
+              <span style={{ ...serif, fontSize: 32, letterSpacing: "-0.02em", color: T.mint }}>{k}</span>
+              <span style={{ fontSize: 12.5, opacity: 0.7, textAlign: "right", maxWidth: 140 }}>{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Final CTA ──
+function FinalCTA({ onBook }: { onBook: () => void }) {
+  return (
+    <section style={{ padding: "80px 32px 60px", maxWidth: 1280, margin: "0 auto" }}>
+      <div style={{
+        position: "relative", padding: "80px 56px",
+        background: `linear-gradient(180deg, ${T.paper2} 0%, ${T.mint} 100%)`,
+        borderRadius: 28, overflow: "hidden",
+        border: `1px solid ${T.line2}`,
+      }}>
+        <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase", opacity: 0.7 }}>
+          ✦ rooms available now
+        </div>
+        <h2 style={{
+          ...serif,
+          margin: "14px 0 0",
+          fontSize: "clamp(60px, 10vw, 160px)", lineHeight: 0.9,
+          letterSpacing: "-0.03em", color: T.ink,
+        }}>
+          Find your room,<br /><span style={{ fontStyle: "italic", color: T.sage }}>by this Friday.</span>
+        </h2>
+
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "flex-end",
+          marginTop: 48, gap: 24, flexWrap: "wrap",
+        }}>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <button onClick={onBook} style={{
+              padding: "16px 28px", borderRadius: 99, background: T.ink,
+              color: "#fff", border: "none", fontWeight: 500, fontSize: 15,
+              display: "flex", alignItems: "center", gap: 10, cursor: "pointer",
+            }}>Book a room now <Arrow /></button>
+            <a href="tel:+919353477987" style={{
+              padding: "16px 24px", borderRadius: 99, background: "transparent",
+              border: `1px solid ${T.ink}44`, fontWeight: 500, fontSize: 15, cursor: "pointer",
+              color: T.ink, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8,
+            }}>
+              <Phone style={{ width: 16, height: 16 }} /> Call +91 9353477987
+            </a>
+          </div>
+          <div style={{ maxWidth: 280, color: T.muted, fontSize: 13.5, lineHeight: 1.5 }}>
+            Free to enquire. Pay the booking advance only when you're ready to confirm. No hidden fees.
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Contact ──
+function Contact({
+  onSubmit, isSubmitting, error, submitted,
+}: {
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  isSubmitting: boolean; error: string | null; submitted: boolean;
+}) {
+  return (
+    <section id="contact" style={{ padding: "0 32px 80px", maxWidth: 1280, margin: "0 auto" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }} className="contact-grid">
+        <div>
+          <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase", marginBottom: 8 }}>
+            contact livoza
+          </div>
+          <h2 style={{ ...serif, margin: "0 0 14px", fontSize: "clamp(36px, 5vw, 56px)", lineHeight: 1, letterSpacing: "-0.02em", color: T.ink }}>
+            Request a<br /><span style={{ fontStyle: "italic", color: T.sage }}>callback.</span>
+          </h2>
+          <p style={{ color: T.muted, fontSize: 14.5, lineHeight: 1.6, margin: "0 0 32px" }}>
+            Interested in Livoza Girls PG? Fill the form and our team will call back within 24 hours.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            {[
+              { icon: "📍", label: "Location", value: "100m from Christ University, Bangalore" },
+              { icon: "📞", label: "Phone", value: "+91 9353477987 · +91 8360669796" },
+              { icon: "✉️", label: "Email", value: "info@livoza.com" },
+            ].map(c => (
+              <div key={c.label} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+                <span style={{
+                  width: 40, height: 40, borderRadius: 12, background: T.mint,
+                  display: "grid", placeItems: "center", fontSize: 18, flexShrink: 0,
+                }}>{c.icon}</span>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 14, color: T.ink }}>{c.label}</div>
+                  <div style={{ color: T.muted, fontSize: 13.5, marginTop: 2 }}>{c.value}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{
+          background: T.card, borderRadius: 24, padding: "32px 28px",
+          border: `1px solid ${T.line2}`,
+        }}>
+          {submitted ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, paddingTop: 16 }}>
+              <div style={{ background: T.mint, borderRadius: 16, padding: "18px 20px", border: `1px solid ${T.mint2}` }}>
+                <div style={{ fontWeight: 600, fontSize: 15, color: T.ink, marginBottom: 4 }}>Request received!</div>
+                <div style={{ color: T.muted, fontSize: 13.5 }}>We&apos;ll call you back within 24 hours.</div>
+              </div>
+              <a href="tel:+919353477987" style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                background: T.ink, color: "#fff", padding: "14px 24px", borderRadius: 99,
+                fontWeight: 500, fontSize: 14, textDecoration: "none",
+              }}>
+                <Phone style={{ width: 16, height: 16 }} /> Or call us: +91 9353477987
+              </a>
+            </div>
+          ) : (
+            <form style={{ display: "flex", flexDirection: "column", gap: 16 }} onSubmit={onSubmit}>
+              {[
+                { label: "Full Name *", name: "fullName", type: "text", required: true, placeholder: "Your full name" },
+                { label: "Phone Number *", name: "phoneNumber", type: "tel", required: true, placeholder: "+91 XXXXX XXXXX" },
+                { label: "Email Address", name: "emailAddress", type: "email", required: false, placeholder: "your@email.com" },
+              ].map(f => (
+                <div key={f.name}>
+                  <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 6 }}>
+                    {f.label}
+                  </label>
+                  <input
+                    type={f.type} name={f.name} required={f.required} placeholder={f.placeholder}
+                    style={{
+                      width: "100%", padding: "12px 16px", borderRadius: 12,
+                      border: `1px solid ${T.line2}`, background: T.paper,
+                      fontSize: 14, color: T.ink, outline: "none",
+                      fontFamily: "inherit", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+              ))}
+              <div>
+                <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 6 }}>
+                  Message
+                </label>
+                <textarea
+                  name="message" rows={3} placeholder="Tell us your requirements…"
+                  style={{
+                    width: "100%", padding: "12px 16px", borderRadius: 12,
+                    border: `1px solid ${T.line2}`, background: T.paper,
+                    fontSize: 14, color: T.ink, outline: "none",
+                    fontFamily: "inherit", resize: "none", boxSizing: "border-box",
+                  }}
+                />
+              </div>
+              <button type="submit" disabled={isSubmitting} style={{
+                padding: "14px", borderRadius: 99, background: T.ink,
+                color: "#fff", border: "none", fontWeight: 500, fontSize: 14.5,
+                cursor: "pointer", opacity: isSubmitting ? 0.6 : 1,
+              }}>
+                {isSubmitting ? "Submitting…" : "Request Callback"}
+              </button>
+              {error && (
+                <p style={{ fontSize: 13, color: "#c0392b", margin: 0 }}>{error}</p>
+              )}
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Footer ──
+function Footer() {
+  const cols = [
+    ["Quick Links", ["Rooms", "Facilities", "About", "Contact"]],
+    ["Room Types", ["Triple Sharing", "Double Sharing", "Single Sharing"]],
+    ["Contact", ["+91 9353477987", "+91 8360669796", "info@livoza.com"]],
+  ];
+  return (
+    <footer style={{ borderTop: `1px solid ${T.line2}`, padding: "40px 32px 28px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 40, marginBottom: 32 }} className="footer-grid">
+          <div>
+            <Logo />
+            <p style={{ color: T.muted, fontSize: 13.5, lineHeight: 1.6, margin: "16px 0 0", maxWidth: 280 }}>
+              Girls-only PG near Christ University — 100m from campus. Fully furnished with washing machine, fridge, oven, Smart TV, and 24/7 security.
+            </p>
+            <div style={{ ...mono, marginTop: 24, fontSize: 11, color: T.muted, textTransform: "uppercase" }}>
+              © 2026 — all rights reserved
+            </div>
+          </div>
+          {cols.map(([h, items]) => (
+            <div key={String(h)}>
+              <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase", marginBottom: 14 }}>{h}</div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+                {(items as string[]).map(x => (
+                  <li key={x}><a href="#" style={{ fontSize: 14, color: T.ink2, textDecoration: "none", opacity: 0.8 }}>{x}</a></li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div style={{
+          paddingTop: 18, borderTop: `1px solid ${T.line2}`,
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          fontSize: 12, color: T.muted, flexWrap: "wrap", gap: 8,
+        }}>
+          <span>Privacy Policy · Terms</span>
+          <span style={{ ...mono }}>Powered by Dragon Ventures</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ── Book Modal ──
+function BookModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const createBookNowSubmission = useMutation(api.forms.createBookNowSubmission);
+
+  if (!open) return null;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const fd = new FormData(e.currentTarget);
+      await createBookNowSubmission({
+        roomType: String(fd.get("roomType") ?? "").trim(),
+        fullName: String(fd.get("fullName") ?? "").trim(),
+        phoneNumber: String(fd.get("phoneNumber") ?? "").trim(),
+        emailAddress: String(fd.get("emailAddress") ?? "").trim() || undefined,
+      });
+      router.push("/thank-you");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to submit.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="bg-[#021210] text-[#EAEAEA] min-h-screen">
-      {/* ── Header ── */}
-      <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-[#021210]/80 border-b border-white/[0.07]">
-        <nav className="flex justify-between items-center md:grid md:grid-cols-3 max-w-7xl mx-auto px-4 lg:px-8 py-3">
-          <LivozaLogo />
-          <div className="hidden md:flex items-center justify-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-white/70 text-sm font-medium hover:text-[#e3bf5f] transition-colors duration-200 tracking-wide"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-          <div className="flex items-center justify-end gap-3">
-            <a
-              href="tel:+919353477987"
-              className="hidden md:flex items-center gap-2 text-white/70 text-sm px-4 py-2 rounded-full border border-white/15 hover:border-white/30 hover:text-white transition-all duration-200"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              +91 9353477987
-            </a>
-            <button
-              onClick={openBookForm}
-              className="hidden md:block bg-[#e3bf5f] text-[#021210] px-5 py-2 rounded-full text-sm font-semibold hover:bg-[#f0cf77] transition-colors duration-200 shadow-[0_2px_12px_rgba(227,191,95,0.35)]"
-            >
-              Book Now
-            </button>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </nav>
-
-        {/* Mobile menu overlay */}
-        {mobileMenuOpen && (
-          <div
-            className="md:hidden fixed inset-0 z-40 bg-black/60 top-[73px]"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-        )}
-        <div
-          className={`md:hidden fixed top-[73px] right-0 z-50 w-72 bg-[#061a15] border-l border-white/[0.08] shadow-2xl transition-transform duration-300 ${
-            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          <nav className="flex flex-col p-5 gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-3 px-4 text-white/75 hover:text-white hover:bg-white/[0.07] rounded-xl text-sm font-medium transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-            <div className="h-px bg-white/[0.08] my-2" />
-            <a
-              href="tel:+919353477987"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 py-3 px-4 text-[#e3bf5f] hover:bg-white/[0.07] rounded-xl text-sm font-medium"
-            >
-              <Phone className="w-4 h-4" />
-              +91 9353477987
-            </a>
-          </nav>
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 100,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      background: "#00000060", backdropFilter: "blur(4px)", padding: 16,
+    }} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={{
+        background: T.paper, borderRadius: 24, maxWidth: 420, width: "100%",
+        padding: "32px 28px", position: "relative",
+        border: `1px solid ${T.line2}`,
+      }}>
+        <button onClick={onClose} style={{
+          position: "absolute", top: 18, right: 18, width: 32, height: 32,
+          borderRadius: 99, background: T.mint, border: "none",
+          display: "grid", placeItems: "center", cursor: "pointer", fontSize: 18, color: T.ink,
+        }}>×</button>
+        <div style={{ marginBottom: 22 }}>
+          <h2 style={{ ...serif, margin: 0, fontSize: 28, color: T.ink }}>Book Your Stay</h2>
+          <p style={{ margin: "6px 0 0", fontSize: 13.5, color: T.muted }}>We&apos;ll call you back within 24 hours</p>
         </div>
-      </header>
-
-      {/* ── Book Your Stay Modal ── */}
-      {bookFormOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-[#0a1f14] border border-white/[0.1] rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
-            <button
-              onClick={() => setBookFormOpen(false)}
-              className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center rounded-full bg-white/[0.07] text-white/50 hover:bg-white/[0.12] hover:text-white transition-colors text-lg font-medium"
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-white font-[family-name:var(--font-playfair)]">
-                Book Your Stay
-              </h2>
-              <p className="text-white/45 text-sm mt-1">
-                We&apos;ll call you back within 24 hours
-              </p>
-            </div>
-            {modalFormSubmitted ? (
-              <div className="space-y-4">
-                <div className="bg-[#132e1e] rounded-2xl p-4 border border-[#3E6B4F]/40">
-                  <p className="text-white font-semibold mb-1">Request received!</p>
-                  <p className="text-white/55 text-sm">We&apos;ll call you back within 24 hours.</p>
-                </div>
-                <a
-                  href="tel:+919353477987"
-                  className="flex items-center justify-center gap-2 bg-[#3E6B4F] text-white px-6 py-3 rounded-full font-medium hover:bg-[#4d8060] transition-colors text-sm"
-                >
-                  <Phone className="w-4 h-4" />
-                  Or call us now: +91 9353477987
-                </a>
-                <button
-                  onClick={() => {
-                    setModalFormSubmitted(false);
-                    setBookFormError(null);
-                    setBookFormOpen(false);
-                  }}
-                  className="block w-full text-white/35 text-sm hover:text-white/60 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            ) : (
-              <form className="space-y-4" onSubmit={handleModalFormSubmit}>
-                <div>
-                  <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                    Room Type
-                  </label>
-                  <select
-                    name="roomType"
-                    required
-                    className="w-full border border-white/[0.1] rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-[#3E6B4F]/50 focus:border-[#3E6B4F] outline-none transition-all bg-[#061a12]"
-                  >
-                    <option value="" className="bg-[#061a12]">Select room type</option>
-                    <option value="Triple Sharing (Non AC)" className="bg-[#061a12]">Triple Sharing (Non AC)</option>
-                    <option value="Double Sharing (Non AC)" className="bg-[#061a12]">Double Sharing (Non AC)</option>
-                    <option value="Single Sharing (Non AC)" className="bg-[#061a12]">Single Sharing (Non AC)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                    Full Name <span className="text-[#7A9B7E]">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="fullName"
-                    required
-                    className="w-full border border-white/[0.1] rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-[#3E6B4F]/50 focus:border-[#3E6B4F] outline-none transition-all bg-[#061a12] placeholder:text-white/20"
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                    Phone Number <span className="text-[#7A9B7E]">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    name="phoneNumber"
-                    required
-                    className="w-full border border-white/[0.1] rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-[#3E6B4F]/50 focus:border-[#3E6B4F] outline-none transition-all bg-[#061a12] placeholder:text-white/20"
-                    placeholder="+91 XXXXX XXXXX"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    name="emailAddress"
-                    className="w-full border border-white/[0.1] rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-[#3E6B4F]/50 focus:border-[#3E6B4F] outline-none transition-all bg-[#061a12] placeholder:text-white/20"
-                    placeholder="your@email.com (optional)"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isBookSubmitting}
-                  className="w-full bg-[#e3bf5f] text-[#021210] py-3.5 rounded-full font-semibold hover:bg-[#f0cf77] transition-colors disabled:opacity-60 text-sm tracking-wide shadow-[0_4px_14px_rgba(227,191,95,0.3)]"
-                >
-                  {isBookSubmitting ? "Submitting…" : "Request Callback"}
-                </button>
-                {bookFormError && (
-                  <p className="text-sm text-red-400 bg-red-900/20 border border-red-500/20 px-3 py-2 rounded-lg">{bookFormError}</p>
-                )}
-              </form>
-            )}
+        <form style={{ display: "flex", flexDirection: "column", gap: 14 }} onSubmit={handleSubmit}>
+          <div>
+            <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 5 }}>Room Type</label>
+            <select name="roomType" required style={{
+              width: "100%", padding: "11px 14px", borderRadius: 12,
+              border: `1px solid ${T.line2}`, background: T.card,
+              fontSize: 14, color: T.ink, fontFamily: "inherit", outline: "none",
+            }}>
+              <option value="">Select room type</option>
+              <option value="Triple Sharing (Non AC)">Triple Sharing (Non AC)</option>
+              <option value="Double Sharing (Non AC)">Double Sharing (Non AC)</option>
+              <option value="Single Sharing (Non AC)">Single Sharing (Non AC)</option>
+            </select>
           </div>
-        </div>
-      )}
-
-      <main className="pb-24 md:pb-0">
-
-        {/* ── Hero ── */}
-        <section
-          id="home"
-          className="relative min-h-[calc(100vh-73px)] flex items-center overflow-hidden"
-        >
-          <div className="absolute inset-0 z-0">
-            <img
-              src="/img1.jpeg"
-              alt="Livoza Girls PG — Premium furnished rooms"
-              className="w-full h-full object-cover"
-            />
-            {/* Rich layered overlay for depth */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#021210]/75 via-[#021210]/60 to-[#021210]/85" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#021210]/40 via-transparent to-[#021210]/20" />
-          </div>
-          {/* Bottom fade into next section */}
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[28vh] bg-gradient-to-b from-transparent to-black"
-            aria-hidden
-          />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full text-center pt-20">
-            {/* Eyebrow badge */}
-            <div className="inline-flex items-center gap-2 bg-white/[0.08] border border-white/[0.12] backdrop-blur-sm rounded-full px-4 py-1.5 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#e3bf5f] animate-pulse" />
-              <span className="text-white/80 text-xs tracking-[0.2em] uppercase font-medium">
-                Girls-Only · 100m from Christ University
-              </span>
+          {[
+            { label: "Full Name *", name: "fullName", type: "text", required: true, placeholder: "Your name" },
+            { label: "Phone Number *", name: "phoneNumber", type: "tel", required: true, placeholder: "+91 XXXXX XXXXX" },
+            { label: "Email Address", name: "emailAddress", type: "email", required: false, placeholder: "your@email.com (optional)" },
+          ].map(f => (
+            <div key={f.name}>
+              <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 5 }}>
+                {f.label}
+              </label>
+              <input
+                type={f.type} name={f.name} required={f.required} placeholder={f.placeholder}
+                style={{
+                  width: "100%", padding: "11px 14px", borderRadius: 12,
+                  border: `1px solid ${T.line2}`, background: T.card,
+                  fontSize: 14, color: T.ink, fontFamily: "inherit", outline: "none", boxSizing: "border-box",
+                }}
+              />
             </div>
-
-            {/* 1 Month Free offer pill */}
-            <div className="flex justify-center mb-6">
-              <div className="inline-flex items-center gap-2 bg-[#3E6B4F]/30 border border-[#3E6B4F]/60 backdrop-blur-sm rounded-full px-5 py-2">
-                <span className="text-base">🎉</span>
-                <span className="text-white font-bold text-sm tracking-wide">1 Month Stay FREE</span>
-                <span className="text-white/50 text-xs">· Pay for 11 months, Stay for 12 months</span>
-              </div>
-            </div>
-
-            <h1 className="font-[family-name:var(--font-playfair)] text-5xl md:text-6xl lg:text-7xl xl:text-[80px] text-white leading-[1.08] mb-3 tracking-tight">
-              Livoza Girls
-              <br />
-              <span className="text-[#e3bf5f] [text-shadow:0_0_40px_rgba(227,191,95,0.4),0_4px_16px_rgba(0,0,0,0.3)]">
-                Premium Living
-              </span>
-            </h1>
-
-            {/* Slogan */}
-            <p className="text-white/40 text-sm md:text-base italic font-[family-name:var(--font-playfair)] mb-6 tracking-wide">
-              A Stay That Matters.
-            </p>
-
-            <p className="text-white/70 text-base md:text-lg max-w-[540px] mx-auto mb-10 leading-relaxed">
-              Situated just 100 metres from Christ University <br/>
-              2-minute walk to campus.
-              Everything you need, right at your doorstep.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              {/* <button
-                type="button"
-                className="inline-flex items-center justify-center gap-3 rounded-full border border-white/20 bg-white/[0.07] backdrop-blur-sm px-7 py-3 text-white text-sm font-medium hover:bg-white/[0.12] transition-all duration-200"
-                aria-label="Watch our video"
-              >
-                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#e3bf5f]/20 border border-[#e3bf5f]/30">
-                  <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
-                    <path d="M1 1L9 6L1 11V1Z" fill="#e3bf5f" />
-                  </svg>
-                </span>
-                Watch Our Video
-              </button> */}
-              <button
-                onClick={openBookForm}
-                className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#3E6B4F] px-7 py-3 text-white text-sm font-semibold hover:bg-[#2d5039] transition-all duration-200 shadow-[0_4px_20px_rgba(62,107,79,0.5)]"
-              >
-                <Phone className="w-4 h-4" />
-                Call Us: +91 9353477987
-              </button>
-            </div>
-
-            {/* Trust indicators */}
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-white/50 text-xs">
-              {["Girls-Only PG", "Fully Furnished", "All Rooms with Balcony", "24/7 Security", "2 Min Walk to Campus"].map((item, i) => (
-                <span key={item} className="flex items-center gap-1.5">
-                  {i > 0 && <span className="w-1 h-1 rounded-full bg-white/30" />}
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Facilities Strip ── */}
-        <section className="relative z-10 bg-black pb-0 border-b border-white/[0.06]">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-12">
-            <div className="rounded-t-[2rem] sm:rounded-t-[2.5rem] bg-gradient-to-b from-[#1a4d35] to-[#0d281c] px-6 py-10 sm:px-10 sm:py-12 border border-white/[0.08] shadow-[0_-12px_48px_rgba(0,0,0,0.5)]">
-              {/* Location bar */}
-              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 mb-10">
-                {["Girls-Only PG", "100m from Christ University", "Bangalore"].map((label, i) => (
-                  <span key={label} className="flex items-center gap-2 text-white/60 text-sm">
-                    {i === 0 && (
-                      <span className="w-4 h-4 rounded-full border border-[#7A9B7E] flex items-center justify-center flex-shrink-0">
-                        <svg width="8" height="8" viewBox="0 0 10 8" fill="none">
-                          <path d="M1 4L3.5 7L9 1" stroke="#7A9B7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </span>
-                    )}
-                    {i > 0 && <span className="text-white/20">·</span>}
-                    {label}
-                  </span>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-8 gap-x-4">
-                {facilities.map((f, i) => (
-                  <div key={f.title} className="flex flex-col items-center text-center group">
-                    <div className="w-12 h-12 rounded-2xl bg-[#e3bf5f]/10 border border-[#e3bf5f]/20 flex items-center justify-center mb-3 group-hover:bg-[#e3bf5f]/20 transition-colors duration-200">
-                      <f.icon className="w-5 h-5 text-[#e3bf5f]" />
-                    </div>
-                    <span className="text-xs font-medium text-white/80 leading-snug">{f.title}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Our Facilities ── */}
-        <section id="service" className="bg-[#021210] py-28">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <p className="text-[#e3bf5f] text-xs font-semibold tracking-[0.25em] uppercase mb-3">
-                Our Facilities
-              </p>
-              <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-white mb-5 tracking-tight">
-                Every Room Fully Equipped
-              </h2>
-              <p className="text-white/50 text-base max-w-xl mx-auto leading-relaxed">
-                Washing Machine · Refrigerator · Microwave/Oven · Smart TV · Furnished Rooms · 24/7 Girls-Only Security
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {facilities.map((f, i) => (
-                <div
-                  key={f.title}
-                  className="group relative bg-gradient-to-br from-[#0f2e1e] to-[#0a1f14] rounded-2xl p-7 border border-white/[0.06] hover:border-[#e3bf5f]/25 transition-all duration-300 overflow-hidden"
-                >
-                  {/* Subtle shimmer on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#e3bf5f]/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="relative z-10 flex items-start gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-[#e3bf5f]/10 border border-[#e3bf5f]/15 flex items-center justify-center flex-shrink-0 group-hover:bg-[#e3bf5f]/15 transition-colors duration-200">
-                      <f.icon className="w-5 h-5 text-[#e3bf5f]" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-semibold text-base mb-1.5">{f.title}</h3>
-                      <p className="text-white/50 text-sm leading-relaxed">{f.desc}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Stats ── */}
-        <section id="about" className="bg-[#021210] pb-20">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-16" />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x md:divide-white/[0.08]">
-              {[
-                { num: "100m", label: "From Christ University" },
-                { num: "2 min", label: "Walk to Campus" },
-                { num: "3+", label: "Room Types" },
-                { num: "24/7", label: "Girls-Only Security" },
-              ].map((s) => (
-                <div key={s.label} className="text-center md:px-8">
-                  <p className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-bold text-[#e3bf5f] mb-2">
-                    {s.num}
-                  </p>
-                  <p className="text-white/50 text-sm tracking-wide">{s.label}</p>
-                </div>
-              ))}
-            </div>
-            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-16" />
-          </div>
-        </section>
-
-        {/* ── Our Properties ── */}
-        <section id="property" className="py-28 bg-[#021210]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="mb-14">
-              <p className="text-[#e3bf5f] text-xs font-semibold tracking-[0.25em] uppercase mb-3">
-                Room Types
-              </p>
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
-                  <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-white tracking-tight">
-                    Choose Your Accommodation
-                  </h2>
-                  <p className="text-white/50 text-base mt-3 max-w-xl leading-relaxed">
-                    Every room fully furnished and equipped — steps from Christ University, Bangalore.
-                  </p>
-                </div>
-                <button
-                  onClick={openBookForm}
-                  className="hidden md:inline-flex items-center gap-2 text-[#e3bf5f] text-sm font-semibold hover:text-white transition-colors flex-shrink-0"
-                >
-                  View All <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {properties.map((p) => (
-                <div
-                  key={p.name}
-                  className="bg-[#0a1f14] border border-white/[0.07] rounded-3xl overflow-hidden hover:border-white/[0.14] hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)] transition-all duration-300 group"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                    <div className="absolute top-4 left-4 flex flex-col gap-1.5">
-                      <span className="bg-[#e3bf5f] text-[#021210] text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                        {p.badge}
-                      </span>
-                      <span className="bg-[#3E6B4F] text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
-                        🎉 1 Month Free
-                      </span>
-                    </div>
-                    <div className="absolute bottom-4 left-4">
-                      <span className="bg-white/15 backdrop-blur-sm border border-white/20 text-white text-xs font-medium px-3 py-1 rounded-full">
-                        {p.type}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold text-white mb-1 leading-snug">{p.name}</h3>
-                    <p className="text-white/40 text-xs mb-4 flex items-center gap-1">
-                      <MapPin className="w-3 h-3 flex-shrink-0" />
-                      {p.location}
-                    </p>
-
-                    <div className="bg-[#0f2e1e] border border-white/[0.06] rounded-2xl p-4 mb-4 space-y-1.5">
-                      <div className="flex justify-between text-xs">
-                        <span className="text-white/45">Advance Payment</span>
-                        <span className="text-white/70 font-medium">{p.advancePayment} <span className="text-white/30 font-normal">(adj. Apr & May)</span></span>
-                      </div>
-                      <div className="flex justify-between text-xs">
-                        <span className="text-white/45">Maintenance (One Time)</span>
-                        <span className="text-white/70 font-medium">{p.maintenance}</span>
-                      </div>
-                      <div className="flex justify-between text-xs">
-                        <span className="text-white/45">Agreement Duration</span>
-                        <span className="text-white/70 font-medium">{p.agreementDuration}</span>
-                      </div>
-                      <div className="flex justify-between text-xs">
-                        <span className="text-white/45">Booking Advance</span>
-                        <span className="text-white/70 font-medium">{p.bookingAdvance}</span>
-                      </div>
-                      <div className="h-px bg-white/[0.07] my-1" />
-                      <div className="flex justify-between text-xs font-semibold">
-                        <span className="text-white/60">Total</span>
-                        <span className="text-white/85">{p.totalInitial}</span>
-                      </div>
-                      <div className="flex justify-between text-xs">
-                        <span className="text-white/40">Move-in Amount</span>
-                        <span className="text-white/55">{p.moveInAmount} <span className="text-white/25 font-normal text-[10px]">(after shifting)</span></span>
-                      </div>
-                      <div className="h-px bg-white/[0.07] my-1" />
-                      <div className="flex justify-between text-xs font-bold">
-                        <span className="text-[#e3bf5f]/80">Annual Total</span>
-                        <span className="text-[#e3bf5f]">{p.annualTotal}</span>
-                      </div>
-                      <div className="bg-[#3E6B4F]/20 border border-[#3E6B4F]/30 rounded-xl px-3 py-2 text-[11px] text-[#7A9B7E] text-center font-medium">
-                        🎉 Pay for 11 months, stay for 12 — 1 month free!
-                      </div>
-                    </div>
-
-                    <p className="text-white/50 text-sm mb-5 leading-relaxed">{p.desc}</p>
-
-                    <div className="flex flex-wrap gap-1.5 mb-5">
-                      {p.tags.slice(0, 4).map((t) => (
-                        <span
-                          key={t}
-                          className="text-[10px] font-medium text-[#7A9B7E] bg-[#132e1e] border border-white/[0.06] px-2.5 py-1 rounded-full"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                      {p.tags.length > 4 && (
-                        <span className="text-[10px] font-medium text-white/40 bg-white/[0.05] px-2.5 py-1 rounded-full">
-                          +{p.tags.length - 4} more
-                        </span>
-                      )}
-                    </div>
-
-                    <button
-                      onClick={openBookForm}
-                      className="w-full bg-[#3E6B4F] text-white py-3 rounded-full text-sm font-semibold hover:bg-[#4d8060] transition-colors duration-200"
-                    >
-                      Check Availability
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Testimonials ── */}
-        <section className="py-28 bg-[#021210]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <p className="text-[#e3bf5f] text-xs font-semibold tracking-[0.25em] uppercase mb-3">
-                Testimonials
-              </p>
-              <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-white tracking-tight">
-                What Our Residents Say
-              </h2>
-              <p className="text-white/50 text-base mt-4 max-w-xl mx-auto leading-relaxed">
-                Hear from students living at Livoza Girls PG near Christ University, Bangalore.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {testimonials.map((t, i) => (
-                <div
-                  key={`${t.initial}-${i}`}
-                  className="relative bg-gradient-to-b from-[#132e1e] to-[#0d1f14] rounded-2xl p-6 border border-white/[0.07] hover:border-white/[0.12] transition-colors duration-300 flex flex-col"
-                >
-                  {/* Stars */}
-                  <div className="flex gap-0.5 mb-5">
-                    {Array.from({ length: 5 }).map((_, idx) => (
-                      <svg key={idx} width="12" height="12" viewBox="0 0 24 24" fill="#e3bf5f">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                      </svg>
-                    ))}
-                  </div>
-
-                  <p className="text-white/70 text-sm leading-relaxed flex-1">
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-
-                  {/* Large decorative quote */}
-                  <span className="absolute top-4 right-5 text-[#e3bf5f]/15 text-6xl font-serif leading-none select-none">&rdquo;</span>
-
-                  <div className="mt-6 pt-5 border-t border-white/[0.07] flex items-center gap-3">
-                    <span className="w-9 h-9 rounded-full bg-gradient-to-br from-[#e3bf5f] to-[#c9a43a] text-[#021210] flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      {t.initial}
-                    </span>
-                    <div>
-                      <p className="text-white/90 font-semibold text-sm">{t.name}</p>
-                      <p className="text-white/40 text-xs">{t.college}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── About Us ── */}
-        <section className="py-28 bg-[#061a12]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <p className="text-[#e3bf5f] text-xs font-semibold tracking-[0.25em] uppercase mb-4">
-                  About Us
-                </p>
-                <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-white mb-6 tracking-tight leading-tight">
-                  Steps away from
-                  <br />
-                  Christ University.
-                </h2>
-                <p className="text-white/55 text-base mb-8 leading-relaxed">
-                  Livoza Girls is situated just 100 metres from Christ University — a 2-minute walk to campus.
-                  Fully furnished rooms with washing machine, fridge, oven, TV and 24/7 girls-only security.
-                </p>
-                <ul className="space-y-3 mb-10">
-                  {[
-                    "Advance Payment — 2 months' rent, adjustable in April & May",
-                    "Maintenance — ₹10,000 one-time annual charge",
-                    "Booking Advance — ₹20,000–₹30,000 to secure your room",
-                    "Annual Discount — 5% off when you pay for the full year upfront",
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-3">
-                      <span className="w-5 h-5 rounded-full bg-[#3E6B4F] flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M20 6L9 17L4 12" />
-                        </svg>
-                      </span>
-                      <span className="text-white/55 text-sm leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  onClick={openBookForm}
-                  className="inline-flex items-center gap-2 bg-[#e3bf5f] text-[#021210] px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#f0cf77] transition-colors duration-200 shadow-[0_4px_16px_rgba(227,191,95,0.3)]"
-                >
-                  Book Your Room
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <img
-                  src="/img1.jpeg"
-                  alt="Livoza Girls PG — Premium furnished room"
-                  className="rounded-2xl w-full aspect-[3/4] object-cover shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
-                />
-                <img
-                  src="/img2.jpeg"
-                  alt="Livoza Girls PG — Room interior"
-                  className="rounded-2xl w-full aspect-[3/4] object-cover mt-8 shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
-                />
-                <img
-                  src="/img3.jpeg"
-                  alt="Livoza Girls PG — Furnished accommodation"
-                  className="rounded-2xl w-full aspect-[3/4] object-cover -mt-4 shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
-                />
-                <img
-                  src="/triplebed.jpeg"
-                  alt="Livoza Girls PG — Triple sharing room"
-                  className="rounded-2xl w-full aspect-[3/4] object-cover mt-4 shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Community CTA ── */}
-        <section id="community" className="py-24 bg-gradient-to-b from-[#103925] to-[#0d281c] relative overflow-hidden">
-          {/* Background texture */}
-          <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_30%_50%,#e3bf5f_0%,transparent_60%)]" />
-          <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_70%_50%,#e3bf5f_0%,transparent_60%)]" />
-
-          <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-8 text-center">
-            <p className="text-[#e3bf5f]/70 text-xs font-semibold tracking-[0.25em] uppercase mb-4">
-              Join Us
-            </p>
-            <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl text-white mb-5 tracking-tight">
-              Be a Part of the<br />Livoza Community
-            </h2>
-            <p className="text-white/70 text-base mb-10 leading-relaxed">
-              Join students at Christ University building memories and friendships — just 100m from campus.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a
-                href="tel:+919353477987"
-                className="inline-flex items-center justify-center gap-2 bg-white text-[#1F3D2B] px-7 py-3.5 rounded-full text-sm font-semibold hover:bg-[#F5F1E8] transition-colors duration-200 shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
-              >
-                <Phone className="w-4 h-4" />
-                +91 9353477987
-              </a>
-              <a
-                href="tel:+918360669796"
-                className="inline-flex items-center justify-center gap-2 border border-white/30 text-white px-7 py-3.5 rounded-full text-sm font-medium hover:bg-white/[0.08] transition-colors duration-200"
-              >
-                <Phone className="w-4 h-4" />
-                +91 8360669796
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Contact ── */}
-        <section id="contact" className="py-28 bg-[#021210]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-              <div>
-                <p className="text-[#e3bf5f] text-xs font-semibold tracking-[0.25em] uppercase mb-4">
-                  Contact Livoza
-                </p>
-                <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-white mb-4 tracking-tight">
-                  Request A Callback
-                </h2>
-                <p className="text-white/50 text-base mb-10 leading-relaxed">
-                  Interested in Livoza Girls PG? Fill in the form and our team will call you back within 24 hours.
-                </p>
-
-                <div className="space-y-7">
-                  <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#3E6B4F]/20 border border-white/[0.07] flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-4 h-4 text-[#7A9B7E]" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-white text-sm mb-1">Location</p>
-                      <p className="text-white/45 text-sm">100 metres from Christ University · 2-minute walk · Bangalore</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#3E6B4F]/20 border border-white/[0.07] flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-4 h-4 text-[#7A9B7E]" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-white text-sm mb-1">Phone</p>
-                      <div className="flex flex-col gap-1">
-                        <a href="tel:+919353477987" className="text-[#7A9B7E] text-sm hover:text-[#e3bf5f] transition-colors">+91 9353477987</a>
-                        <a href="tel:+918360669796" className="text-[#7A9B7E] text-sm hover:text-[#e3bf5f] transition-colors">+91 8360669796</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#3E6B4F]/20 border border-white/[0.07] flex items-center justify-center flex-shrink-0">
-                      <svg className="w-4 h-4 text-[#7A9B7E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-white text-sm mb-1">Email</p>
-                      <a href="mailto:info@livoza.com" className="text-[#7A9B7E] text-sm hover:text-[#e3bf5f] transition-colors">info@livoza.com</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-[#0a1f14] border border-white/[0.08] rounded-3xl p-8">
-                {contactFormSubmitted ? (
-                  <div className="space-y-4 py-4">
-                    <div className="bg-[#132e1e] rounded-2xl p-5 border border-[#3E6B4F]/40">
-                      <p className="text-white font-semibold mb-1">Request received!</p>
-                      <p className="text-white/55 text-sm">We&apos;ll call you back within 24 hours.</p>
-                    </div>
-                    <a
-                      href="tel:+919353477987"
-                      className="flex items-center justify-center gap-2 bg-[#3E6B4F] text-white px-6 py-3.5 rounded-full font-semibold hover:bg-[#4d8060] transition-colors text-sm"
-                    >
-                      <Phone className="w-4 h-4" />
-                      Or call us: +91 9353477987
-                    </a>
-                    <button
-                      onClick={() => { setContactFormSubmitted(false); setContactFormError(null); }}
-                      className="block w-full text-white/40 text-sm hover:text-white/70 transition-colors"
-                    >
-                      Submit another request
-                    </button>
-                  </div>
-                ) : (
-                  <form className="space-y-5" onSubmit={handleContactFormSubmit}>
-                    <div>
-                      <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                        Full Name <span className="text-[#7A9B7E]">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="fullName"
-                        required
-                        className="w-full border border-white/[0.1] rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-[#3E6B4F]/50 focus:border-[#3E6B4F] outline-none transition-all bg-[#061a12] placeholder:text-white/20"
-                        placeholder="Your full name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                        Phone Number <span className="text-[#7A9B7E]">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        name="phoneNumber"
-                        required
-                        className="w-full border border-white/[0.1] rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-[#3E6B4F]/50 focus:border-[#3E6B4F] outline-none transition-all bg-[#061a12] placeholder:text-white/20"
-                        placeholder="+91 XXXXX XXXXX"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        name="emailAddress"
-                        className="w-full border border-white/[0.1] rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-[#3E6B4F]/50 focus:border-[#3E6B4F] outline-none transition-all bg-[#061a12] placeholder:text-white/20"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                        Message
-                      </label>
-                      <textarea
-                        name="message"
-                        rows={4}
-                        className="w-full border border-white/[0.1] rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-[#3E6B4F]/50 focus:border-[#3E6B4F] outline-none transition-all bg-[#061a12] resize-none placeholder:text-white/20"
-                        placeholder="Tell us about your requirements…"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={isContactSubmitting}
-                      className="w-full bg-[#e3bf5f] text-[#021210] py-3.5 rounded-full font-semibold hover:bg-[#f0cf77] transition-colors disabled:opacity-60 text-sm tracking-wide shadow-[0_4px_14px_rgba(227,191,95,0.3)]"
-                    >
-                      {isContactSubmitting ? "Submitting…" : "Request Callback"}
-                    </button>
-                    {contactFormError && (
-                      <p className="text-sm text-red-400 bg-red-900/20 border border-red-500/20 px-3 py-2 rounded-lg">{contactFormError}</p>
-                    )}
-                  </form>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Footer ── */}
-        <footer id="footer" className="bg-[#0d281c] pt-16 pb-0">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-white/[0.08]">
-              <div className="md:col-span-2">
-                <LivozaLogo light />
-                <p className="text-white/50 text-sm mt-4 max-w-xs leading-relaxed">
-                  Girls-only PG near Christ University — 100m from campus. Fully furnished rooms with washing machine, fridge, oven, and Smart TV.
-                </p>
-                <div className="flex gap-3 mt-6">
-                  <a
-                    href="tel:+919353477987"
-                    className="inline-flex items-center gap-2 bg-white/[0.07] hover:bg-white/[0.12] border border-white/10 text-white/70 hover:text-white text-xs px-4 py-2 rounded-full transition-all duration-200"
-                  >
-                    <Phone className="w-3 h-3" />
-                    Call Now
-                  </a>
-                  <a
-                    href="mailto:info@livoza.com"
-                    className="inline-flex items-center gap-2 bg-white/[0.07] hover:bg-white/[0.12] border border-white/10 text-white/70 hover:text-white text-xs px-4 py-2 rounded-full transition-all duration-200"
-                  >
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    Email
-                  </a>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-white text-sm mb-5 tracking-wide">Quick Links</h4>
-                <ul className="space-y-3">
-                  {["About", "Property", "Blogs", "Community", "Privacy Policy"].map((link) => (
-                    <li key={link}>
-                      <a href="#" className="text-white/50 hover:text-white text-sm transition-colors duration-200">
-                        {link}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold text-white text-sm mb-5 tracking-wide">Contact</h4>
-                <ul className="space-y-3">
-                  <li>
-                    <a href="tel:+919353477987" className="text-white/50 hover:text-white text-sm transition-colors duration-200">
-                      +91 9353477987
-                    </a>
-                  </li>
-                  <li>
-                    <a href="tel:+918360669796" className="text-white/50 hover:text-white text-sm transition-colors duration-200">
-                      +91 8360669796
-                    </a>
-                  </li>
-                  <li>
-                    <a href="mailto:info@livoza.com" className="text-white/50 hover:text-white text-sm transition-colors duration-200">
-                      info@livoza.com
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
-              <p className="text-white/35 text-xs">
-                Copyright © 2026 Livoza. All rights reserved.
-              </p>
-              <p className="text-white/35 text-xs">
-                Powered by Dragon Ventures
-              </p>
-            </div>
-          </div>
-        </footer>
-      </main>
-
-      {/* ── Mobile Floating CTA ── */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[70] bg-[#021210]/95 backdrop-blur border-t border-white/[0.08] shadow-[0_-4px_20px_rgba(0,0,0,0.4)] px-4 py-3">
-        <div className="flex gap-3 max-w-7xl mx-auto">
-          <a
-            href="tel:+919353477987"
-            className="flex-1 flex items-center justify-center gap-2 bg-[#1F3D2B] text-white py-3 px-4 rounded-full text-sm font-semibold hover:bg-[#3E6B4F] transition-colors shadow-[0_2px_10px_rgba(31,61,43,0.3)]"
-          >
-            <Phone className="w-4 h-4 flex-shrink-0" />
-            Call Now
-          </a>
-          <button
-            onClick={openBookForm}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#e3bf5f] text-[#021210] py-3 px-4 rounded-full text-sm font-semibold hover:bg-[#f0cf77] transition-colors shadow-[0_2px_10px_rgba(227,191,95,0.35)]"
-          >
-            <Calendar className="w-4 h-4 flex-shrink-0" />
-            Book Now
+          ))}
+          <button type="submit" disabled={isSubmitting} style={{
+            padding: "14px", borderRadius: 99, background: T.ink,
+            color: "#fff", border: "none", fontWeight: 500, fontSize: 14.5,
+            cursor: "pointer", marginTop: 4, opacity: isSubmitting ? 0.6 : 1,
+          }}>
+            {isSubmitting ? "Submitting…" : "Request Callback"}
           </button>
-        </div>
+          {error && <p style={{ fontSize: 13, color: "#c0392b", margin: 0 }}>{error}</p>}
+        </form>
       </div>
     </div>
+  );
+}
+
+// ── Main page ──
+export default function Home() {
+  const router = useRouter();
+  const [bookOpen, setBookOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [contactSubmitted, setContactSubmitted] = useState(false);
+  const [isContactSubmitting, setIsContactSubmitting] = useState(false);
+  const [contactError, setContactError] = useState<string | null>(null);
+
+  const createContactSubmission = useMutation(api.forms.createContactSubmission);
+
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isContactSubmitting) return;
+    setIsContactSubmitting(true);
+    setContactError(null);
+    try {
+      const fd = new FormData(e.currentTarget);
+      await createContactSubmission({
+        fullName: String(fd.get("fullName") ?? "").trim(),
+        phoneNumber: String(fd.get("phoneNumber") ?? "").trim(),
+        emailAddress: String(fd.get("emailAddress") ?? "").trim() || undefined,
+        message: String(fd.get("message") ?? "").trim() || undefined,
+      });
+      router.push("/thank-you");
+    } catch (err) {
+      setContactError(err instanceof Error ? err.message : "Failed to submit.");
+    } finally {
+      setIsContactSubmitting(false);
+    }
+  };
+
+  return (
+    <>
+      <style>{`
+        body { background: ${T.paper}; }
+        @keyframes floatBob {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        .float-card {
+          animation: floatBob 4s ease-in-out infinite;
+        }
+        @media (max-width: 768px) {
+          .hero-grid { grid-template-columns: 1fr !important; grid-template-rows: auto !important; }
+          .hero-grid > * { grid-column: 1 !important; grid-row: auto !important; }
+          .rooms-grid { grid-template-columns: 1fr !important; }
+          .facilities-grid { grid-template-columns: 1fr 1fr !important; }
+          .steps-grid { grid-template-columns: 1fr !important; }
+          .stats-grid { grid-template-columns: 1fr 1fr !important; padding: 32px 24px !important; }
+          .testimonial-grid { grid-template-columns: 1fr !important; }
+          .contact-grid { grid-template-columns: 1fr !important; }
+          .footer-grid { grid-template-columns: 1fr 1fr !important; }
+          .mobile-menu-btn { display: grid !important; }
+          .mobile-cta { display: block !important; }
+          nav { display: none !important; }
+          .desktop-nav-btns { display: none !important; }
+          .float-card { max-width: 100% !important; }
+        }
+        @media (max-width: 480px) {
+          .facilities-grid { grid-template-columns: 1fr !important; }
+          .stats-grid { grid-template-columns: 1fr 1fr !important; }
+          .footer-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+
+      <div style={{ background: T.paper, minHeight: "100vh", color: T.ink, fontFamily: "var(--font-poppins), ui-sans-serif, system-ui, sans-serif" }}>
+        <Nav onBook={() => setBookOpen(true)} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+        <Hero onBook={() => setBookOpen(true)} />
+        <Trustbar />
+        <Facilities />
+        <Rooms onBook={() => setBookOpen(true)} />
+        <Stats />
+        <HowItWorks />
+        <Testimonials />
+        <FinalCTA onBook={() => setBookOpen(true)} />
+        <Contact
+          onSubmit={handleContactSubmit}
+          isSubmitting={isContactSubmitting}
+          error={contactError}
+          submitted={contactSubmitted}
+        />
+        <Footer />
+
+        {/* Mobile floating CTA */}
+        <div style={{
+          position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 70,
+          background: `${T.paper}f2`, backdropFilter: "blur(8px)",
+          borderTop: `1px solid ${T.line2}`, padding: "12px 16px",
+          display: "none",
+        }} className="mobile-cta">
+          <div style={{ display: "flex", gap: 10, maxWidth: 480, margin: "0 auto" }}>
+            <a href="tel:+919353477987" style={{
+              flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              background: T.mint, color: T.ink, padding: "13px", borderRadius: 99,
+              fontWeight: 600, fontSize: 14, textDecoration: "none",
+            }}>
+              <Phone style={{ width: 16, height: 16 }} /> Call Now
+            </a>
+            <button onClick={() => setBookOpen(true)} style={{
+              flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              background: T.ink, color: "#fff", padding: "13px", borderRadius: 99,
+              fontWeight: 600, fontSize: 14, border: "none", cursor: "pointer",
+            }}>
+              <Calendar style={{ width: 16, height: 16 }} /> Book Now
+            </button>
+          </div>
+        </div>
+
+        <BookModal open={bookOpen} onClose={() => setBookOpen(false)} />
+      </div>
+    </>
   );
 }

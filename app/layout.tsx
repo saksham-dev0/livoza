@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Playfair_Display } from "next/font/google";
+import { Poppins, Playfair_Display, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -14,6 +14,13 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -44,11 +51,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* End Google Tag Manager */}
       </head>
       <body
-        className={`${poppins.variable} ${playfair.variable} font-sans antialiased`}
+        className={`${poppins.variable} ${playfair.variable} ${instrumentSerif.variable} font-sans antialiased`}
       >
         <ClerkProvider
           signInFallbackRedirectUrl="/referral"
-          signUpFallbackRedirectUrl="/referral/referee"
+          signUpFallbackRedirectUrl="/referral"
         >
         {/* Google Tag Manager (noscript) */}
         <noscript>
