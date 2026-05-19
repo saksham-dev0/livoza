@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { SharedNav } from "../components/SharedNav";
+import { FloatingCTA } from "../components/FloatingCTA";
 
 const T = {
   ink: "#154f4c",
@@ -785,6 +786,7 @@ export default function PropertiesPage() {
       `}</style>
 
       <SharedNav />
+      <FloatingCTA />
 
       <div className="properties-shell" style={{ paddingTop: 68 }}>
 

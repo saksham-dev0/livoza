@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { SharedNav } from "../components/SharedNav";
+import { FloatingCTA } from "../components/FloatingCTA";
 
 // ── Design tokens ──
 const T = {
@@ -66,6 +67,7 @@ export default function AboutPage() {
     }}>
 
       <SharedNav />
+      <FloatingCTA />
 
       {/* ── HERO ── */}
       <section style={{ padding: `76px ${px} 0` }}>
