@@ -5,6 +5,15 @@ export type BookNowLead = {
   emailAddress?: string;
 };
 
+export type ReferralLead = {
+  referrerName: string;
+  referrerEmail?: string;
+  refereeName: string;
+  refereePhone: string;
+  refereeEmail?: string;
+  preferredCity: string;
+};
+
 export type ContactLead = {
   fullName: string;
   phoneNumber: string;
@@ -54,6 +63,31 @@ export function buildBookNowEmail(lead: BookNowLead): { subject: string; html: s
           }</td></tr>
         </tbody>
       </table>
+    </div>
+  `;
+  return { subject, html };
+}
+
+export function buildReferralEmail(lead: ReferralLead): { subject: string; html: string } {
+  const subject = `Livoza - New Referral by ${escapeHtml(lead.referrerName)}`;
+  const html = `
+    <div style="font-family: Arial, Helvetica, sans-serif; line-height: 1.4; max-width: 600px;">
+      <div style="background: #154f4c; color: #fff; padding: 20px 24px; border-radius: 8px 8px 0 0;">
+        <p style="margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7;">Referral by</p>
+        <h2 style="margin: 4px 0 0; font-size: 22px;">${escapeHtml(lead.referrerName)}</h2>
+        ${lead.referrerEmail ? `<p style="margin: 4px 0 0; font-size: 13px; opacity: 0.75;">${escapeHtml(lead.referrerEmail)}</p>` : ""}
+      </div>
+      <div style="border: 1px solid #eee; border-top: none; padding: 20px 24px; border-radius: 0 0 8px 8px;">
+        <p style="margin: 0 0 16px 0; color: #444;">A new referral has been submitted. Here are the referee details:</p>
+        <table style="border-collapse: collapse; width: 100%;">
+          <tbody>
+            <tr><td style="padding: 8px 12px; border: 1px solid #eee; background: #f9f9f9; width: 140px;"><b>Name</b></td><td style="padding: 8px 12px; border: 1px solid #eee;">${escapeHtml(lead.refereeName)}</td></tr>
+            <tr><td style="padding: 8px 12px; border: 1px solid #eee; background: #f9f9f9;"><b>Phone</b></td><td style="padding: 8px 12px; border: 1px solid #eee;">${escapeHtml(lead.refereePhone)}</td></tr>
+            <tr><td style="padding: 8px 12px; border: 1px solid #eee; background: #f9f9f9;"><b>Email</b></td><td style="padding: 8px 12px; border: 1px solid #eee;">${lead.refereeEmail ? escapeHtml(lead.refereeEmail) : "-"}</td></tr>
+            <tr><td style="padding: 8px 12px; border: 1px solid #eee; background: #f9f9f9;"><b>PG Location</b></td><td style="padding: 8px 12px; border: 1px solid #eee;">${escapeHtml(lead.preferredCity)}</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   `;
   return { subject, html };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useUser, useClerk } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import Link from "next/link";
@@ -40,12 +40,21 @@ const AV_GRADIENTS = [
 
 function ReferralDashboard() {
   const { user } = useUser();
+  const { signOut } = useClerk();
   const router = useRouter();
   const upsertReferralUser = useMutation(api.referrals.upsertReferralUser);
   const myReferrals = useQuery(api.referrals.getMyReferrals);
+  const referralUser = useQuery(api.referrals.getReferralUser);
+  const updateDetails = useMutation(api.referrals.updateReferralUserDetails);
+  const generateUploadUrl = useMutation(api.referrals.generateUploadUrl);
   const [copied, setCopied] = useState(false);
   const [activeFilter, setActiveFilter] = useState("All");
   const [isMobile, setIsMobile] = useState(false);
+  const [phoneInput, setPhoneInput] = useState("");
+  const [qrFile, setQrFile] = useState<File | null>(null);
+  const [qrPreview, setQrPreview] = useState<string | null>(null);
+  const [detailsSaving, setDetailsSaving] = useState(false);
+  const [detailsSaved, setDetailsSaved] = useState(false);
 
   useEffect(() => {
     upsertReferralUser();
@@ -57,6 +66,34 @@ function ReferralDashboard() {
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
+
+  useEffect(() => {
+    if (referralUser?.phone) setPhoneInput(referralUser.phone);
+  }, [referralUser?.phone]);
+
+  const qrStorageId = referralUser?.paymentQrStorageId ?? null;
+  const qrImageUrl = useQuery(
+    api.referrals.getQrImageUrl,
+    qrStorageId ? { storageId: qrStorageId } : "skip"
+  );
+
+  const handleSaveDetails = async () => {
+    setDetailsSaving(true);
+    try {
+      let storageId = referralUser?.paymentQrStorageId;
+      if (qrFile) {
+        const uploadUrl = await generateUploadUrl();
+        const res = await fetch(uploadUrl, { method: "POST", body: qrFile, headers: { "Content-Type": qrFile.type } });
+        const { storageId: newId } = await res.json();
+        storageId = newId;
+      }
+      await updateDetails({ phone: phoneInput || undefined, paymentQrStorageId: storageId });
+      setDetailsSaved(true);
+      setTimeout(() => setDetailsSaved(false), 2000);
+    } finally {
+      setDetailsSaving(false);
+    }
+  };
 
   const firstName = user?.firstName ?? user?.fullName?.split(" ")[0] ?? "you";
   const userSlug = user?.username ?? user?.id?.slice(-8) ?? "your-link";
@@ -96,13 +133,20 @@ function ReferralDashboard() {
             <span style={{ fontSize: 10, padding: "2px 6px", borderRadius: 99, background: "#dee8e6", color: "#154f4c", fontWeight: 600 }}>₹3,000/booking</span>
           </Link>
         </nav>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: isMobile ? "4px 8px 4px 4px" : "4px 14px 4px 4px", background: "#fff", border: "1px solid #154f4c1f", borderRadius: 99, fontSize: 13.5, fontWeight: 500, minWidth: 0, maxWidth: isMobile ? 150 : 260 }}>
-            <span style={{ width: 26, height: 26, borderRadius: 99, background: "linear-gradient(135deg,#5d8b87,#154f4c)", color: "#fff", fontFamily: "'Instrument Serif', serif", fontStyle: "italic", display: "grid", placeItems: "center", fontSize: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: isMobile ? "4px 8px 4px 4px" : "4px 14px 4px 4px", background: "#fff", border: "1px solid #154f4c1f", borderRadius: 99, fontSize: 13.5, fontWeight: 500, minWidth: 0, maxWidth: isMobile ? 120 : 220 }}>
+            <span style={{ width: 26, height: 26, borderRadius: 99, background: "linear-gradient(135deg,#5d8b87,#154f4c)", color: "#fff", fontFamily: "'Instrument Serif', serif", fontStyle: "italic", display: "grid", placeItems: "center", fontSize: 14, flexShrink: 0 }}>
               {firstName.charAt(0).toLowerCase()}
             </span>
             <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</span>
           </span>
+          <button
+            onClick={() => signOut({ redirectUrl: "/" })}
+            title="Sign out"
+            style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, borderRadius: 99, background: "#fff", border: "1px solid #154f4c1f", cursor: "pointer", color: "#6a7a78", flexShrink: 0 }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+          </button>
         </div>
       </header>
 
@@ -279,6 +323,74 @@ function ReferralDashboard() {
           </div>
         </div>
 
+        {/* Payout details card */}
+        <div style={{ marginTop: 18, background: "#fff", border: "1px solid #154f4c1f", borderRadius: isMobile ? 20 : 24, padding: isMobile ? "20px" : "24px 28px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+            <div style={{ fontFamily: "'Geist Mono', monospace", fontSize: 11, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase" }}>⁕ your payout details</div>
+            {(referralUser?.phone || referralUser?.paymentQrStorageId) && (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "2px 8px", borderRadius: 99, background: "#e8f3ed", border: "1px solid #2e8b6a33", fontSize: 11, color: "#1d6a4f", fontWeight: 500 }}>
+                <span style={{ width: 5, height: 5, borderRadius: 99, background: "#2e8b6a", display: "inline-block" }} />
+                Saved
+              </span>
+            )}
+          </div>
+          <h3 style={{ margin: "6px 0 4px", fontSize: 18, fontWeight: 600, letterSpacing: "-0.01em", color: "#154f4c" }}>Add your details to receive incentives</h3>
+          <p style={{ margin: "0 0 20px", fontSize: 13.5, color: "#6a7a78", lineHeight: 1.5 }}>We need your contact number and UPI QR code to send your ₹3,000 payout instantly when your referral books.</p>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20, alignItems: "start" }}>
+            {/* Phone */}
+            <div>
+              <label style={{ display: "block", fontFamily: "'Geist Mono', monospace", fontSize: 10.5, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>Contact number</label>
+              <input
+                type="tel"
+                value={phoneInput}
+                onChange={(e) => setPhoneInput(e.target.value)}
+                placeholder="+91 98765 43210"
+                style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "1px solid #154f4c22", background: "#f7f5f0", fontSize: 14.5, color: "#154f4c", fontFamily: "inherit", outline: "none", boxSizing: "border-box" }}
+              />
+            </div>
+            {/* QR upload */}
+            <div>
+              <label style={{ display: "block", fontFamily: "'Geist Mono', monospace", fontSize: 10.5, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>UPI / payment QR code</label>
+              <label style={{ display: "flex", alignItems: "center", gap: 14, padding: "10px 14px", borderRadius: 10, border: "1px dashed #154f4c44", background: "#f7f5f0", cursor: "pointer" }}>
+                {(qrPreview || qrImageUrl) ? (
+                  <img src={qrPreview ?? qrImageUrl ?? undefined} alt="QR" style={{ width: 52, height: 52, objectFit: "contain", borderRadius: 6, border: "1px solid #154f4c1f" }} />
+                ) : (
+                  <div style={{ width: 52, height: 52, borderRadius: 6, background: "#dee8e6", display: "grid", placeItems: "center" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5d8b87" strokeWidth="1.8"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
+                  </div>
+                )}
+                <div>
+                  <div style={{ fontSize: 13.5, fontWeight: 500, color: "#154f4c" }}>{qrFile ? qrFile.name : (qrImageUrl ? "QR saved · tap to replace" : "Upload QR image")}</div>
+                  <div style={{ fontSize: 12, color: "#6a7a78", marginTop: 2 }}>PNG, JPG or WEBP</div>
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0] ?? null;
+                    setQrFile(f);
+                    if (f) setQrPreview(URL.createObjectURL(f));
+                  }}
+                />
+              </label>
+            </div>
+          </div>
+          <div style={{ marginTop: 18, display: "flex", justifyContent: "flex-end" }}>
+            <button
+              onClick={handleSaveDetails}
+              disabled={detailsSaving || (!phoneInput && !qrFile)}
+              style={{ padding: "11px 22px", borderRadius: 99, background: detailsSaved ? "#2e8b6a" : "#154f4c", color: "#fff", border: "none", fontSize: 13.5, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", display: "inline-flex", alignItems: "center", gap: 8, opacity: (!phoneInput && !qrFile) ? 0.5 : 1, transition: "background 0.2s" }}
+            >
+              {detailsSaving ? (
+                <><span style={{ width: 14, height: 14, borderRadius: 99, border: "2px solid #ffffff55", borderTopColor: "#fff", display: "inline-block", animation: "spin 0.7s linear infinite" }} />Saving…</>
+              ) : detailsSaved ? (
+                <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="m5 12 5 5 9-11" /></svg>Saved!</>
+              ) : "Save details"}
+            </button>
+          </div>
+        </div>
+
         {/* Referrals list */}
         <div style={{ marginTop: 28 }}>
           <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: isMobile ? "stretch" : "flex-end", gap: 14, marginBottom: 14 }}>
@@ -299,17 +411,16 @@ function ReferralDashboard() {
 
           <div style={{ background: "#fff", border: "1px solid #154f4c1f", borderRadius: 20, overflow: "hidden" }}>
             {/* Table head */}
-            <div style={{ display: isMobile ? "none" : "grid", gridTemplateColumns: "minmax(220px, 1.4fr) 1fr 1.2fr 1fr 1fr 110px", alignItems: "center", gap: 16, padding: "12px 22px", background: "#f1ece2", fontFamily: "'Geist Mono', monospace", fontSize: 10.5, color: "#6a7a78", letterSpacing: "0.14em", textTransform: "uppercase" }}>
+            <div style={{ display: isMobile ? "none" : "grid", gridTemplateColumns: "minmax(220px, 1.4fr) 1fr 1.2fr 1.5fr 1fr", alignItems: "center", gap: 16, padding: "12px 22px", background: "#f1ece2", fontFamily: "'Geist Mono', monospace", fontSize: 10.5, color: "#6a7a78", letterSpacing: "0.14em", textTransform: "uppercase" }}>
               <div>Friend</div>
               <div>Channel</div>
               <div>Status</div>
               <div>Stage</div>
               <div>Your payout</div>
-              <div style={{ textAlign: "right" }}>Action</div>
             </div>
 
             {myReferrals && myReferrals.length > 0 ? myReferrals.map((r, i) => (
-              <div key={r._id} style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "minmax(220px, 1.4fr) 1fr 1.2fr 1fr 1fr 110px", alignItems: "center", gap: isMobile ? 14 : 16, padding: isMobile ? "18px" : "16px 22px", borderTop: "1px solid #154f4c10" }}>
+              <div key={r._id} style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "minmax(220px, 1.4fr) 1fr 1.2fr 1.5fr 1fr", alignItems: "center", gap: isMobile ? 14 : 16, padding: isMobile ? "18px" : "16px 22px", borderTop: "1px solid #154f4c10" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
                   <div style={{ width: 36, height: 36, borderRadius: 99, background: AV_GRADIENTS[i % AV_GRADIENTS.length], display: "grid", placeItems: "center", color: "#fff", fontFamily: "'Instrument Serif', serif", fontSize: 16, flexShrink: 0 }}>
                     {r.refereeName.charAt(0).toLowerCase()}
@@ -333,22 +444,36 @@ function ReferralDashboard() {
                     Referred
                   </span>
                 </div>
-                <div style={{ display: isMobile ? "grid" : "flex", gridTemplateColumns: isMobile ? "auto minmax(0, 1fr)" : undefined, gap: isMobile ? 12 : 4, alignItems: "center", minWidth: 0 }}>
+                <div style={{ display: isMobile ? "grid" : "block", gridTemplateColumns: isMobile ? "auto minmax(0, 1fr)" : undefined, gap: isMobile ? 12 : 0, alignItems: "center", minWidth: 0 }}>
                   {isMobile && <span style={{ fontFamily: "'Geist Mono', monospace", fontSize: 10.5, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase" }}>Stage</span>}
-                  <span style={{ display: "flex", gap: 4, minWidth: 0 }}>
-                    {[1, 2, 3, 4].map((s) => (
-                      <span key={s} style={{ flex: 1, height: 6, borderRadius: 99, background: s === 1 ? "#154f4c" : "#e7e1d2" }} />
-                    ))}
-                  </span>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 0 }}>
+                    {(() => {
+                      const stageOrder = ["referred", "lead_visited", "converted"];
+                      const stageLabels = ["Referred", "Lead visited", "Converted"];
+                      const currentStage = r.stage ?? "referred";
+                      const currentIdx = stageOrder.indexOf(currentStage);
+                      return (
+                        <>
+                          <div style={{ display: "flex", gap: 4 }}>
+                            {stageOrder.map((_, s) => (
+                              <span key={s} style={{ flex: 1, height: 5, borderRadius: 99, background: s <= currentIdx ? "#154f4c" : "#e7e1d2" }} />
+                            ))}
+                          </div>
+                          <div style={{ display: "flex", gap: 4 }}>
+                            {stageLabels.map((label, s) => (
+                              <span key={s} style={{ flex: 1, fontFamily: "'Geist Mono', monospace", fontSize: 9, color: s <= currentIdx ? "#154f4c" : "#a8b8b6", letterSpacing: "0.06em", textTransform: "uppercase", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
+                            ))}
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
                 </div>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, letterSpacing: "-0.01em", color: "#154f4c", display: isMobile ? "flex" : "block", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
                   {isMobile && <span style={{ fontFamily: "'Geist Mono', monospace", fontSize: 10.5, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase" }}>Payout</span>}
                   <span>
                     ₹3,000<span style={{ fontFamily: "'Geist', sans-serif", fontSize: 12, color: "#6a7a78", marginLeft: 4 }}>on booking</span>
                   </span>
-                </div>
-                <div style={{ textAlign: "right", fontSize: 12.5, color: "#1d3936", fontWeight: 500, display: "inline-flex", alignItems: "center", gap: 4, justifyContent: isMobile ? "flex-start" : "flex-end", cursor: "pointer", opacity: 0.85 }}>
-                  View →
                 </div>
               </div>
             )) : (
@@ -374,9 +499,9 @@ function ReferralDashboard() {
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: 8, alignItems: "stretch" }}>
-            <button onClick={handleCopy} style={{ padding: "12px 18px", borderRadius: 99, background: "#fff", border: "1px solid #154f4c1f", color: "#154f4c", fontSize: 13.5, fontWeight: 500, cursor: "pointer", fontFamily: "inherit" }}>
+            {/* <button onClick={handleCopy} style={{ padding: "12px 18px", borderRadius: 99, background: "#fff", border: "1px solid #154f4c1f", color: "#154f4c", fontSize: 13.5, fontWeight: 500, cursor: "pointer", fontFamily: "inherit" }}>
               {copied ? "Copied!" : "Copy link"}
-            </button>
+            </button> */}
             <button onClick={() => router.push("/referral/referee")} style={{ padding: "12px 20px", borderRadius: 99, background: "#154f4c", color: "#fff", border: "none", fontSize: 13.5, fontWeight: 500, cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "inherit" }}>
               Refer someone
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6" /></svg>

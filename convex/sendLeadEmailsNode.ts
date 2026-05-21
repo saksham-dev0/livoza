@@ -6,6 +6,7 @@ import { internalAction } from "./_generated/server";
 import {
   buildBookNowEmail,
   buildContactEmail,
+  buildReferralEmail,
   getFromEmailHeader,
   getToEmail,
 } from "./sendLeadEmails";
@@ -49,6 +50,22 @@ export const sendBookNowEmail = internalAction({
   },
   handler: async (_ctx, args) => {
     const { subject, html } = buildBookNowEmail(args);
+    await sendEmail(subject, html);
+    return null;
+  },
+});
+
+export const sendReferralEmail = internalAction({
+  args: {
+    referrerName: v.string(),
+    referrerEmail: v.optional(v.string()),
+    refereeName: v.string(),
+    refereePhone: v.string(),
+    refereeEmail: v.optional(v.string()),
+    preferredCity: v.string(),
+  },
+  handler: async (_ctx, args) => {
+    const { subject, html } = buildReferralEmail(args);
     await sendEmail(subject, html);
     return null;
   },

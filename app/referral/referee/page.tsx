@@ -33,8 +33,6 @@ export default function RefereePage() {
     refereePhone: "",
     refereeEmail: "",
     preferredCity: "",
-    preferredMoveInDate: "",
-    gender: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -76,8 +74,6 @@ export default function RefereePage() {
         refereePhone: form.refereePhone.trim(),
         refereeEmail: form.refereeEmail.trim() || undefined,
         preferredCity: form.preferredCity,
-        preferredMoveInDate: form.preferredMoveInDate || undefined,
-        gender: form.gender || undefined,
       });
       setSuccess(true);
     } catch (err: unknown) {
@@ -94,8 +90,6 @@ export default function RefereePage() {
       refereePhone: "",
       refereeEmail: "",
       preferredCity: "",
-      preferredMoveInDate: "",
-      gender: "",
     });
   };
 
@@ -291,14 +285,7 @@ export default function RefereePage() {
                   <select
                     required
                     value={form.preferredCity}
-                    onChange={(e) => {
-                      const city = e.target.value;
-                      setForm((f) => ({
-                        ...f,
-                        preferredCity: city,
-                        gender: city === "YPR" ? "female" : f.gender,
-                      }));
-                    }}
+                    onChange={(e) => setForm((f) => ({ ...f, preferredCity: e.target.value }))}
                     style={selectStyle}
                   >
                     <option value="">Select location</option>
@@ -310,40 +297,7 @@ export default function RefereePage() {
               )}
 
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 14 }}>
-                {field(
-                  "Move-in date",
-                  false,
-                  <input
-                    type="date"
-                    value={form.preferredMoveInDate}
-                    onChange={(e) => setForm((f) => ({ ...f, preferredMoveInDate: e.target.value }))}
-                    style={{ ...inputStyle, colorScheme: "light" }}
-                  />
-                )}
-
-                {field(
-                  "Gender",
-                  false,
-                  <div style={{ position: "relative" }}>
-                    <select
-                      value={form.gender}
-                      disabled={form.preferredCity === "YPR"}
-                      onChange={(e) => setForm((f) => ({ ...f, gender: e.target.value }))}
-                      style={{
-                        ...selectStyle,
-                        opacity: form.preferredCity === "YPR" ? 0.58 : 1,
-                        cursor: form.preferredCity === "YPR" ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      <option value="">Select gender</option>
-                      <option value="female">Female</option>
-                      <option value="male">Male</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <SelectArrow />
-                  </div>,
-                  form.preferredCity === "YPR" ? "YPR is a girls-only property, so gender is set automatically." : undefined
-                )}
+                
               </div>
 
               {error && (
