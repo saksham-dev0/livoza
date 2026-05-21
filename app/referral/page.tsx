@@ -141,7 +141,7 @@ function ReferralDashboard() {
             <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</span>
           </span>
           <button
-            onClick={() => signOut({ redirectUrl: "/" })}
+            onClick={() => signOut({ redirectUrl: "/referral" })}
             title="Sign out"
             style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, borderRadius: 99, background: "#fff", border: "1px solid #154f4c1f", cursor: "pointer", color: "#6a7a78", flexShrink: 0 }}
           >

@@ -29,9 +29,10 @@ export function SharedNav({ onBook }: { onBook?: () => void }) {
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/properties", label: "Properties" },
-    { href: "/#facilities", label: "Facilities" },
     { href: "/about", label: "About" },
+    { href: "/properties", label: "Properties" },
+    { href: "/referral", label: "Referral" },
+    { href: "/#facilities", label: "Facilities" },
     { href: "/#contact", label: "Contact" },
   ];
 
