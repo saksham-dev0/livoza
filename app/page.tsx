@@ -183,8 +183,8 @@ function Hero({ onBook }: { onBook: () => void }) {
             lineHeight: 0.93, letterSpacing: "-0.025em",
             color: T.ink, margin: 0,
           }}>
-            Premium Living.<br />
-            <span style={{ fontStyle: "italic", color: T.sage }}>A stay that matters.</span>
+            Girls PG near<br />Christ University,<br />
+            <span style={{ fontStyle: "italic", color: T.sage }}>Yeshwanthpur.</span>
           </h1>
         </div>
 
@@ -431,12 +431,12 @@ function RoomCard({ room, onBook }: {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
           <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, letterSpacing: "-0.01em", color: T.ink }}>{room.name}</h3>
           <div style={{ ...serif, fontSize: 24, letterSpacing: "-0.02em", lineHeight: 1, color: T.ink }}>
-            ₹ *<span style={{ fontSize: 11, color: T.muted, fontFamily: "inherit" }}></span>
+            {room.advancePayment}<span style={{ fontSize: 11, color: T.muted, fontFamily: "inherit" }}> adv.</span>
           </div>
         </div>
 
         <div style={{ color: T.muted, fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
-          <MapPin style={{ width: 13, height: 13 }} /> Christ University · 100m
+          <MapPin style={{ width: 13, height: 13 }} /> Christ University, Yeshwanthpur · 100m
         </div>
 
         {/* Pricing table */}
@@ -746,6 +746,89 @@ function Testimonials() {
   );
 }
 
+// ── Food & FAQ ──
+function FoodAndFAQ() {
+  const faqs = [
+    {
+      q: "Is Livoza a girls-only PG near Christ University Yeshwanthpur?",
+      a: "Yes. Livoza is an exclusively girls-only PG located 100m from Christ University, Yeshwanthpur campus, Bangalore — 560022. Entry is restricted to female residents and verified visitors.",
+    },
+    {
+      q: "What room types are available at Livoza Yeshwanthpur?",
+      a: "We offer triple sharing, double sharing, and single sharing rooms — all non-AC, fully furnished with washing machine, refrigerator, microwave/oven, Smart TV, and high-speed WiFi.",
+    },
+    {
+      q: "Is there a budget girls PG near Christ University Yeshwanthpur?",
+      a: "Yes. Triple sharing starts at ₹33,000 advance — the most affordable fully-furnished girls PG option near Christ University Yeshwanthpur. No broker fees, no hidden charges.",
+    },
+    {
+      q: "Do rooms have attached bathrooms?",
+      a: "Yes, our rooms come with attached bathrooms for residents' privacy and convenience.",
+    },
+    {
+      q: "Is food or meals provided at Livoza?",
+      a: "Livoza does not operate an in-house kitchen currently. However, the property is within walking distance of several affordable tiffin centres and mess services near Christ University Yeshwanthpur — ideal for daily meals.",
+    },
+    {
+      q: "Is there WiFi and power backup at Livoza Yeshwanthpur?",
+      a: "Yes. High-speed WiFi is available throughout the property, and we have full power backup to ensure uninterrupted electricity for all residents.",
+    },
+    {
+      q: "How do I book a room at Livoza girls PG Yeshwanthpur?",
+      a: "Call or WhatsApp us at +91 9353477987, or fill the callback form on this page. Pay the booking advance to secure your room — no broker, no hidden fees.",
+    },
+  ];
+
+  return (
+    <section id="faq" style={{ padding: "80px 32px 0", maxWidth: 1280, margin: "0 auto" }}>
+      {/* Food/meals note */}
+      {/* <div style={{
+        background: T.card, borderRadius: 20, padding: "28px 32px",
+        border: `1px solid ${T.line2}`, marginBottom: 48,
+        display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap",
+      }}>
+        <span style={{
+          width: 48, height: 48, borderRadius: 14, background: T.mint,
+          display: "grid", placeItems: "center", fontSize: 24, flexShrink: 0,
+        }}>🍱</span>
+        <div>
+          <h3 style={{ margin: "0 0 6px", fontSize: 17, fontWeight: 600, color: T.ink, letterSpacing: "-0.01em" }}>
+            Food &amp; Meals Near Livoza, Yeshwanthpur
+          </h3>
+          <p style={{ margin: 0, color: T.muted, fontSize: 13.5, lineHeight: 1.6, maxWidth: 680 }}>
+            Livoza does not operate an in-house kitchen. Multiple affordable tiffin centres, mess services, and
+            restaurants are within a 2–5 minute walk near Christ University Yeshwanthpur campus. Students typically
+            spend ₹2,000–₹3,500/month on meals in the area.
+          </p>
+        </div>
+      </div> */}
+
+      {/* FAQ */}
+      <div style={{ ...mono, fontSize: 11, color: T.muted, textTransform: "uppercase", marginBottom: 8 }}>
+        ⁂ faq
+      </div>
+      <h2 style={{ ...serif, margin: "0 0 36px", fontSize: "clamp(36px, 5vw, 64px)", lineHeight: 1, letterSpacing: "-0.02em", color: T.ink }}>
+        Common questions,{" "}
+        <span style={{ fontStyle: "italic", color: T.sage }}>answered.</span>
+      </h2>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        {faqs.map((f, i) => (
+          <div key={i} style={{
+            borderRadius: 14, background: T.card, border: `1px solid ${T.line2}`,
+            padding: "20px 24px",
+          }}>
+            <h3 style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 600, color: T.ink, letterSpacing: "-0.01em" }}>
+              {f.q}
+            </h3>
+            <p style={{ margin: 0, color: T.muted, fontSize: 13.5, lineHeight: 1.6 }}>{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ── Final CTA ──
 function FinalCTA({ onBook }: { onBook: () => void }) {
   return (
@@ -817,7 +900,7 @@ function Contact({
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {[
-              { icon: "📍", label: "Location", value: "100m from Christ University, Bangalore" },
+              { icon: "📍", label: "Location", value: "100m from Christ University, Yeshwanthpur, Bangalore — 560022" },
               { icon: "📞", label: "Phone", value: "+91 9353477987 · +91 8360669796" },
               { icon: "✉️", label: "Email", value: "info@livoza.com" },
             ].map(c => (
@@ -921,7 +1004,7 @@ function Footer() {
           <div>
             <Logo />
             <p style={{ color: T.muted, fontSize: 13.5, lineHeight: 1.6, margin: "16px 0 0", maxWidth: 280 }}>
-              Girls-only PG near Christ University — 100m from campus. Fully furnished with washing machine, fridge, oven, Smart TV, and 24/7 security.
+              Girls-only PG near Christ University, Yeshwanthpur, Bangalore — 100m from campus. Fully furnished single, double &amp; triple sharing rooms with washing machine, fridge, oven, Smart TV, high-speed WiFi, and 24/7 security.
             </p>
             <div style={{ ...mono, marginTop: 24, fontSize: 11, color: T.muted, textTransform: "uppercase" }}>
               © 2026 — all rights reserved
@@ -1079,8 +1162,21 @@ export default function Home() {
     }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Is Livoza a girls-only PG near Christ University Yeshwanthpur?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Livoza is an exclusively girls-only PG located 100m from Christ University, Yeshwanthpur campus, Bangalore — 560022." } },
+      { "@type": "Question", "name": "What room types are available at Livoza Yeshwanthpur?", "acceptedAnswer": { "@type": "Answer", "text": "Triple sharing, double sharing, and single sharing rooms — all fully furnished with washing machine, refrigerator, microwave/oven, Smart TV, and high-speed WiFi." } },
+      { "@type": "Question", "name": "Is there a budget girls PG near Christ University Yeshwanthpur?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Triple sharing starts at ₹33,000 advance — the most affordable fully-furnished girls PG near Christ University Yeshwanthpur. No broker fees." } },
+      { "@type": "Question", "name": "Is food or meals provided at Livoza?", "acceptedAnswer": { "@type": "Answer", "text": "Livoza does not operate an in-house kitchen. Multiple affordable tiffin centres and mess services are within a 2–5 minute walk near Christ University Yeshwanthpur campus." } },
+      { "@type": "Question", "name": "Is there WiFi and power backup?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. High-speed WiFi is available throughout and we have full power backup for uninterrupted electricity." } },
+    ],
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <style>{`
         body { background: ${T.paper}; }
         @keyframes floatBob {
@@ -1122,6 +1218,7 @@ export default function Home() {
         <Stats />
         <HowItWorks />
         <Testimonials />
+        <FoodAndFAQ />
         <FinalCTA onBook={() => setBookOpen(true)} />
         <Contact
           onSubmit={handleContactSubmit}

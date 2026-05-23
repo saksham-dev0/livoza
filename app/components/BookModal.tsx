@@ -50,6 +50,7 @@ export function BookModal({ open, onClose }: { open: boolean; onClose: () => voi
         fullName: String(fd.get("fullName") ?? "").trim(),
         phoneNumber: String(fd.get("phoneNumber") ?? "").trim(),
         emailAddress: String(fd.get("emailAddress") ?? "").trim() || undefined,
+        pgLocation: String(fd.get("pgLocation") ?? "").trim() || undefined,
       });
       router.push("/thank-you");
     } catch (err) {
@@ -101,6 +102,21 @@ export function BookModal({ open, onClose }: { open: boolean; onClose: () => voi
               <option value="Triple Sharing (Non AC)">Triple Sharing (Non AC)</option>
               <option value="Double Sharing (Non AC)">Double Sharing (Non AC)</option>
               <option value="Single Sharing (Non AC)">Single Sharing (Non AC)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 5 }}>
+              PG Location
+            </label>
+            <select name="pgLocation" style={{
+              width: "100%", padding: "11px 14px", borderRadius: 12,
+              border: `1px solid ${T.line2}`, background: T.card,
+              fontSize: 14, color: T.ink, fontFamily: "inherit", outline: "none",
+            }}>
+              <option value="">Choose PG location</option>
+              <option value="Near Christ University Yeshwanthpur Campus">Near Christ University Yeshwanthpur Campus</option>
+              <option value="Near Christ University Central Campus">Near Christ University Central Campus</option>
             </select>
           </div>
 

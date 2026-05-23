@@ -26,6 +26,7 @@ export default defineSchema({
     fullName: v.string(),
     phoneNumber: v.string(),
     emailAddress: v.optional(v.string()),
+    pgLocation: v.optional(v.string()),
     createdAt: v.number(),
 
     // Optional: only populated if a user is authenticated (if auth is configured later).

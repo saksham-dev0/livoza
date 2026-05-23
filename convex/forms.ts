@@ -13,12 +13,14 @@ export const createBookNowSubmission = mutation({
     fullName: v.string(),
     phoneNumber: v.string(),
     emailAddress: v.optional(v.string()),
+    pgLocation: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const roomType = args.roomType.trim();
     const fullName = args.fullName.trim();
     const phoneNumber = args.phoneNumber.trim();
     const emailAddress = normalizeOptionalString(args.emailAddress);
+    const pgLocation = normalizeOptionalString(args.pgLocation);
 
     if (roomType.length === 0) {
       throw new Error("roomType is required");
@@ -41,6 +43,7 @@ export const createBookNowSubmission = mutation({
       fullName,
       phoneNumber,
       emailAddress,
+      pgLocation,
       createdAt: Date.now(),
       submittedByAuthTokenIdentifier,
     });
