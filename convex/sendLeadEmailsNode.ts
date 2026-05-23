@@ -47,6 +47,7 @@ export const sendBookNowEmail = internalAction({
     fullName: v.string(),
     phoneNumber: v.string(),
     emailAddress: v.optional(v.string()),
+    pgLocation: v.optional(v.string()),
   },
   handler: async (_ctx, args) => {
     const { subject, html } = buildBookNowEmail(args);

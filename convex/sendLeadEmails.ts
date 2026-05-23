@@ -3,6 +3,7 @@ export type BookNowLead = {
   fullName: string;
   phoneNumber: string;
   emailAddress?: string;
+  pgLocation?: string;
 };
 
 export type ReferralLead = {
@@ -60,6 +61,9 @@ export function buildBookNowEmail(lead: BookNowLead): { subject: string; html: s
           )}</td></tr>
           <tr><td style="padding: 6px 10px; border: 1px solid #eee;"><b>Email Address</b></td><td style="padding: 6px 10px; border: 1px solid #eee;">${
             lead.emailAddress ? escapeHtml(lead.emailAddress) : "-"
+          }</td></tr>
+          <tr><td style="padding: 6px 10px; border: 1px solid #eee;"><b>PG Location</b></td><td style="padding: 6px 10px; border: 1px solid #eee;">${
+            lead.pgLocation ? escapeHtml(lead.pgLocation) : "-"
           }</td></tr>
         </tbody>
       </table>

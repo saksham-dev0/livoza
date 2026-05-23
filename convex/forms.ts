@@ -55,6 +55,7 @@ export const createBookNowSubmission = mutation({
         fullName,
         phoneNumber,
         emailAddress,
+        pgLocation,
       });
     } catch (err) {
       console.error("Failed to schedule BOOK NOW email", err);

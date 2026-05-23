@@ -75,6 +75,7 @@ function HeroBookForm() {
         fullName: String(fd.get("fullName") ?? "").trim(),
         phoneNumber: String(fd.get("phoneNumber") ?? "").trim(),
         emailAddress: String(fd.get("emailAddress") ?? "").trim() || undefined,
+        pgLocation: String(fd.get("pgLocation") ?? "").trim() || undefined,
       });
       router.push("/thank-you");
     } catch (err) {
@@ -104,6 +105,20 @@ function HeroBookForm() {
             <option value="Triple Sharing (Non AC)">Triple Sharing (Non AC)</option>
             <option value="Double Sharing (Non AC)">Double Sharing (Non AC)</option>
             <option value="Single Sharing (Non AC)">Single Sharing (Non AC)</option>
+          </select>
+        </div>
+        <div>
+          <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 5 }}>PG Location</label>
+          <select name="pgLocation" style={{
+            width: "100%", padding: "11px 36px 11px 14px", borderRadius: 12,
+            border: `1px solid ${T.line2}`, background: T.paper,
+            fontSize: 14, color: T.ink, fontFamily: "inherit", outline: "none",
+            appearance: "none", backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236a7a78' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "no-repeat", backgroundPosition: "calc(100% - 14px) center",
+          }}>
+            <option value="">Choose PG location</option>
+            <option value="Near Christ University Yeshwanthpur Campus">Near Christ University Yeshwanthpur Campus</option>
+            <option value="Near Christ University Central Campus">Near Christ University Central Campus</option>
           </select>
         </div>
         {[
@@ -1055,6 +1070,7 @@ function BookModal({ open, onClose }: { open: boolean; onClose: () => void }) {
         fullName: String(fd.get("fullName") ?? "").trim(),
         phoneNumber: String(fd.get("phoneNumber") ?? "").trim(),
         emailAddress: String(fd.get("emailAddress") ?? "").trim() || undefined,
+        pgLocation: String(fd.get("pgLocation") ?? "").trim() || undefined,
       });
       router.push("/thank-you");
     } catch (err) {
@@ -1088,14 +1104,30 @@ function BookModal({ open, onClose }: { open: boolean; onClose: () => void }) {
           <div>
             <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 5 }}>Room Type</label>
             <select name="roomType" required style={{
-              width: "100%", padding: "11px 14px", borderRadius: 12,
+              width: "100%", padding: "11px 36px 11px 14px", borderRadius: 12,
               border: `1px solid ${T.line2}`, background: T.card,
               fontSize: 14, color: T.ink, fontFamily: "inherit", outline: "none",
+              appearance: "none", backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236a7a78' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+              backgroundRepeat: "no-repeat", backgroundPosition: "calc(100% - 14px) center",
             }}>
               <option value="">Select room type</option>
               <option value="Triple Sharing (Non AC)">Triple Sharing (Non AC)</option>
               <option value="Double Sharing (Non AC)">Double Sharing (Non AC)</option>
               <option value="Single Sharing (Non AC)">Single Sharing (Non AC)</option>
+            </select>
+          </div>
+          <div>
+            <label style={{ ...mono, fontSize: 10, textTransform: "uppercase", color: T.muted, display: "block", marginBottom: 5 }}>PG Location</label>
+            <select name="pgLocation" style={{
+              width: "100%", padding: "11px 36px 11px 14px", borderRadius: 12,
+              border: `1px solid ${T.line2}`, background: T.card,
+              fontSize: 14, color: T.ink, fontFamily: "inherit", outline: "none",
+              appearance: "none", backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236a7a78' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+              backgroundRepeat: "no-repeat", backgroundPosition: "calc(100% - 14px) center",
+            }}>
+              <option value="">Choose PG location</option>
+              <option value="Near Christ University Yeshwanthpur Campus">Near Christ University Yeshwanthpur Campus</option>
+              <option value="Near Christ University Central Campus">Near Christ University Central Campus</option>
             </select>
           </div>
           {[
