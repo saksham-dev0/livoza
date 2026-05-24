@@ -130,7 +130,7 @@ function ReferralDashboard() {
         <nav style={{ display: isMobile ? "none" : "flex", gap: 28, fontSize: 14.5, color: "#1d3936" }}>
           <Link href="/referral" style={{ opacity: 1, fontWeight: 600, textDecoration: "none", color: "#154f4c", display: "flex", alignItems: "center", gap: 6 }}>
             Refer
-            <span style={{ fontSize: 10, padding: "2px 6px", borderRadius: 99, background: "#dee8e6", color: "#154f4c", fontWeight: 600 }}>₹3,000/booking</span>
+            <span style={{ fontSize: 10, padding: "2px 6px", borderRadius: 99, background: "#dee8e6", color: "#154f4c", fontWeight: 600 }}>₹8,000/booking</span>
           </Link>
         </nav>
         <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
@@ -166,8 +166,8 @@ function ReferralDashboard() {
             </h1>
             <p style={{ marginTop: 14, maxWidth: 560, color: "#1d3936", fontSize: isMobile ? 16 : 15, lineHeight: 1.5 }}>
               {total > 0
-                ? <>You&apos;ve referred <strong>{total} friend{total !== 1 ? "s" : ""}</strong> to Livoza. <span style={{ color: "#6a7a78" }}>You earn ₹3,000 instantly when they book a room.</span></>
-                : <>Share your link and earn <strong>₹3,000</strong> when your friend books a room. <span style={{ color: "#6a7a78" }}>Paid instantly after conversion.</span></>
+                ? <>You&apos;ve referred <strong>{total} friend{total !== 1 ? "s" : ""}</strong> to Livoza. <span style={{ color: "#6a7a78" }}>You earn ₹8,000 instantly when they book a room.</span></>
+                : <>Share your link and earn <strong>₹8,000</strong> when your friend books a room. <span style={{ color: "#6a7a78" }}>Paid instantly after conversion.</span></>
               }
             </p>
           </div>
@@ -228,8 +228,8 @@ function ReferralDashboard() {
               </div>
               <p style={{ color: "#ffffffb3", fontSize: 14, lineHeight: 1.5, maxWidth: 480, marginTop: 12 }}>
                 {total > 0
-                  ? <>If your {total} referred friend{total !== 1 ? "s" : ""} book{total === 1 ? "s" : ""} a room, you receive <strong>₹3,000</strong> per booking instantly. Keep sharing — no cap.</>
-                  : <>No bookings yet. Share your link and earn <strong>₹3,000 instantly</strong> when your friend books a room.</>
+                  ? <>If your {total} referred friend{total !== 1 ? "s" : ""} book{total === 1 ? "s" : ""} a room, you receive <strong>₹8,000</strong> per booking instantly. Keep sharing — no cap.</>
+                  : <>No bookings yet. Share your link and earn <strong>₹8,000 instantly</strong> when your friend books a room.</>
                 }
               </p>
             </div>
@@ -246,7 +246,7 @@ function ReferralDashboard() {
               </div>
               <div>
                 <div style={{ fontFamily: "'Geist Mono', monospace", fontSize: 10.5, letterSpacing: "0.12em", textTransform: "uppercase", color: "#ffffff80" }}>⌖ per referral</div>
-                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, lineHeight: 1, letterSpacing: "-0.02em", marginTop: 8 }}>₹3,000</div>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, lineHeight: 1, letterSpacing: "-0.02em", marginTop: 8 }}>₹8,000</div>
                 <div style={{ color: "#ffffffa6", fontSize: 12, marginTop: 8, lineHeight: 1.45 }}>paid instantly after booking</div>
               </div>
             </div>
@@ -305,11 +305,11 @@ function ReferralDashboard() {
           <div>
             <div style={{ fontFamily: "'Geist Mono', monospace", fontSize: 11, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase" }}>⁕ what you earn</div>
             <h4 style={{ margin: "6px 0 0", fontSize: 15, fontWeight: 600, letterSpacing: "-0.01em", color: "#154f4c" }}>Each converted booking</h4>
-            <div style={{ color: "#6a7a78", fontSize: 12.5, marginTop: 6, lineHeight: 1.45 }}>You receive ₹3,000 instantly when the person you referred books a room — no caps, no claim form.</div>
+            <div style={{ color: "#6a7a78", fontSize: 12.5, marginTop: 6, lineHeight: 1.45 }}>You receive ₹8,000 instantly when the person you referred books a room — no caps, no claim form.</div>
           </div>
           <div>
             <div style={{ fontFamily: "'Geist Mono', monospace", fontSize: 11, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase" }}>per referral</div>
-            <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 38, lineHeight: 1, letterSpacing: "-0.02em", color: "#154f4c", marginTop: 6 }}>₹3,000<span style={{ fontFamily: "'Geist', sans-serif", fontSize: 13, color: "#6a7a78", marginLeft: 4 }}>/ booking</span></div>
+            <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 38, lineHeight: 1, letterSpacing: "-0.02em", color: "#154f4c", marginTop: 6 }}>₹8,000<span style={{ fontFamily: "'Geist', sans-serif", fontSize: 13, color: "#6a7a78", marginLeft: 4 }}>/ booking</span></div>
           </div>
           <div>
             <div style={{ fontFamily: "'Geist Mono', monospace", fontSize: 11, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase" }}>they get</div>
@@ -335,7 +335,7 @@ function ReferralDashboard() {
             )}
           </div>
           <h3 style={{ margin: "6px 0 4px", fontSize: 18, fontWeight: 600, letterSpacing: "-0.01em", color: "#154f4c" }}>Add your details to receive incentives</h3>
-          <p style={{ margin: "0 0 20px", fontSize: 13.5, color: "#6a7a78", lineHeight: 1.5 }}>We need your contact number and UPI QR code to send your ₹3,000 payout instantly when your referral books.</p>
+          <p style={{ margin: "0 0 20px", fontSize: 13.5, color: "#6a7a78", lineHeight: 1.5 }}>We need your contact number and UPI QR code to send your ₹8,000 payout instantly when your referral books.</p>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20, alignItems: "start" }}>
             {/* Phone */}
             <div>
@@ -398,7 +398,7 @@ function ReferralDashboard() {
               <h2 style={{ margin: 0, fontFamily: "'Instrument Serif', serif", fontWeight: 400, fontSize: isMobile ? 34 : 42, lineHeight: 1, letterSpacing: "-0.02em", color: "#154f4c" }}>
                 The people you <span style={{ fontStyle: "italic", color: "#5d8b87" }}>brought home.</span>
               </h2>
-              <div style={{ marginTop: 10, fontFamily: "'Geist Mono', monospace", fontSize: 11, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase" }}>⁂ {total} referral{total !== 1 ? "s" : ""} · ₹3,000 per booking</div>
+              <div style={{ marginTop: 10, fontFamily: "'Geist Mono', monospace", fontSize: 11, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase" }}>⁂ {total} referral{total !== 1 ? "s" : ""} · ₹8,000 per booking</div>
             </div>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               {["All"].map((f) => (
@@ -472,14 +472,14 @@ function ReferralDashboard() {
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, letterSpacing: "-0.01em", color: "#154f4c", display: isMobile ? "flex" : "block", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
                   {isMobile && <span style={{ fontFamily: "'Geist Mono', monospace", fontSize: 10.5, color: "#6a7a78", letterSpacing: "0.12em", textTransform: "uppercase" }}>Payout</span>}
                   <span>
-                    ₹3,000<span style={{ fontFamily: "'Geist', sans-serif", fontSize: 12, color: "#6a7a78", marginLeft: 4 }}>on booking</span>
+                    ₹8,000<span style={{ fontFamily: "'Geist', sans-serif", fontSize: 12, color: "#6a7a78", marginLeft: 4 }}>on booking</span>
                   </span>
                 </div>
               </div>
             )) : (
               <div style={{ padding: isMobile ? "36px 20px" : "48px 24px", textAlign: "center", color: "#6a7a78" }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: isMobile ? 26 : 28, color: "#154f4c", marginBottom: 8 }}>No referrals yet.</div>
-                <div style={{ fontSize: 14 }}>Share your link to get started — every converted booking earns you ₹3,000 instantly.</div>
+                <div style={{ fontSize: 14 }}>Share your link to get started — every converted booking earns you ₹8,000 instantly.</div>
               </div>
             )}
           </div>
@@ -493,8 +493,8 @@ function ReferralDashboard() {
             </h4>
             <p style={{ margin: "6px 0 0", color: "#1d3936", fontSize: 14, maxWidth: 520, lineHeight: 1.5 }}>
               {total > 0
-                ? "Refer more friends and keep earning ₹3,000 for every room booking. No cap, no claim form."
-                : "Share your referral link with anyone looking for student housing. When they book a room, you receive ₹3,000 instantly."
+                ? "Refer more friends and keep earning ₹8,000 for every room booking. No cap, no claim form."
+                : "Share your referral link with anyone looking for student housing. When they book a room, you receive ₹8,000 instantly."
               }
             </p>
           </div>

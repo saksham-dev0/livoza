@@ -90,7 +90,7 @@ export default function ReferralLanding() {
                 fontWeight: 600,
               }}
             >
-              ₹3,000/booking
+              ₹8,000/booking
             </span>
           </a>
         </nav>
@@ -165,7 +165,7 @@ export default function ReferralLanding() {
                   display: "inline-block",
                 }}
               />
-              Referral program · earn ₹3,000 per booking
+              Referral program · earn ₹8,000 per booking
             </span>
             {!isMobile && <span style={{ opacity: 0.6 }}>Pays out the day your friend books</span>}
           </div>
@@ -198,7 +198,7 @@ export default function ReferralLanding() {
         >
           Refer a friend,
           <br />
-          <span style={{ fontStyle: "italic", color: "#5d8b87" }}>earn ₹3,000 each time.</span>
+          <span style={{ fontStyle: "italic", color: "#5d8b87" }}>earn ₹8,000 each time.</span>
         </h1>
 
         {/* Hero grid */}
@@ -270,14 +270,14 @@ export default function ReferralLanding() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  Sign in to share your link &amp; earn ₹3,000 per booking.
+                  Sign in to share your link &amp; earn ₹8,000 per booking.
                 </div>
               </div>
               {!isMobile && (
                 <div style={{ textAlign: "right", fontSize: 12, color: "#ffffff70", flexShrink: 0 }}>
                   per booking
                   <strong style={{ display: "block", color: "#fff", fontWeight: 600, fontSize: 13, marginTop: 2 }}>
-                    earn ₹3,000 cash
+                    earn ₹8,000 cash
                   </strong>
                 </div>
               )}
@@ -323,7 +323,7 @@ export default function ReferralLanding() {
                     marginTop: 8,
                   }}
                 >
-                  ₹3,000
+                  ₹8,000
                   <span style={{ fontFamily: "'Geist', sans-serif", fontSize: 14, color: "#ffffff80", marginLeft: 4 }}>
                     cash
                   </span>
@@ -379,13 +379,13 @@ export default function ReferralLanding() {
                     marginTop: 8,
                   }}
                 >
-                  ₹3,000
+                  ₹8,000
                   <span style={{ fontFamily: "'Geist', sans-serif", fontSize: 14, color: "#ffffff80", marginLeft: 4 }}>
                     per lead
                   </span>
                 </div>
                 <div style={{ fontSize: 12.5, color: "#ffffffa6", marginTop: 10, lineHeight: 1.45 }}>
-                  Every friend who books earns you ₹3,000. No cap on referrals.
+                  Every friend who books earns you ₹8,000. No cap on referrals.
                 </div>
               </div>
             </div>
@@ -533,7 +533,7 @@ export default function ReferralLanding() {
               {[
                 { n: "i", title: "Refer someone", desc: "Fill the details of the person you are referring.", meta: "30s" },
                 { n: "ii", title: "They tour & book", desc: "Friend books any verified Livoza room.", meta: "~9 days" },
-                { n: "iii", title: "You earn ₹3,000", desc: "₹3,000 paid to you the day they book. Every time.", meta: "instant" },
+                { n: "iii", title: "You earn ₹8,000", desc: "₹8,000 paid to you the day they book. Every time.", meta: "instant" },
               ].map((step) => (
                 <div
                   key={step.n}
@@ -666,11 +666,11 @@ export default function ReferralLanding() {
               ✦ this year on livoza
             </div>
             <div style={{ fontSize: 13.5, color: "#1d3936", marginTop: 8, maxWidth: 280, lineHeight: 1.5 }}>
-              Refer friends, earn ₹3,000 per booking — no cap, paid instantly on conversion.
+              Refer friends, earn ₹8,000 per booking — no cap, paid instantly on conversion.
             </div>
           </div>
           {[
-            { num: "₹3,000", sub: "earned per friend\nwho books a room" },
+            { num: "₹8,000", sub: "earned per friend\nwho books a room" },
             { num: "No cap", sub: "refer as many friends\nas you want" },
             { num: "9.2 days", sub: "average tour-to-keys\nfor referred friends" },
             { num: "94%", sub: "of referred renters\nrenew the next year" },
@@ -713,7 +713,7 @@ export default function ReferralLanding() {
         >
           {[
             "No cap on referrals",
-            "₹3,000 pays out on booking",
+            "₹8,000 pays out on booking",
             "Earn on every converted lead",
             "Open to everyone",
           ].map((item) => (
@@ -750,10 +750,10 @@ export default function ReferralLanding() {
                 letterSpacing: "-0.01em",
               }}
             >
-              Ready to earn ₹3,000? <span style={{ fontStyle: "italic", color: "#9dc3be" }}>Sign in to start.</span>
+              Ready to earn ₹8,000? <span style={{ fontStyle: "italic", color: "#9dc3be" }}>Sign in to start.</span>
             </div>
             <div style={{ fontSize: 13.5, color: "#ffffff80", marginTop: 6 }}>
-              Get your personal referral link. Earn ₹3,000 for every friend who books.
+              Get your personal referral link. Earn ₹8,000 for every friend who books.
             </div>
           </div>
           <div style={{ display: "flex", gap: 10, flexShrink: 0, width: isMobile ? "100%" : "auto" }}>
