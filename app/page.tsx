@@ -446,7 +446,7 @@ function RoomCard({ room, onBook }: {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
           <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, letterSpacing: "-0.01em", color: T.ink }}>{room.name}</h3>
           <div style={{ ...serif, fontSize: 24, letterSpacing: "-0.02em", lineHeight: 1, color: T.ink }}>
-            {room.advancePayment}<span style={{ fontSize: 11, color: T.muted, fontFamily: "inherit" }}> adv.</span>
+            {room.advancePayment}<span style={{ fontSize: 11, color: T.muted, fontFamily: "inherit" }}> </span>
           </div>
         </div>
 
@@ -498,7 +498,7 @@ function Rooms({ onBook }: { onBook: () => void }) {
       name: "Triple Sharing (Non AC)",
       badge: "Best Value",
       image: "/triplebed.jpeg",
-      advancePayment: "₹33,000",
+      advancePayment: "₹*",
       maintenance: "₹10,000",
       bookingAdvance: "₹20,000",
       totalInitial: "₹59,500",
@@ -510,7 +510,7 @@ function Rooms({ onBook }: { onBook: () => void }) {
       name: "Double Sharing (Non AC)",
       badge: "Most Popular",
       image: "/doublebed.jpeg",
-      advancePayment: "₹38,000",
+      advancePayment: "₹*",
       maintenance: "₹10,000",
       bookingAdvance: "₹20,000",
       totalInitial: "₹67,000",
@@ -522,7 +522,7 @@ function Rooms({ onBook }: { onBook: () => void }) {
       name: "Single Sharing (Non AC)",
       badge: "Premium",
       image: "/img1.jpeg",
-      advancePayment: "₹70,000",
+      advancePayment: "₹*",
       maintenance: "₹10,000",
       bookingAdvance: "₹30,000",
       totalInitial: "₹1,15,000",
